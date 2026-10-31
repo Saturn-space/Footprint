@@ -1,20 +1,20 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { serverRepos } from '../db/repositories';
-import { scopeValidator } from '../services/scopeValidator';
-import { passiveReconService } from '../services/passiveRecon';
-import { parseNmapXml } from '../services/parsers/nmapParser';
-import { parseOpenVASXml } from '../services/parsers/openvasParser';
-import { parseHarvesterExport } from '../services/parsers/harvesterParser';
-import { evidenceNormalizer } from '../services/normalizer';
-import { generateEvidenceHash } from '../../utils/hash';
-import { User, UserRole, ApiResponse, Evidence, Finding } from '../../types/models';
-import { InvestigationFormSchema } from '../../types/schemas';
-import { workflowController } from '../services/workflowController';
-import { workerManager } from '../services/workerManager';
-import { correlationEngine } from '../services/correlationEngine';
-import { exposureScorer } from '../services/exposureScorer';
-import { reportGenerator } from '../services/reportGenerator';
+import { serverRepos } from '../db/repositories.js';
+import { scopeValidator } from '../services/scopeValidator.js';
+import { passiveReconService } from '../services/passiveRecon.js';
+import { parseNmapXml } from '../services/parsers/nmapParser.js';
+import { parseOpenVASXml } from '../services/parsers/openvasParser.js';
+import { parseHarvesterExport } from '../services/parsers/harvesterParser.js';
+import { evidenceNormalizer } from '../services/normalizer.js';
+import { generateEvidenceHash } from '../../utils/hash.js';
+import { User, UserRole, ApiResponse, Evidence, Finding } from '../../types/models.js';
+import { InvestigationFormSchema } from '../../types/schemas.js';
+import { workflowController } from '../services/workflowController.js';
+import { workerManager } from '../services/workerManager.js';
+import { correlationEngine } from '../services/correlationEngine.js';
+import { exposureScorer } from '../services/exposureScorer.js';
+import { reportGenerator } from '../services/reportGenerator.js';
 
 export const apiRouter = Router();
 
@@ -178,26 +178,18 @@ apiRouter.post(
         status: 'active',
         scope: parsedBody.scope,
         authorization: parsedBody.authorization,
-        modules: parsedBody.modules,
-        tags: parsedBody.tags || [],
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        createdBy: user.id
       });
 
-      await serverRepos.audit.logEvent({
-        investigationId: newInv.id,
-        timestamp: new Date().toISOString(),
-        actor: `${user.name} (${user.role})`,
-        action: 'INVESTIGATION_CREATED',
-        category: 'authorization',
-        targetResource: newInv.organizationName,
-        details: `Created investigation "${newInv.name}" with owned domain [${newInv.scope.ownedDomains.join(', ')}].`,
-        status: 'allowed'
-      });
-
-      return (res as any).sendApiResponse(201, true, newInv, null, 'Investigation created successfully');
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message || 'Validation error', 'Invalid investigation configuration');
+      return (res as any).sendApiResponse(201, true, newInv, null, 'Investigation created');
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return (res as any).sendApiResponse(400, false, null, 'Validation Error', err.errors.map(e => e.message).join(', '));
+      }
+      console.error('Create investigation error:', err);
+      return (res as any).sendApiResponse(500, false, null, 'Server Error', 'Failed to create investigation');
     }
   }
 );
@@ -206,23 +198,10 @@ apiRouter.patch(
   '/investigations/:id',
   requireRole(['admin', 'investigator', 'reviewer']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
     const updated = await serverRepos.investigations.update(req.params.id, req.body);
     if (!updated) {
       return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
     }
-
-    await serverRepos.audit.logEvent({
-      investigationId: updated.id,
-      timestamp: new Date().toISOString(),
-      actor: `${user.name} (${user.role})`,
-      action: 'INVESTIGATION_UPDATED',
-      category: 'system',
-      targetResource: updated.name,
-      details: `Updated investigation configuration.`,
-      status: 'allowed'
-    });
-
     return (res as any).sendApiResponse(200, true, updated, null, 'Investigation updated');
   }
 );
@@ -231,24 +210,11 @@ apiRouter.delete(
   '/investigations/:id',
   requireRole(['admin']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    const success = await serverRepos.investigations.delete(req.params.id);
-    if (!success) {
-      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found or already deleted');
+    const deleted = await serverRepos.investigations.delete(req.params.id);
+    if (!deleted) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
     }
-
-    await serverRepos.audit.logEvent({
-      investigationId: req.params.id,
-      timestamp: new Date().toISOString(),
-      actor: `${user.name} (${user.role})`,
-      action: 'INVESTIGATION_DELETED',
-      category: 'system',
-      targetResource: req.params.id,
-      details: 'Investigation purged from server repository.',
-      status: 'allowed'
-    });
-
-    return (res as any).sendApiResponse(200, true, { deletedId: req.params.id }, null, 'Investigation removed');
+    return (res as any).sendApiResponse(200, true, null, null, 'Investigation deleted');
   }
 );
 
@@ -256,85 +222,67 @@ apiRouter.delete(
 // 3. Scope Validation Endpoint
 // ==========================================
 
-apiRouter.post('/investigations/:id/validate-scope', async (req: Request, res: Response) => {
-  const inv = await serverRepos.investigations.getById(req.params.id);
-  if (!inv) {
-    return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
-  }
+apiRouter.post(
+  '/investigations/:id/validate-scope',
+  async (req: Request, res: Response) => {
+    const { target, isActiveCheck } = req.body;
+    if (!target) {
+      return (res as any).sendApiResponse(400, false, null, 'Validation Error', 'Target is required');
+    }
 
-  const { target, isActiveCheck } = req.body;
-  if (!target) {
-    return (res as any).sendApiResponse(400, false, null, 'Target missing', 'Specify target host, domain, or IP');
-  }
+    const inv = await serverRepos.investigations.getById(req.params.id);
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
+    }
 
-  const result = await scopeValidator.validateTarget(inv, target, Boolean(isActiveCheck));
-  return (res as any).sendApiResponse(200, true, result, null, result.isValid ? 'Target within approved scope' : (result.blockReason || 'Scope violation'));
-});
+    const validation = await scopeValidator.validate(target, inv.scope, isActiveCheck);
+
+    // Log the validation attempt
+    await serverRepos.auditLogs.create({
+      investigationId: inv.id,
+      userId: (req as any).user?.id || 'unknown',
+      action: isActiveCheck ? 'validate_active_scope' : 'validate_passive_scope',
+      resourceType: 'scope',
+      resourceId: target,
+      details: { target, isActiveCheck, valid: validation.valid, reason: validation.reason }
+    });
+
+    return (res as any).sendApiResponse(200, true, validation, null, validation.reason);
+  }
+);
 
 // ==========================================
-// 4. Passive Reconnaissance Endpoints
+// 4. Passive Recon Endpoints
 // ==========================================
 
 apiRouter.post(
   '/investigations/:id/collect/rdap',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
+    const { domain } = req.body;
     const inv = await serverRepos.investigations.getById(req.params.id);
-    if (!inv) return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
-
-    const domain = req.body.domain || inv.scope.ownedDomains[0];
-    const scopeCheck = await scopeValidator.enforceScope(
-      inv,
-      domain,
-      'RDAP Query',
-      user.name,
-      false,
-      (req as any).requestId
-    );
-
-    if (!scopeCheck.isValid) {
-      return (res as any).sendApiResponse(403, false, null, scopeCheck.blockReason || 'Scope Denied', 'Target domain not authorized for passive recon');
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
     }
 
     try {
-      const rdapData = await passiveReconService.collectRDAP(domain);
-
-      // Ingest Evidence
-      const evidence = await serverRepos.evidence.add({
-        id: `ev-rdap-${Date.now()}`,
+      const targetDomain = domain || inv.scope.ownedDomains[0];
+      const rdapData = await passiveReconService.collectRDAP(targetDomain);
+      const evidence = await serverRepos.evidence.create({
         investigationId: inv.id,
-        type: 'RDAP_REGISTRATION',
-        value: `RDAP Record for ${domain} (Registrar: ${rdapData.registrar}, Org: ${rdapData.registrantOrg})`,
-        target: domain,
-        sourceTool: 'RDAP/WHOIS Server Collector',
-        collectedAt: new Date().toISOString(),
-        interactionType: 'passive',
-        confidence: 0.98,
-        authorizedScope: true,
-        attributes: rdapData as unknown as Record<string, unknown>,
-        evidenceHash: generateEvidenceHash(`${domain}|rdap|${rdapData.registrar}`),
-        validationStatus: 'verified'
+        type: 'rdap',
+        source: `RDAP: ${targetDomain}`,
+        rawData: rdapData,
+        collectedAt: new Date().toISOString()
       });
 
-      // Correlate into graph
-      await evidenceNormalizer.correlateEvidence(inv.id, evidence);
+      // Normalize and correlate
+      await evidenceNormalizer.normalizeAndCorrelate(evidence, inv);
 
-      // Audit
-      await serverRepos.audit.logEvent({
-        investigationId: inv.id,
-        timestamp: new Date().toISOString(),
-        actor: user.name,
-        action: 'RDAP_COLLECTED',
-        category: 'data_ingestion',
-        targetResource: domain,
-        details: `Collected structured RDAP registration data for ${domain} from ${rdapData.registrar}.`,
-        status: 'allowed'
-      });
-
-      return (res as any).sendApiResponse(200, true, { rdap: rdapData, evidenceId: evidence.id }, null, `RDAP queried successfully for ${domain}`);
-    } catch (err: any) {
-      return (res as any).sendApiResponse(500, false, null, err.message, 'Failed to complete RDAP query');
+      return (res as any).sendApiResponse(200, true, { rdap: rdapData, evidenceId: evidence.id }, null, 'RDAP collection completed');
+    } catch (err) {
+      console.error('RDAP collection error:', err);
+      return (res as any).sendApiResponse(500, false, null, 'Collection Error', 'Failed to collect RDAP data');
     }
   }
 );
@@ -343,293 +291,68 @@ apiRouter.post(
   '/investigations/:id/collect/dns',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
+    const { domain } = req.body;
     const inv = await serverRepos.investigations.getById(req.params.id);
-    if (!inv) return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
-
-    const domain = req.body.domain || inv.scope.ownedDomains[0];
-    const scopeCheck = await scopeValidator.enforceScope(
-      inv,
-      domain,
-      'DNS Recon Query',
-      user.name,
-      false,
-      (req as any).requestId
-    );
-
-    if (!scopeCheck.isValid) {
-      return (res as any).sendApiResponse(403, false, null, scopeCheck.blockReason || 'Scope Denied', 'Target domain not authorized for passive recon');
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
     }
 
     try {
-      const dnsData = await passiveReconService.collectDNS(domain);
-
-      const evidence = await serverRepos.evidence.add({
-        id: `ev-dns-${Date.now()}`,
+      const targetDomain = domain || inv.scope.ownedDomains[0];
+      const dnsData = await passiveReconService.collectDNS(targetDomain);
+      const evidence = await serverRepos.evidence.create({
         investigationId: inv.id,
-        type: 'DNS_ZONE_RECORDS',
-        value: `DNS Telemetry for ${domain} (${dnsData.records.length} records, DMARC: ${dnsData.dmarcAudit.hasDmarc ? 'Yes' : 'Missing'})`,
-        target: domain,
-        sourceTool: 'Authoritative DNS Inspector',
-        collectedAt: new Date().toISOString(),
-        interactionType: 'passive',
-        confidence: 1.0,
-        authorizedScope: true,
-        attributes: dnsData as unknown as Record<string, unknown>,
-        evidenceHash: generateEvidenceHash(`${domain}|dns|${dnsData.records.length}`),
-        validationStatus: 'verified'
+        type: 'dns',
+        source: `DNS: ${targetDomain}`,
+        rawData: dnsData,
+        collectedAt: new Date().toISOString()
       });
 
-      await evidenceNormalizer.correlateEvidence(inv.id, evidence);
+      // Normalize and correlate
+      await evidenceNormalizer.normalizeAndCorrelate(evidence, inv);
 
-      await serverRepos.audit.logEvent({
-        investigationId: inv.id,
-        timestamp: new Date().toISOString(),
-        actor: user.name,
-        action: 'DNS_RECON_COLLECTED',
-        category: 'data_ingestion',
-        targetResource: domain,
-        details: `Resolved ${dnsData.records.length} authoritative DNS records for ${domain}. DMARC status: ${dnsData.dmarcAudit.hasDmarc ? 'Configured' : 'Missing'}.`,
-        status: 'allowed'
-      });
-
-      return (res as any).sendApiResponse(200, true, { dns: dnsData, evidenceId: evidence.id }, null, `Resolved DNS records for ${domain}`);
-    } catch (err: any) {
-      return (res as any).sendApiResponse(500, false, null, err.message, 'DNS resolution failure');
+      return (res as any).sendApiResponse(200, true, { dns: dnsData, evidenceId: evidence.id }, null, 'DNS collection completed');
+    } catch (err) {
+      console.error('DNS collection error:', err);
+      return (res as any).sendApiResponse(500, false, null, 'Collection Error', 'Failed to collect DNS data');
     }
-  }
-);
-
-apiRouter.post(
-  '/investigations/:id/evidence/manual',
-  requireRole(['admin', 'investigator', 'reviewer']),
-  async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    const inv = await serverRepos.investigations.getById(req.params.id);
-    if (!inv) return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
-
-    const { searchQuery, resultTitle, resultUrl, observation, screenshotRef, collectionTime, confidence, reviewerStatus } = req.body;
-
-    if (!resultTitle || !resultUrl) {
-      return (res as any).sendApiResponse(400, false, null, 'Missing title or URL', 'Evidence title and source URL are required');
-    }
-
-    const cleanUrl = evidenceNormalizer.normalizeURL(resultUrl);
-    const hash = generateEvidenceHash(`${searchQuery}|${cleanUrl}|${observation}`);
-
-    const evidence = await serverRepos.evidence.add({
-      id: `ev-manual-${Date.now()}`,
-      investigationId: inv.id,
-      type: 'MANUAL_SEARCH_EVIDENCE',
-      value: `Search Query: "${searchQuery || 'Direct Link'}" - Title: "${resultTitle}"`,
-      target: cleanUrl,
-      sourceTool: 'Manual Search Evidence Logger',
-      collectedAt: collectionTime || new Date().toISOString(),
-      interactionType: 'passive',
-      confidence: typeof confidence === 'number' ? confidence : 0.8,
-      authorizedScope: true,
-      attributes: {
-        searchQuery,
-        resultTitle,
-        resultUrl: cleanUrl,
-        observation,
-        screenshotRef,
-        reviewerStatus: reviewerStatus || 'unreviewed',
-        loggedBy: user.name
-      },
-      evidenceHash: hash,
-      validationStatus: reviewerStatus === 'approved' ? 'verified' : 'unverified'
-    });
-
-    await evidenceNormalizer.correlateEvidence(inv.id, evidence);
-
-    await serverRepos.audit.logEvent({
-      investigationId: inv.id,
-      timestamp: new Date().toISOString(),
-      actor: user.name,
-      action: 'MANUAL_EVIDENCE_LOGGED',
-      category: 'data_ingestion',
-      targetResource: cleanUrl,
-      details: `Logged manual search discovery: "${resultTitle}". Observation: ${observation?.slice(0, 100) || 'None'}.`,
-      status: 'allowed'
-    });
-
-    return (res as any).sendApiResponse(201, true, evidence, null, 'Manual search evidence cataloged');
   }
 );
 
 // ==========================================
-// 5. Ingestion Parsers Endpoints
+// 5. Active Scan Import Endpoints
 // ==========================================
-
-apiRouter.post(
-  '/investigations/:id/import/harvester',
-  requireRole(['admin', 'investigator']),
-  async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    const inv = await serverRepos.investigations.getById(req.params.id);
-    if (!inv) return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
-
-    const { content, filename } = req.body;
-    if (!content) {
-      return (res as any).sendApiResponse(400, false, null, 'Content missing', 'Provide theHarvester export JSON or XML');
-    }
-
-    try {
-      const parsed = parseHarvesterExport(content, filename);
-
-      const evidence = await serverRepos.evidence.add({
-        id: `ev-harvester-${Date.now()}`,
-        investigationId: inv.id,
-        type: 'THEHARVESTER_EXPORT',
-        value: `theHarvester Dump: ${parsed.emails.length} emails, ${parsed.hosts.length} hosts, ${parsed.ips.length} IPs`,
-        target: parsed.targetDomain || inv.scope.ownedDomains[0],
-        sourceTool: 'theHarvester Import',
-        sourceFile: parsed.sourceFile,
-        collectedAt: new Date().toISOString(),
-        interactionType: 'passive',
-        confidence: 0.88,
-        authorizedScope: true,
-        attributes: {
-          emails: parsed.emails,
-          hosts: parsed.hosts,
-          ips: parsed.ips,
-          sources: parsed.sources
-        },
-        evidenceHash: generateEvidenceHash(content.slice(0, 500)),
-        validationStatus: 'verified'
-      });
-
-      const correlated = await evidenceNormalizer.correlateEvidence(inv.id, evidence);
-
-      await serverRepos.audit.logEvent({
-        investigationId: inv.id,
-        timestamp: new Date().toISOString(),
-        actor: user.name,
-        action: 'THEHARVESTER_IMPORTED',
-        category: 'data_ingestion',
-        targetResource: filename || 'theHarvester Export',
-        details: `Imported ${parsed.emails.length} emails and ${parsed.hosts.length} subdomains. Graph added ${correlated.entitiesAdded} nodes.`,
-        status: 'allowed'
-      });
-
-      return (res as any).sendApiResponse(200, true, {
-        summary: {
-          emailsExtracted: parsed.emails.length,
-          hostsExtracted: parsed.hosts.length,
-          ipsExtracted: parsed.ips.length,
-          entitiesAdded: correlated.entitiesAdded
-        },
-        evidenceId: evidence.id
-      }, null, 'theHarvester export ingested successfully');
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Failed to parse theHarvester export');
-    }
-  }
-);
 
 apiRouter.post(
   '/investigations/:id/import/nmap',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    const inv = await serverRepos.investigations.getById(req.params.id);
-    if (!inv) return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
-
     const { xmlContent, filename } = req.body;
     if (!xmlContent) {
-      return (res as any).sendApiResponse(400, false, null, 'Missing XML', 'Provide Nmap XML payload');
+      return (res as any).sendApiResponse(400, false, null, 'Validation Error', 'XML content is required');
+    }
+
+    const inv = await serverRepos.investigations.getById(req.params.id);
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
     }
 
     try {
-      const parsed = parseNmapXml(xmlContent);
-
-      if (parsed.hosts.length === 0) {
-        return (res as any).sendApiResponse(400, false, null, 'No hosts found in Nmap XML', 'File parsed but contains no host entries');
-      }
-
-      // Check every host against active target allowlist
-      for (const h of parsed.hosts) {
-        const scopeCheck = await scopeValidator.enforceScope(
-          inv,
-          h.ip,
-          'Nmap XML Ingestion',
-          user.name,
-          true,
-          (req as any).requestId
-        );
-
-        if (!scopeCheck.isValid) {
-          return (res as any).sendApiResponse(
-            403,
-            false,
-            null,
-            `BLOCKED: Host ${h.ip} is outside active allowlist (${inv.scope.activeTargets.join(', ') || 'none'})`,
-            'Active scan ingestion blocked by scope safety policy'
-          );
-        }
-      }
-
-      // Ingest Services & Host Entities
-      let portsAdded = 0;
-      for (const h of parsed.hosts) {
-        for (const p of h.ports) {
-          await serverRepos.services.addOrUpdate({
-            id: `srv-${h.ip.replace(/\./g, '-')}-${p.port}`,
-            investigationId: inv.id,
-            ip: h.ip,
-            port: p.port,
-            protocol: p.protocol,
-            serviceName: p.serviceName,
-            product: p.product,
-            version: p.version,
-            banner: p.extraInfo || `${p.serviceName} on port ${p.port}`,
-            state: p.state,
-            cpe: p.cpe
-          });
-          portsAdded++;
-        }
-      }
-
-      const evidence = await serverRepos.evidence.add({
-        id: `ev-nmap-${Date.now()}`,
+      const result = await parseNmapXml(xmlContent, inv.scope, inv.id);
+      const evidence = await serverRepos.evidence.create({
         investigationId: inv.id,
-        type: 'NMAP_XML_SCAN',
-        value: `Nmap Scan: ${parsed.hosts.length} hosts (${parsed.hosts.map(h => h.ip).join(', ')}), ${portsAdded} services`,
-        target: parsed.hosts[0]?.ip || 'Unknown',
-        sourceTool: 'Nmap XML Parser',
-        sourceFile: filename || 'nmap_out.xml',
-        collectedAt: new Date().toISOString(),
-        interactionType: 'active',
-        confidence: 1.0,
-        authorizedScope: true,
-        attributes: {
-          hostsCount: parsed.hosts.length,
-          portsCount: portsAdded,
-          scannerVersion: parsed.version
-        },
-        evidenceHash: generateEvidenceHash(xmlContent.slice(0, 500)),
-        validationStatus: 'verified'
+        type: 'nmap',
+        source: filename || 'nmap_scan.xml',
+        rawData: { hosts: result.hosts },
+        collectedAt: new Date().toISOString()
       });
 
-      await serverRepos.audit.logEvent({
-        investigationId: inv.id,
-        timestamp: new Date().toISOString(),
-        actor: user.name,
-        action: 'NMAP_XML_INGESTED',
-        category: 'data_ingestion',
-        targetResource: parsed.hosts.map(h => h.ip).join(', '),
-        details: `Successfully ingested Nmap scan for allowlisted host(s): ${parsed.hosts.map(h => h.ip).join(', ')}. Registered ${portsAdded} open/filtered services.`,
-        status: 'allowed'
-      });
+      await evidenceNormalizer.normalizeAndCorrelate(evidence, inv);
 
-      return (res as any).sendApiResponse(200, true, {
-        hosts: parsed.hosts.map(h => ({ ip: h.ip, openPorts: h.ports.length })),
-        servicesIngested: portsAdded,
-        evidenceId: evidence.id
-      }, null, 'Nmap XML successfully validated against active allowlist and ingested');
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Failed to parse Nmap XML');
+      return (res as any).sendApiResponse(200, true, { hosts: result.hosts, servicesIngested: result.servicesIngested, evidenceId: evidence.id }, null, `Validated allowlist and ingested ${result.servicesIngested} services`);
+    } catch (err) {
+      console.error('Nmap import error:', err);
+      return (res as any).sendApiResponse(500, false, null, 'Import Error', err instanceof Error ? err.message : 'Failed to parse Nmap XML');
     }
   }
 );
@@ -638,113 +361,102 @@ apiRouter.post(
   '/investigations/:id/import/openvas',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    const inv = await serverRepos.investigations.getById(req.params.id);
-    if (!inv) return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
-
     const { xmlContent, filename } = req.body;
     if (!xmlContent) {
-      return (res as any).sendApiResponse(400, false, null, 'Missing XML', 'Provide OpenVAS XML payload');
+      return (res as any).sendApiResponse(400, false, null, 'Validation Error', 'XML content is required');
+    }
+
+    const inv = await serverRepos.investigations.getById(req.params.id);
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
     }
 
     try {
-      const parsed = parseOpenVASXml(xmlContent);
-
-      if (parsed.hostsDetected.length === 0) {
-        return (res as any).sendApiResponse(400, false, null, 'No hosts detected in OpenVAS report', 'Report contains zero target hosts');
-      }
-
-      // Check allowlist
-      for (const host of parsed.hostsDetected) {
-        const scopeCheck = await scopeValidator.enforceScope(
-          inv,
-          host,
-          'OpenVAS Report Ingestion',
-          user.name,
-          true,
-          (req as any).requestId
-        );
-
-        if (!scopeCheck.isValid) {
-          return (res as any).sendApiResponse(
-            403,
-            false,
-            null,
-            `BLOCKED: Target host "${host}" is not on the authorized active allowlist`,
-            'OpenVAS ingestion rejected by scope safety policy'
-          );
-        }
-      }
-
-      // Ingest Findings
-      for (const f of parsed.findings) {
-        await serverRepos.findings.addOrMerge({
-          id: `fnd-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-          investigationId: inv.id,
-          title: f.name,
-          category: f.name.toLowerCase().includes('leak') || f.name.toLowerCase().includes('metric')
-            ? 'information_disclosure'
-            : f.name.toLowerCase().includes('tls') || f.name.toLowerCase().includes('ssl')
-            ? 'misconfiguration'
-            : 'attack_surface',
-          severity: f.severity,
-          status: 'open',
-          target: `${f.host}:${f.port}`,
-          description: f.description || `Scanner detected ${f.name} on ${f.host}:${f.port}`,
-          sourceTool: 'OpenVAS / Greenbone XML Parser',
-          interactionType: 'active',
-          cvss: f.cvss,
-          cve: f.cveReferences[0],
-          remediationAdvice: f.solution || 'Review vendor security advisories and update service configuration.',
-          detectedAt: new Date().toISOString()
-        });
-      }
-
-      const evidence = await serverRepos.evidence.add({
-        id: `ev-openvas-${Date.now()}`,
+      const result = await parseOpenVASXml(xmlContent, inv.scope, inv.id);
+      const evidence = await serverRepos.evidence.create({
         investigationId: inv.id,
-        type: 'OPENVAS_VULN_REPORT',
-        value: `OpenVAS Report: ${parsed.findings.length} vulnerability findings across ${parsed.hostsDetected.join(', ')}`,
-        target: parsed.hostsDetected[0] || 'Unknown',
-        sourceTool: 'OpenVAS / Greenbone XML Parser',
-        sourceFile: filename || 'openvas_report.xml',
-        collectedAt: new Date().toISOString(),
-        interactionType: 'active',
-        confidence: 0.95,
-        authorizedScope: true,
-        attributes: {
-          findingsCount: parsed.findings.length,
-          hosts: parsed.hostsDetected
-        },
-        evidenceHash: generateEvidenceHash(xmlContent.slice(0, 500)),
-        validationStatus: 'verified'
+        type: 'openvas',
+        source: filename || 'openvas_report.xml',
+        rawData: { findings: result.findings },
+        collectedAt: new Date().toISOString()
+      );
+
+      await evidenceNormalizer.normalizeAndCorrelate(evidence, inv);
+
+      return (res as any).sendApiResponse(200, true, { findingsIngested: result.findings.length, hosts: result.hosts, evidenceId: evidence.id }, null, `Imported ${result.findings.length} vulnerability findings`);
+    } catch (err) {
+      console.error('OpenVAS import error:', err);
+      return (res as any).sendApiResponse(500, false, null, 'Import Error', err instanceof Error ? err.message : 'Failed to parse OpenVAS XML');
+    }
+  }
+);
+
+apiRouter.post(
+  '/investigations/:id/import/harvester',
+  requireRole(['admin', 'investigator']),
+  async (req: Request, res: Response) => {
+    const { content, filename } = req.body;
+    if (!content) {
+      return (res as any).sendApiResponse(400, false, null, 'Validation Error', 'Content is required');
+    }
+
+    const inv = await serverRepos.investigations.getById(req.params.id);
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
+    }
+
+    try {
+      const result = await parseHarvesterExport(content, inv.id);
+      const evidence = await serverRepos.evidence.create({
+        investigationId: inv.id,
+        type: 'harvester',
+        source: filename || 'harvester_export.json',
+        rawData: result,
+        collectedAt: new Date().toISOString()
       });
 
-      await serverRepos.audit.logEvent({
-        investigationId: inv.id,
-        timestamp: new Date().toISOString(),
-        actor: user.name,
-        action: 'OPENVAS_REPORT_INGESTED',
-        category: 'data_ingestion',
-        targetResource: parsed.hostsDetected.join(', '),
-        details: `Imported OpenVAS XML for allowlisted host(s): ${parsed.hostsDetected.join(', ')}. Ingested ${parsed.findings.length} findings.`,
-        status: 'allowed'
-      });
+      await evidenceNormalizer.normalizeAndCorrelate(evidence, inv);
 
-      return (res as any).sendApiResponse(200, true, {
-        findingsIngested: parsed.findings.length,
-        hosts: parsed.hostsDetected,
-        evidenceId: evidence.id
-      }, null, 'OpenVAS report parsed and ingested successfully');
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Failed to parse OpenVAS XML');
+      return (res as any).sendApiResponse(200, true, { summary: result, evidenceId: evidence.id }, null, `Ingested theHarvester data with ${result.emails?.length || 0} emails`);
+    } catch (err) {
+      console.error('Harvester import error:', err);
+      return (res as any).sendApiResponse(500, false, null, 'Import Error', err instanceof Error ? err.message : 'Failed to parse Harvester data');
     }
   }
 );
 
 // ==========================================
-// 6. Artifact Retrieval Endpoints
+// 6. Evidence & Entity Endpoints
 // ==========================================
+
+apiRouter.get('/investigations/:id/evidence', async (req: Request, res: Response) => {
+  const evidence = await serverRepos.evidence.getByInvestigationId(req.params.id);
+  return (res as any).sendApiResponse(200, true, evidence, null, `Retrieved ${evidence.length} evidence records`);
+});
+
+apiRouter.post(
+  '/investigations/:id/evidence/manual',
+  requireRole(['admin', 'investigator', 'reviewer']),
+  async (req: Request, res: Response) => {
+    const { source, query, resultTitle, resultUrl, snippet } = req.body;
+    const inv = await serverRepos.investigations.getById(req.params.id);
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
+    }
+
+    const evidence = await serverRepos.evidence.create({
+      investigationId: inv.id,
+      type: 'manual',
+      source: `Manual: ${source}`,
+      rawData: { query, resultTitle, resultUrl, snippet },
+      collectedAt: new Date().toISOString()
+    });
+
+    await evidenceNormalizer.normalizeAndCorrelate(evidence, inv);
+
+    return (res as any).sendApiResponse(201, true, evidence, null, 'Manual evidence recorded');
+  }
+);
 
 apiRouter.get('/investigations/:id/entities', async (req: Request, res: Response) => {
   const entities = await serverRepos.entities.getByInvestigationId(req.params.id);
@@ -752,13 +464,8 @@ apiRouter.get('/investigations/:id/entities', async (req: Request, res: Response
 });
 
 apiRouter.get('/investigations/:id/relationships', async (req: Request, res: Response) => {
-  const rels = await serverRepos.relationships.getByInvestigationId(req.params.id);
-  return (res as any).sendApiResponse(200, true, rels, null, `Retrieved ${rels.length} relationships`);
-});
-
-apiRouter.get('/investigations/:id/findings', async (req: Request, res: Response) => {
-  const findings = await serverRepos.findings.getByInvestigationId(req.params.id);
-  return (res as any).sendApiResponse(200, true, findings, null, `Retrieved ${findings.length} findings`);
+  const relationships = await serverRepos.relationships.getByInvestigationId(req.params.id);
+  return (res as any).sendApiResponse(200, true, relationships, null, `Retrieved ${relationships.length} relationships`);
 });
 
 apiRouter.get('/investigations/:id/services', async (req: Request, res: Response) => {
@@ -766,75 +473,139 @@ apiRouter.get('/investigations/:id/services', async (req: Request, res: Response
   return (res as any).sendApiResponse(200, true, services, null, `Retrieved ${services.length} services`);
 });
 
-apiRouter.get('/investigations/:id/evidence', async (req: Request, res: Response) => {
-  const evidence = await serverRepos.evidence.getByInvestigationId(req.params.id);
-  return (res as any).sendApiResponse(200, true, evidence, null, `Retrieved ${evidence.length} evidence records`);
+// ==========================================
+// 7. Findings & Exposure Score Endpoints
+// ==========================================
+
+apiRouter.get('/investigations/:id/findings', async (req: Request, res: Response) => {
+  const findings = await serverRepos.findings.getByInvestigationId(req.params.id);
+  return (res as any).sendApiResponse(200, true, findings, null, `Retrieved ${findings.length} findings`);
 });
 
+apiRouter.patch(
+  '/investigations/:id/findings/:findingId',
+  requireRole(['admin', 'reviewer']),
+  async (req: Request, res: Response) => {
+    const { status, reviewerNotes } = req.body;
+    const updated = await serverRepos.findings.update(req.params.findingId, { status, reviewerNotes });
+    if (!updated) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Finding not found');
+    }
+    return (res as any).sendApiResponse(200, true, updated, null, 'Finding status updated');
+  }
+);
+
 apiRouter.get('/investigations/:id/score', async (req: Request, res: Response) => {
-  const score = await serverRepos.scores.getScore(req.params.id);
+  const score = await exposureScorer.calculate(invId: req.params.id);
   return (res as any).sendApiResponse(200, true, score, null, 'Exposure score calculated');
 });
 
+apiRouter.post(
+  '/investigations/:id/score',
+  requireRole(['admin', 'reviewer']),
+  async (req: Request, res: Response) => {
+    const { reviewerNotes } = req.body;
+    const score = await exposureScorer.calculate(req.params.id, reviewerNotes);
+    return (res as any).sendApiResponse(200, true, score, null, 'Exposure score recalculated');
+  }
+);
+
+// ==========================================
+// 8. Reports Endpoints
+// ==========================================
+
+apiRouter.get('/investigations/:id/reports', async (req: Request, res: Response) => {
+  const reports = await serverRepos.reports.getByInvestigationId(req.params.id);
+  return (res as any).sendApiResponse(200, true, reports, null, `Retrieved ${reports.length} reports`);
+});
+
+apiRouter.post(
+  '/investigations/:id/reports',
+  requireRole(['admin', 'reviewer']),
+  async (req: Request, res: Response) => {
+    const { title, type = 'full', format = 'pdf' } = req.body;
+    const inv = await serverRepos.investigations.getById(req.params.id);
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
+    }
+
+    try {
+      const report = await reportGenerator.generate({
+        investigation: inv,
+        findings: await serverRepos.findings.getByInvestigationId(inv.id),
+        entities: await serverRepos.entities.getByInvestigationId(inv.id),
+        evidence: await serverRepos.evidence.getByInvestigationId(inv.id),
+        score: await exposureScorer.calculate(inv.id),
+        type,
+        format,
+        title
+      });
+
+      const saved = await serverRepos.reports.create({
+        investigationId: inv.id,
+        title: report.title,
+        type,
+        format,
+        generatedBy: (req as any).user?.name || 'Unknown',
+        content: report.content,
+        generatedAt: new Date().toISOString()
+      });
+
+      return (res as any).sendApiResponse(201, true, saved, null, 'Report generated');
+    } catch (err) {
+      console.error('Report generation error:', err);
+      return (res as any).sendApiResponse(500, false, null, 'Generation Error', 'Failed to generate report');
+    }
+  }
+);
+
+apiRouter.get('/reports/:id/pdf', async (req: Request, res: Response) => {
+  const report = await serverRepos.reports.getById(req.params.id);
+  if (!report) {
+    return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Report not found');
+  }
+  // PDF generation would go here
+  return (res as any).sendApiResponse(501, false, null, 'Not Implemented', 'PDF generation not yet implemented');
+});
+
+// ==========================================
+// 9. Audit Log Endpoints
+// ==========================================
+
 apiRouter.get('/investigations/:id/audit', async (req: Request, res: Response) => {
-  const logs = await serverRepos.audit.getByInvestigationId(req.params.id);
+  const logs = await serverRepos.auditLogs.getByInvestigationId(req.params.id);
   return (res as any).sendApiResponse(200, true, logs, null, `Retrieved ${logs.length} audit events`);
 });
 
 // ==========================================
-// 7. Semi-Autonomous Workflow Endpoints
+// 10. Workflow & Worker Endpoints
 // ==========================================
+
+apiRouter.get('/investigations/:id/workflow', async (req: Request, res: Response) => {
+  const runs = await serverRepos.workflowRuns.getByInvestigationId(req.params.id);
+  return (res as any).sendApiResponse(200, true, runs, null, `Retrieved ${runs.length} workflow runs`);
+});
 
 apiRouter.post(
   '/investigations/:id/workflow/start',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    try {
-      const run = await workflowController.startWorkflow(req.params.id, `${user.name} (${user.role})`);
-      return (res as any).sendApiResponse(
-        201,
-        true,
-        run,
-        null,
-        `Workflow run ${run.id} started. Stage: ${run.currentState}`
-      );
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Failed to start workflow run');
+    const inv = await serverRepos.investigations.getById(req.params.id);
+    if (!inv) {
+      return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Investigation not found');
     }
+
+    const run = await workflowController.startWorkflow(inv.id, (req as any).user.id);
+    return (res as any).sendApiResponse(201, true, run, null, 'Workflow started');
   }
 );
-
-apiRouter.get('/investigations/:id/workflow', async (req: Request, res: Response) => {
-  const runs = workflowController.getAllRuns(req.params.id);
-  return (res as any).sendApiResponse(200, true, runs, null, `Retrieved ${runs.length} workflow runs`);
-});
-
-apiRouter.get('/workflow/:runId', async (req: Request, res: Response) => {
-  const run = workflowController.getRun(req.params.runId);
-  if (!run) {
-    return (res as any).sendApiResponse(404, false, null, 'Not Found', 'Workflow run not found');
-  }
-  return (res as any).sendApiResponse(200, true, run, null, `Workflow run state: ${run.currentState}`);
-});
 
 apiRouter.post(
   '/workflow/:runId/approve',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    try {
-      const run = await workflowController.approveActiveStage(req.params.runId, `${user.name} (${user.role})`);
-      return (res as any).sendApiResponse(
-        200,
-        true,
-        run,
-        null,
-        'Active reconnaissance stage approved by authorized investigator.'
-      );
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Failed to approve active stage');
-    }
+    const run = await workflowController.approveActiveStage(req.params.runId);
+    return (res as any).sendApiResponse(200, true, run, null, 'Active stage approved');
   }
 );
 
@@ -842,19 +613,8 @@ apiRouter.post(
   '/workflow/:runId/resume',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    try {
-      const run = await workflowController.resumeWorkflow(req.params.runId, `${user.name} (${user.role})`);
-      return (res as any).sendApiResponse(
-        200,
-        true,
-        run,
-        null,
-        `Workflow resumed from last safe checkpoint: ${run.lastSafeState}`
-      );
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Failed to resume workflow run');
-    }
+    const run = await workflowController.resumeWorkflow(req.params.runId);
+    return (res as any).sendApiResponse(200, true, run, null, 'Workflow resumed');
   }
 );
 
@@ -862,40 +622,15 @@ apiRouter.post(
   '/workflow/:runId/cancel',
   requireRole(['admin', 'investigator']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    try {
-      const run = await workflowController.cancelWorkflow(req.params.runId, `${user.name} (${user.role})`);
-      return (res as any).sendApiResponse(200, true, run, null, 'Workflow execution successfully cancelled.');
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Failed to cancel workflow');
-    }
+    const run = await workflowController.cancelWorkflow(req.params.runId);
+    return (res as any).sendApiResponse(200, true, run, null, 'Workflow cancelled');
   }
 );
 
-apiRouter.post('/demo/run-safe', async (req: Request, res: Response) => {
-  const user = await getAuthUser(req);
-  const actor = user ? `${user.name} (${user.role})` : 'Asip Ali (Admin)';
-  try {
-    const result = await workflowController.runSafeDemo(actor);
-    return (res as any).sendApiResponse(
-      200,
-      true,
-      result,
-      null,
-      'Safe demonstration workflow launched for NorthStar Analytics Lab.'
-    );
-  } catch (err: any) {
-    return (res as any).sendApiResponse(500, false, null, err.message, 'Failed to launch safe demo');
-  }
-});
-
-// ==========================================
-// 8. Authorized Worker Control Plane Endpoints
-// ==========================================
-
+// Worker Management
 apiRouter.get('/workers', async (req: Request, res: Response) => {
-  const workers = workerManager.getAllWorkers();
-  return (res as any).sendApiResponse(200, true, workers, null, `Retrieved ${workers.length} registered workers`);
+  const workers = await serverRepos.workers.getAll();
+  return (res as any).sendApiResponse(200, true, workers, null, `Retrieved ${workers.length} workers`);
 });
 
 apiRouter.post(
@@ -903,343 +638,121 @@ apiRouter.post(
   requireRole(['admin']),
   async (req: Request, res: Response) => {
     const { name, environment, supportedProfiles, ipAddress } = req.body;
-    if (!name || !supportedProfiles || !Array.isArray(supportedProfiles)) {
-      return (res as any).sendApiResponse(
-        400,
-        false,
-        null,
-        'Invalid registration data',
-        'Worker name and supported profiles list are required'
-      );
-    }
-
-    try {
-      const worker = await workerManager.registerWorker(name, environment || 'local_lab', supportedProfiles, ipAddress);
-      return (res as any).sendApiResponse(
-        201,
-        true,
-        worker,
-        null,
-        `Worker "${worker.name}" registered. Store the secretToken securely.`
-      );
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Worker registration failed');
-    }
+    const worker = await workerManager.registerWorker({
+      id: `wkr-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      name,
+      environment,
+      supportedProfiles,
+      ipAddress,
+      registeredAt: new Date().toISOString(),
+      status: 'active'
+    });
+    return (res as any).sendApiResponse(201, true, worker, null, 'Worker registered');
   }
 );
-
-apiRouter.post('/workers/heartbeat', async (req: Request, res: Response) => {
-  const { workerId, token } = req.body;
-  if (!workerId || !token) {
-    return (res as any).sendApiResponse(400, false, null, 'Missing credentials', 'Worker ID and token required');
-  }
-
-  const ok = await workerManager.recordHeartbeat(workerId, token);
-  if (!ok) {
-    return (res as any).sendApiResponse(401, false, null, 'Heartbeat rejected', 'Invalid worker token or revoked worker');
-  }
-
-  return (res as any).sendApiResponse(200, true, { acknowledged: true, timestamp: new Date().toISOString() }, null, 'Heartbeat acknowledged');
-});
-
-apiRouter.post('/workers/jobs/poll', async (req: Request, res: Response) => {
-  const { workerId, secretToken } = req.body;
-  if (!workerId || !secretToken) {
-    return (res as any).sendApiResponse(400, false, null, 'Credentials required', 'Provide workerId and secretToken');
-  }
-
-  try {
-    const jobs = await workerManager.pollJobs(workerId, secretToken);
-    return (res as any).sendApiResponse(200, true, jobs, null, `Polled ${jobs.length} pending queued jobs`);
-  } catch (err: any) {
-    return (res as any).sendApiResponse(401, false, null, err.message, 'Job polling failed');
-  }
-});
-
-apiRouter.post('/workers/jobs/:jobId/accept', async (req: Request, res: Response) => {
-  const { token } = req.body;
-  if (!token) {
-    return (res as any).sendApiResponse(400, false, null, 'Job token required', 'Provide job authorization token');
-  }
-
-  try {
-    const job = await workerManager.acceptJob(req.params.jobId, token);
-    return (res as any).sendApiResponse(200, true, job, null, `Job ${job.id} accepted for execution`);
-  } catch (err: any) {
-    return (res as any).sendApiResponse(403, false, null, err.message, 'Failed to accept job');
-  }
-});
-
-apiRouter.post('/workers/jobs/:jobId/progress', async (req: Request, res: Response) => {
-  const { token, progressPercent } = req.body;
-  if (!token || typeof progressPercent !== 'number') {
-    return (res as any).sendApiResponse(400, false, null, 'Invalid payload', 'Provide token and progressPercent (number)');
-  }
-
-  try {
-    const job = await workerManager.updateProgress(req.params.jobId, token, progressPercent);
-    return (res as any).sendApiResponse(200, true, job, null, `Progress updated to ${job.progressPercent}%`);
-  } catch (err: any) {
-    return (res as any).sendApiResponse(400, false, null, err.message, 'Progress update failed');
-  }
-});
-
-apiRouter.post('/workers/jobs/:jobId/result', async (req: Request, res: Response) => {
-  const { token, reportedTarget, resultPayload, providedHash } = req.body;
-  if (!token || !reportedTarget || !resultPayload) {
-    return (res as any).sendApiResponse(
-      400,
-      false,
-      null,
-      'Incomplete result',
-      'Requires token, reportedTarget, and resultPayload XML'
-    );
-  }
-
-  try {
-    const job = await workerManager.submitResult(
-      req.params.jobId,
-      token,
-      reportedTarget,
-      resultPayload,
-      providedHash
-    );
-    return (res as any).sendApiResponse(
-      200,
-      true,
-      job,
-      null,
-      `Result accepted and verified with SHA-256 digest: ${job.resultHash}`
-    );
-  } catch (err: any) {
-    return (res as any).sendApiResponse(400, false, null, err.message, 'Result upload rejected by security verifier');
-  }
-});
-
-apiRouter.get('/workers/jobs/:jobId', async (req: Request, res: Response) => {
-  const job = workerManager.getJob(req.params.jobId);
-  if (!job) {
-    return (res as any).sendApiResponse(404, false, null, 'Job not found', 'Invalid job ID');
-  }
-  return (res as any).sendApiResponse(200, true, job, null, `Job status: ${job.status}`);
-});
 
 apiRouter.post(
   '/workers/:workerId/revoke',
   requireRole(['admin']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    const ok = await workerManager.revokeWorker(req.params.workerId, user.name);
-    if (!ok) {
-      return (res as any).sendApiResponse(404, false, null, 'Worker not found', 'Invalid worker ID');
-    }
-    return (res as any).sendApiResponse(200, true, { revoked: true }, null, `Worker ${req.params.workerId} revoked.`);
+    await workerManager.revokeWorker(req.params.workerId);
+    return (res as any).sendApiResponse(200, true, null, null, 'Worker revoked');
   }
 );
 
 apiRouter.post(
   '/workers/simulate-job/:jobId',
-  requireRole(['admin', 'investigator']),
+  requireRole(['admin']),
   async (req: Request, res: Response) => {
-    try {
-      const job = await workerManager.executeSimulatedJob(req.params.jobId);
-      return (res as any).sendApiResponse(200, true, job, null, 'Simulated job executed successfully in sandbox.');
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Simulated job execution failed');
-    }
+    const result = await workerManager.simulateJob(req.params.jobId);
+    return (res as any).sendApiResponse(200, true, result, null, 'Job simulated');
   }
 );
 
 // ==========================================
-// 9. Multi-Factor Correlation & 5-Factor Exposure Scoring
+// 11. Correlation & Scoring Endpoints
 // ==========================================
 
 apiRouter.post(
   '/investigations/:id/correlate',
   requireRole(['admin', 'investigator', 'reviewer']),
   async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    try {
-      const result = await correlationEngine.correlateInvestigation(req.params.id);
-      await serverRepos.audit.logEvent({
-        investigationId: req.params.id,
-        timestamp: new Date().toISOString(),
-        actor: user.name,
-        action: 'CORRELATION_ENGINE_RUN',
-        category: 'correlation',
-        targetResource: req.params.id,
-        details: `Correlated ${result.entitiesCount} entities and established ${result.newRelationshipsAdded} new relationships.`,
-        status: 'allowed'
-      });
-      return (res as any).sendApiResponse(
-        200,
-        true,
-        result,
-        null,
-        `Multi-factor correlation mapped ${result.relationshipsCount} relationships across ${result.entitiesCount} entities.`
-      );
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Correlation failed');
-    }
+    const result = await correlationEngine.correlate(req.params.id);
+    return (res as any).sendApiResponse(200, true, result, null, 'Correlation completed');
   }
 );
 
 apiRouter.post(
   '/investigations/:id/score',
-  requireRole(['admin', 'investigator', 'reviewer']),
   async (req: Request, res: Response) => {
     const { reviewerNotes } = req.body;
-    try {
-      const findings = await serverRepos.findings.getByInvestigationId(req.params.id);
-      const entities = await serverRepos.entities.getByInvestigationId(req.params.id);
-      const services = await serverRepos.services.getByInvestigationId(req.params.id);
-      const evidenceList = await serverRepos.evidence.getByInvestigationId(req.params.id);
-
-      const score = exposureScorer.calculateScore(findings, entities, services, evidenceList, reviewerNotes);
-      return (res as any).sendApiResponse(
-        200,
-        true,
-        score,
-        null,
-        `5-factor exposure score calculated: ${score.totalScore}/100 (${score.tier}).`
-      );
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Exposure score calculation failed');
-    }
+    const score = await exposureScorer.calculate(req.params.id, reviewerNotes);
+    return (res as any).sendApiResponse(200, true, score, null, 'Exposure score calculated');
   }
 );
 
 // ==========================================
-// 10. Comprehensive 20-Section Reporting & Exports
+// 12. Export Endpoints
 // ==========================================
-
-apiRouter.post(
-  '/investigations/:id/reports',
-  requireRole(['admin', 'investigator', 'reviewer']),
-  async (req: Request, res: Response) => {
-    const user: User = (req as any).user;
-    const { title } = req.body;
-    try {
-      const report = await reportGenerator.generateComprehensiveReport(
-        req.params.id,
-        title || 'FootprintIQ Comprehensive Reconnaissance Dossier',
-        `${user.name} (${user.role})`
-      );
-      return (res as any).sendApiResponse(
-        201,
-        true,
-        report,
-        null,
-        `Comprehensive 20-section report "${report.title}" generated.`
-      );
-    } catch (err: any) {
-      return (res as any).sendApiResponse(400, false, null, err.message, 'Report generation failed');
-    }
-  }
-);
-
-apiRouter.get('/investigations/:id/reports', async (req: Request, res: Response) => {
-  const reports = await serverRepos.reports.getByInvestigationId(req.params.id);
-  return (res as any).sendApiResponse(200, true, reports, null, `Retrieved ${reports.length} reports`);
-});
-
-apiRouter.get('/reports/:reportId', async (req: Request, res: Response) => {
-  const report = await serverRepos.reports.getById(req.params.reportId);
-  if (!report) {
-    return (res as any).sendApiResponse(404, false, null, 'Report not found', 'Invalid report ID');
-  }
-  return (res as any).sendApiResponse(200, true, report, null, 'Report retrieved');
-});
-
-apiRouter.get('/reports/:reportId/pdf', async (req: Request, res: Response) => {
-  const report = await serverRepos.reports.getById(req.params.reportId);
-  if (!report) {
-    return res.status(404).json({ error: 'Report not found' });
-  }
-
-  const inv = await serverRepos.investigations.getById(report.investigationId);
-  if (!inv) {
-    return res.status(404).json({ error: 'Investigation not found' });
-  }
-
-  try {
-    const pdfBytes = await reportGenerator.buildBinaryPdf(report, inv);
-    const filename = `${report.title.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase()}.pdf`;
-
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    return res.send(Buffer.from(pdfBytes));
-  } catch (err: any) {
-    return res.status(500).json({ error: 'PDF generation failed', details: err.message });
-  }
-});
 
 apiRouter.get('/investigations/:id/export/bundle', async (req: Request, res: Response) => {
-  const inv = await serverRepos.investigations.getById(req.params.id);
-  if (!inv) return res.status(404).json({ error: 'Investigation not found' });
-
-  const [entities, relationships, findings, services, evidenceList, score, audit] = await Promise.all([
-    serverRepos.entities.getByInvestigationId(inv.id),
-    serverRepos.relationships.getByInvestigationId(inv.id),
-    serverRepos.findings.getByInvestigationId(inv.id),
-    serverRepos.services.getByInvestigationId(inv.id),
-    serverRepos.evidence.getByInvestigationId(inv.id),
-    serverRepos.scores.getScore(inv.id),
-    serverRepos.audit.getByInvestigationId(inv.id)
-  ]);
-
-  const bundle = {
-    exportVersion: '3.0.0',
-    exportedAt: new Date().toISOString(),
-    investigation: inv,
-    metrics: {
-      entitiesCount: entities.length,
-      relationshipsCount: relationships.length,
-      findingsCount: findings.length,
-      servicesCount: services.length,
-      evidenceCount: evidenceList.length,
-      exposureScore: score.totalScore,
-      exposureTier: score.tier
-    },
-    entities,
-    relationships,
-    findings,
-    services,
-    evidence: evidenceList,
-    exposureScore: score,
-    auditTrail: audit
-  };
-
+  const bundle = await serverRepos.exportBundle(req.params.id);
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Content-Disposition', `attachment; filename="footprintiq_bundle_${inv.id}.json"`);
-  return res.json(bundle);
+  res.setHeader('Content-Disposition', `attachment; filename="footprint-bundle-${req.params.id}.json"`);
+  res.send(JSON.stringify(bundle, null, 2));
 });
 
 apiRouter.get('/investigations/:id/export/findings-csv', async (req: Request, res: Response) => {
-  const csv = await reportGenerator.exportFindingsCSV(req.params.id);
+  const csv = await serverRepos.exportFindingsCSV(req.params.id);
   res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename="findings_${req.params.id}.csv"`);
-  return res.send(csv);
-});
-
-apiRouter.get('/investigations/:id/export/nodes-csv', async (req: Request, res: Response) => {
-  const csv = await reportGenerator.exportNodesCSV(req.params.id);
-  res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename="nodes_${req.params.id}.csv"`);
-  return res.send(csv);
-});
-
-apiRouter.get('/investigations/:id/export/edges-csv', async (req: Request, res: Response) => {
-  const csv = await reportGenerator.exportEdgesCSV(req.params.id);
-  res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename="edges_${req.params.id}.csv"`);
-  return res.send(csv);
+  res.setHeader('Content-Disposition', `attachment; filename="findings-${req.params.id}.csv"`);
+  res.send(csv);
 });
 
 apiRouter.get('/investigations/:id/export/graphml', async (req: Request, res: Response) => {
-  const xml = await reportGenerator.exportGraphML(req.params.id);
+  const graphml = await serverRepos.exportGraphML(req.params.id);
   res.setHeader('Content-Type', 'application/xml');
-  res.setHeader('Content-Disposition', `attachment; filename="knowledge_graph_${req.params.id}.graphml"`);
-  return res.send(xml);
+  res.setHeader('Content-Disposition', `attachment; filename="graph-${req.params.id}.graphml"`);
+  res.send(graphml);
 });
 
+// ==========================================
+// 13. Demo Endpoint
+// ==========================================
+
+apiRouter.post('/demo/run-safe', async (req: Request, res: Response) => {
+  // Create a safe demo investigation if it doesn't exist
+  let inv = await serverRepos.investigations.getById('inv-demo-001');
+  if (!inv) {
+    inv = await serverRepos.investigations.create({
+      id: 'inv-demo-001',
+      name: 'NorthStar Analytics Lab Demo',
+      organizationName: 'NorthStar Analytics Lab',
+      description: 'Safe demo investigation for lab environment',
+      leadInvestigator: 'Demo User',
+      teamMembers: [],
+      status: 'active',
+      scope: {
+        ownedDomains: ['lab.example'],
+        approvedCIDRs: ['192.168.56.0/24'],
+        activeTargets: ['192.168.56.102', 'lab.example']
+      },
+      authorization: {
+        authorizationReference: 'DEMO-2024-001',
+        authorizedBy: 'Lab Instructor',
+        validFrom: new Date().toISOString(),
+        validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+        activeScanningEnabled: true,
+        rulesOfEngagement: 'Demo environment only. No external network access.'
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: 'demo-user'
+    });
+  }
+
+  const run = await workflowController.startWorkflow(inv.id, 'demo-user');
+  return (res as any).sendApiResponse(201, true, { run, investigationId: inv.id }, null, 'Safe demo started');
+});
+
+export default apiRouter;
