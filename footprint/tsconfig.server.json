@@ -14,8 +14,29 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "types": ["node", "express"],
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": false
   },
-  "include": ["server.ts", "src/server/**/*"],
-  "exclude": ["node_modules", "dist", "src/pages", "src/components", "src/hooks", "src/context", "src/utils", "src/data"]
+  "include": [
+    "server.ts",
+    "src/server/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/pages",
+    "src/components",
+    "src/hooks",
+    "src/context",
+    "src/utils",
+    "src/data",
+    "src/pages/**/*",
+    "src/components/**/*",
+    "src/hooks/**/*",
+    "src/context/**/*",
+    "src/utils/**/*",
+    "src/data/**/*"
+  ]
 }
