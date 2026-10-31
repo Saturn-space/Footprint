@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Access Denied &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="max-width: 520px; margin: 3rem auto;">
+  <div class="card" style="border: 1px solid #fee2e2; background: #ffffff; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05); text-align: center; padding: 2.5rem 2rem; border-radius: 8px;">
+    <div style="width: 56px; height: 56px; border-radius: 50%; background: #fef2f2; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+      </svg>
+    </div>
+
+    <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: #991b1b;">403 &mdash; Access Restricted</h2>
+    <p style="font-size: 0.875rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.6;">
+      Your active user account does not possess the server-side permissions required to execute this operation or view this restricted workspace.
+    </p>
+
+    {% if current_user %}
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.85rem 1rem; margin-bottom: 1.5rem; text-align: left; font-size: 0.8125rem;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 0.35rem;">
+        <span style="color: #64748b;">Current Identity:</span>
+        <span class="mono" style="font-weight: 600; color: #0f172a;">{{ current_user.username }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: #64748b;">Assigned Role:</span>
+        <span class="badge badge-amber mono" style="font-weight: 600;">{{ current_user.role|upper }}</span>
+      </div>
+    </div>
+    {% endif %}
+
+    <a href="/" class="btn btn-primary" style="display: inline-flex; justify-content: center; width: auto; padding: 0.625rem 1.75rem; text-decoration: none;">
+      Return to Safe Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

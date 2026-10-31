@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "footprintiq"
+version = "2.0.0-foundation"
+description = "FootprintIQ: Digital Footprint Investigator - Python / FastAPI Foundation"
+authors = [
+    { name = "FootprintIQ Research Team" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.28.0",
+    "sqlalchemy>=2.0.28",
+    "alembic>=1.13.1",
+    "pydantic>=2.6.4",
+    "pydantic-settings>=2.2.1",
+    "jinja2>=3.1.3",
+    "python-multipart>=0.0.9",
+    "httpx>=0.26.0",
+    "dnspython>=2.6.1",
+    "argon2-cffi>=23.1.0",
+    "python-gvm>=24.0.0",
+    "lxml>=4.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.4",
+    "pytest-asyncio>=0.23.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

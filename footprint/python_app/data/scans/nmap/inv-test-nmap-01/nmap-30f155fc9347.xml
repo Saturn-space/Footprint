@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<nmaprun scanner="nmap" args="nmap -sT -sV -p 80,443 -oX - 192.168.1.50" start="1700000000" version="7.94" xmloutputversion="1.05">
+<scaninfo type="syn" protocol="tcp" numservices="2" services="80,443"/>
+<host starttime="1700000001" endtime="1700000010">
+<status state="up" reason="arp-response" reason_ttl="0"/>
+<address addr="192.168.1.50" addrtype="ipv4"/>
+<hostnames>
+<hostname name="lab-web.local" type="user"/>
+</hostnames>
+<ports>
+<port protocol="tcp" portid="80">
+<state state="open" reason="syn-ack" reason_ttl="64"/>
+<service name="http" product="Apache httpd" version="2.4.52" extrainfo="(Ubuntu)" method="probed" conf="10">
+<cpe>cpe:/a:apache:http_server:2.4.52</cpe>
+</service>
+</port>
+<port protocol="tcp" portid="443">
+<state state="closed" reason="reset" reason_ttl="64"/>
+<service name="https" method="table" conf="3"/>
+</port>
+</ports>
+<os>
+<osmatch name="Linux 5.4 - 5.10" accuracy="95"/>
+</os>
+</host>
+<runstats>
+<finished time="1700000010" timestr="Sun Oct 28 00:00:10 2026" elapsed="10.00" summary="Nmap done: 1 IP address (1 host up) scanned in 10.00 seconds" exit="success"/>
+<hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>

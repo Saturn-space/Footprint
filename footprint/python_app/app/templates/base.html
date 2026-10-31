@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}FootprintIQ — Digital Footprint Investigator{% endblock %}</title>
+  <meta name="description" content="FootprintIQ: Authorized cybersecurity reconnaissance, scope enforcement, OSINT digital footprint, and vulnerability investigation platform.">
+  <link rel="stylesheet" href="/static/css/main.css">
+  <script src="/static/js/htmx.min.js"></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="/" class="brand">
+        <div class="brand-icon">IQ</div>
+        <div class="brand-text">
+          <h1>FootprintIQ</h1>
+          <span>Digital Footprint Investigator</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/dashboard" class="nav-link {% if active_nav == 'dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="/investigations" class="nav-link {% if active_nav == 'investigations' %}active{% endif %}">Investigations</a>
+        <a href="/scans" class="nav-link {% if active_nav == 'scans' %}active{% endif %}">Scans &amp; Jobs</a>
+        <a href="/findings" class="nav-link {% if active_nav == 'findings' %}active{% endif %}">Findings</a>
+        <a href="/evidence" class="nav-link {% if active_nav == 'evidence' %}active{% endif %}">Evidence</a>
+        <a href="/audit" class="nav-link {% if active_nav == 'audit' %}active{% endif %}">Audit Trail</a>
+        {% if current_user and current_user.role == 'administrator' %}
+        <a href="/admin/authorizations" class="nav-link {% if active_nav == 'admin' %}active{% endif %}">Admin</a>
+        {% endif %}
+      </nav>
+
+      <div class="header-meta">
+        {% if current_user %}
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem;">
+          <span style="color: var(--text-secondary);">User:</span>
+          <span class="mono" style="color: var(--brand-primary); font-weight: 600;">{{ current_user.username }}</span>
+          {% if current_user.role == 'administrator' %}
+            <span class="badge badge-amber mono" style="font-size: 0.65rem;">ADMIN</span>
+          {% elif current_user.role == 'analyst' %}
+            <span class="badge badge-brand mono" style="font-size: 0.65rem;">ANALYST</span>
+          {% else %}
+            <span class="badge badge-info mono" style="font-size: 0.65rem;">VIEWER</span>
+          {% endif %}
+        </div>
+
+        <form method="POST" action="/auth/logout" style="margin: 0; display: inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          <button type="submit" class="btn btn-secondary" style="font-size: 0.72rem; padding: 0.3rem 0.65rem;">
+            Sign Out
+          </button>
+        </form>
+        {% else %}
+        <a href="/login" class="btn btn-primary" style="font-size: 0.75rem; padding: 0.35rem 0.8rem;">
+          Sign In
+        </a>
+        {% endif %}
+        <span class="badge badge-brand mono">v{{ app_version }}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Application Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div>
+        <span>FootprintIQ &copy; 2026 &middot; Authorized Educational &amp; Lab Reconnaissance Platform</span>
+      </div>
+      <div class="mono">
+        <span>Env: {{ app_env }} &middot; DB: {{ db_dialect }}</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

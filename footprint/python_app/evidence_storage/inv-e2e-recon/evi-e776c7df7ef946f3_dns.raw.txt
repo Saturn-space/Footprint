@@ -1,0 +1,1 @@
+object CollectorResult can't be used in 'await' expression

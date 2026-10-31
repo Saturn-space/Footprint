@@ -1,0 +1,9 @@
+{% if status == 'ready' %}
+<span class="badge badge-emerald">
+  <span class="status-pill online"></span> Database Connected
+</span>
+{% else %}
+<span class="badge badge-rose">
+  <span class="status-pill offline"></span> Database Disconnected
+</span>
+{% endif %}

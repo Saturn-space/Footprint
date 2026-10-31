@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Investigations &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+  <div>
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Investigation Campaigns</h2>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Manage authorized reconnaissance scopes and digital footprint investigations.</p>
+  </div>
+  <a href="#new-campaign-modal" onclick="document.getElementById('new-campaign-modal').style.display='block'" class="btn btn-primary" style="font-size: 0.8rem;">
+    + Create New Investigation
+  </a>
+</div>
+
+<!-- Search & Filtering Bar -->
+<div class="card" style="margin-bottom: 1.25rem;">
+  <div class="card-body" style="padding: 0.85rem 1.25rem;">
+    <form method="GET" action="/investigations" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 240px;">
+        <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search by campaign name, organization, or target..." class="form-control" style="padding: 0.4rem 0.75rem;">
+      </div>
+      <div>
+        <select name="status" class="form-select" style="padding: 0.4rem 0.75rem;">
+          <option value="">All Statuses</option>
+          <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active</option>
+          <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+          <option value="archived" {% if status_filter == 'archived' %}selected{% endif %}>Archived</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-secondary">Filter</button>
+      {% if search_query or status_filter %}
+      <a href="/investigations" class="btn btn-outline">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+<!-- Investigations Table -->
+<div class="card">
+  {% if investigations %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Case Identifier</th>
+          <th>Campaign Title</th>
+          <th>Target Organization</th>
+          <th>Lead Investigator</th>
+          <th>Scope Apex</th>
+          <th>Active Targets</th>
+          <th>Status</th>
+          <th>Created Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inv in investigations %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--brand-primary);">
+            <a href="/investigations/{{ inv.id }}" style="text-decoration: none; color: inherit;">
+              {{ inv.id }}
+            </a>
+          </td>
+          <td style="font-weight: 600; color: var(--text-primary);">
+            <a href="/investigations/{{ inv.id }}" style="text-decoration: none; color: inherit;">
+              {{ inv.name }}
+            </a>
+          </td>
+          <td>{{ inv.organization_name }}</td>
+          <td>{{ inv.lead_investigator }}</td>
+          <td class="mono" style="font-size: 0.78rem;">
+            {% if inv.owned_domains %}
+              {{ inv.owned_domains[0] }}
+            {% else %}
+              <span style="color: var(--text-muted);">None</span>
+            {% endif %}
+          </td>
+          <td class="mono" style="font-size: 0.78rem;">
+            {% if inv.active_targets %}
+              {{ inv.active_targets[0] }}
+            {% else %}
+              <span style="color: var(--text-muted);">None</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if inv.status == 'active' %}
+              <span class="badge badge-emerald">ACTIVE</span>
+            {% elif inv.status == 'completed' %}
+              <span class="badge badge-brand">COMPLETED</span>
+            {% elif inv.status == 'archived' %}
+              <span class="badge badge-info">ARCHIVED</span>
+            {% else %}
+              <span class="badge badge-amber">{{ inv.status|upper }}</span>
+            {% endif %}
+          </td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ inv.created_at.strftime('%Y-%m-%d %H:%M') if inv.created_at else 'N/A' }}
+          </td>
+          <td>
+            <a href="/investigations/{{ inv.id }}" class="btn btn-secondary" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;">
+              Workspace &rarr;
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">&empty;</div>
+    <h3>No Investigations Found</h3>
+    <p>
+      {% if search_query or status_filter %}
+        No investigations matched your filter criteria. Try clearing the filters.
+      {% else %}
+        No investigation campaigns have been registered yet.
+      {% endif %}
+    </p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Modal Form: Create New Investigation -->
+<div id="new-campaign-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 100; overflow-y: auto;">
+  <div style="max-width: 600px; margin: 3rem auto; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-lg); overflow: hidden;">
+    <div class="card-header">
+      <h3 class="card-title">Register New Investigation Campaign</h3>
+      <button type="button" onclick="document.getElementById('new-campaign-modal').style.display='none'" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+    </div>
+    <form method="POST" action="/investigations" style="padding: 1.25rem;">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <div class="form-group">
+        <label class="form-label">Campaign Name *</label>
+        <input type="text" name="name" required class="form-control" placeholder="e.g. NorthStar Analytics Lab Security Assessment">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Target Organization Name *</label>
+        <input type="text" name="organization_name" required class="form-control" placeholder="e.g. NorthStar Analytics Lab">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description *</label>
+        <textarea name="description" required class="form-control form-textarea" placeholder="Detail the objective, operational boundaries, and context of this reconnaissance campaign..."></textarea>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Lead Investigator *</label>
+          <input type="text" name="lead_investigator" required class="form-control" value="{{ current_user.username if current_user else 'Lead Analyst' }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Authorization Ticket Ref</label>
+          <input type="text" name="authorization_reference" class="form-control" placeholder="e.g. TICKET-SEC-2026-001">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Apex Domain(s) (comma-separated)</label>
+        <input type="text" name="owned_domains" class="form-control" placeholder="e.g. lab.example, northstar.lab">
+        <span class="form-hint">Used for passive WHOIS/RDAP, DNS, and search disclosure queries.</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Approved IP Addresses</label>
+          <input type="text" name="approved_ips" class="form-control" placeholder="e.g. 192.168.56.102">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Approved Network CIDRs</label>
+          <input type="text" name="approved_cidrs" class="form-control" placeholder="e.g. 192.168.56.0/24">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Active Targets (Allowlist)</label>
+        <input type="text" name="active_targets" class="form-control" placeholder="e.g. 192.168.56.102">
+        <span class="form-hint">Target hosts approved for active Nmap scanning and Greenbone vulnerability assessments.</span>
+      </div>
+
+      <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem;">
+        <input type="checkbox" name="active_scanning_enabled" id="active_scan_chk" value="true">
+        <label for="active_scan_chk" style="font-size: 0.82rem; font-weight: 500; color: var(--text-primary); cursor: pointer;">
+          Enable Active Reconnaissance &amp; Vulnerability Assessment for this investigation
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+        <button type="button" onclick="document.getElementById('new-campaign-modal').style.display='none'" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Save &amp; Create Campaign
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

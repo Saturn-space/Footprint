@@ -1,0 +1,791 @@
+{% extends "base.html" %}
+
+{% block title %}{{ inv.name }} &middot; Investigation Workspace &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<!-- Workspace Header -->
+<div class="card" style="margin-bottom: 1.25rem;">
+  <div class="card-body" style="padding: 1.25rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.35rem;">
+          <span class="badge badge-brand mono">{{ inv.id }}</span>
+          {% if inv.status == 'active' %}
+            <span class="badge badge-emerald">ACTIVE CAMPAIGN</span>
+          {% elif inv.status == 'completed' %}
+            <span class="badge badge-brand">COMPLETED</span>
+          {% else %}
+            <span class="badge badge-amber">{{ inv.status|upper }}</span>
+          {% endif %}
+          <span class="badge badge-muted mono">SCORE: {{ score.total_score }}/100 ({{ score.tier|upper }})</span>
+        </div>
+        <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem;">{{ inv.name }}</h2>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          Organization: <strong>{{ inv.organization_name }}</strong> &middot; Lead Investigator: <strong>{{ inv.lead_investigator }}</strong>
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <a href="/investigations/{{ inv.id }}/report/pdf" class="btn btn-primary" style="font-size: 0.78rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download PDF Dossier
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab(event, 'tab-overview')">Overview &amp; Scope</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tab-authorizations')">Target Authorizations ({{ authorizations|length }})</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tab-passive')">Passive Recon &amp; Entities ({{ entities|length }})</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tab-active')">Active Nmap Ports ({{ scan_ports|length }})</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tab-vulns')">Vulnerabilities ({{ vuln_findings|length }})</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tab-evidence')">Forensic Evidence ({{ evidence_list|length }})</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tab-jobs')">Execution Jobs</button>
+  <button class="tab-btn" onclick="switchTab(event, 'tab-report')">Score &amp; Report</button>
+</div>
+
+<!-- =========================================================================
+     TAB 1: OVERVIEW & SCOPE
+     ========================================================================= -->
+<div id="tab-overview" class="tab-content" style="display: block;">
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Campaign Metadata &amp; Objectives</h3>
+      </div>
+      <div class="card-body" style="font-size: 0.82rem; line-height: 1.6;">
+        <p style="margin-bottom: 0.75rem; color: var(--text-secondary);">{{ inv.description }}</p>
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+          <div style="display: flex; justify-content: space-between; padding: 0.3rem 0;">
+            <span class="mono" style="color: var(--text-muted);">Lead Investigator:</span>
+            <span style="font-weight: 600;">{{ inv.lead_investigator }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.3rem 0;">
+            <span class="mono" style="color: var(--text-muted);">Team Members:</span>
+            <span>{{ inv.team_members|join(', ') if inv.team_members else 'None' }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.3rem 0;">
+            <span class="mono" style="color: var(--text-muted);">Authorization Ticket:</span>
+            <span class="mono">{{ inv.authorization_reference or 'None' }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.3rem 0;">
+            <span class="mono" style="color: var(--text-muted);">Created:</span>
+            <span class="mono">{{ inv.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') if inv.created_at else 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Authorized Target Boundary</h3>
+        {% if inv.active_scanning_enabled %}
+          <span class="badge badge-amber">ACTIVE SCANNING ENABLED</span>
+        {% else %}
+          <span class="badge badge-passive">PASSIVE ONLY</span>
+        {% endif %}
+      </div>
+      <div class="card-body" style="font-size: 0.82rem;">
+        <div style="margin-bottom: 0.75rem;">
+          <span class="form-label">Apex Domain(s):</span>
+          <div class="mono" style="background: var(--bg-secondary); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.8rem;">
+            {{ inv.owned_domains|join(', ') if inv.owned_domains else 'None defined' }}
+          </div>
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <span class="form-label">Approved IP Addresses:</span>
+          <div class="mono" style="background: var(--bg-secondary); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.8rem;">
+            {{ inv.approved_ips|join(', ') if inv.approved_ips else 'None defined' }}
+          </div>
+        </div>
+        <div style="margin-bottom: 0.75rem;">
+          <span class="form-label">Approved CIDR Ranges:</span>
+          <div class="mono" style="background: var(--bg-secondary); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.8rem;">
+            {{ inv.approved_cidrs|join(', ') if inv.approved_cidrs else 'None defined' }}
+          </div>
+        </div>
+        <div>
+          <span class="form-label">Active Scanning Allowlist:</span>
+          <div class="mono" style="background: var(--bg-secondary); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--active-primary); font-weight: 600;">
+            {{ inv.active_targets|join(', ') if inv.active_targets else 'None defined' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     TAB 2: TARGET AUTHORIZATIONS
+     ========================================================================= -->
+<div id="tab-authorizations" class="tab-content" style="display: none;">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Explicit Target Authorization Records</h3>
+      <button class="btn btn-primary" onclick="document.getElementById('new-authz-modal').style.display='block'" style="font-size: 0.75rem;">
+        + Authorize New Target
+      </button>
+    </div>
+    {% if authorizations %}
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Target Address / Host</th>
+            <th>Type</th>
+            <th>Approved Operations</th>
+            <th>Approved By</th>
+            <th>Ticket Ref</th>
+            <th>Valid Window</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in authorizations %}
+          <tr>
+            <td class="mono" style="font-weight: 600; color: var(--text-primary);">{{ a.target }}</td>
+            <td><span class="badge badge-info">{{ a.target_type }}</span></td>
+            <td>
+              {% for op in a.allowed_operations %}
+                {% if op in ('SCAN_PORTS', 'SCAN_ACTIVE') %}
+                  <span class="badge badge-amber mono" style="font-size: 0.65rem;">{{ op }}</span>
+                {% elif op in ('SCAN_VULN', 'SCAN_VULNERABILITY') %}
+                  <span class="badge badge-crit mono" style="font-size: 0.65rem;">{{ op }}</span>
+                {% else %}
+                  <span class="badge badge-emerald mono" style="font-size: 0.65rem;">{{ op }}</span>
+                {% endif %}
+              {% endfor %}
+            </td>
+            <td>{{ a.approved_by }}</td>
+            <td class="mono" style="font-size: 0.75rem;">{{ a.authorization_reference }}</td>
+            <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+              {{ a.valid_from.strftime('%Y-%m-%d') }} to {{ a.valid_to.strftime('%Y-%m-%d') }}
+            </td>
+            <td>
+              {% if a.is_revoked %}
+                <span class="badge badge-crit">REVOKED</span>
+              {% else %}
+                <span class="badge badge-emerald">ACTIVE</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">&empty;</div>
+      <h3>No Explicit Target Authorizations</h3>
+      <p>Active Nmap and Greenbone scans will be strictly rejected until an explicit authorization record is added for the target host.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- =========================================================================
+     TAB 3: PASSIVE RECON & DISCOVERED ENTITIES
+     ========================================================================= -->
+<div id="tab-passive" class="tab-content" style="display: none;">
+  <!-- Launch Passive Collection Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">
+        <span class="status-pill online"></span>
+        Execute Passive Reconnaissance
+      </h3>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="/investigations/{{ inv.id }}/recon/passive">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div style="display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 260px;">
+            <label class="form-label">Target Apex Domain / Host</label>
+            <input type="text" name="target" required class="form-control" value="{{ inv.owned_domains[0] if inv.owned_domains else '' }}" placeholder="e.g. lab.example">
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary">
+              Run Passive Collectors (RDAP, DNS, Search)
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Discovered Entities Table -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Normalized Discovered Entities ({{ entities|length }})</h3>
+    </div>
+    {% if entities %}
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Entity Type</th>
+            <th>Canonical Value</th>
+            <th>First Discovered</th>
+            <th>Last Observed</th>
+            <th>Evidence Provenance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in entities %}
+          <tr>
+            <td>
+              {% if e.entity_type|lower == 'email' %}
+                <span class="badge badge-brand">EMAIL</span>
+              {% elif e.entity_type|lower in ('domain', 'subdomain') %}
+                <span class="badge badge-emerald">DOMAIN</span>
+              {% elif e.entity_type|lower == 'person' %}
+                <span class="badge badge-amber">PERSON</span>
+              {% else %}
+                <span class="badge badge-info">{{ e.entity_type|upper }}</span>
+              {% endif %}
+            </td>
+            <td class="mono" style="font-weight: 600; color: var(--text-primary);">{{ e.canonical_value }}</td>
+            <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+              {{ e.first_seen.strftime('%Y-%m-%d %H:%M') if e.first_seen else 'N/A' }}
+            </td>
+            <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+              {{ e.last_seen.strftime('%Y-%m-%d %H:%M') if e.last_seen else 'N/A' }}
+            </td>
+            <td>
+              <span class="mono" style="font-size: 0.75rem; color: var(--brand-primary);">
+                {{ e.evidence_ids|length if e.evidence_ids else 0 }} artifact(s)
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">&empty;</div>
+      <h3>No Entities Discovered Yet</h3>
+      <p>Run passive reconnaissance above to harvest DNS records, WHOIS/RDAP contacts, and search disclosures.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- =========================================================================
+     TAB 4: ACTIVE NETWORK RECON (NMAP)
+     ========================================================================= -->
+<div id="tab-active" class="tab-content" style="display: none;">
+  <!-- Launch Nmap Scan Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">
+        <span class="status-pill running"></span>
+        Dispatch Active Nmap Scan
+      </h3>
+      <span class="badge badge-amber">ALLOWLIST REQUIRED</span>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="/investigations/{{ inv.id }}/scans/nmap">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="grid-3" style="align-items: flex-end; margin-bottom: 0;">
+          <div>
+            <label class="form-label">Authorized Target IP / Host</label>
+            <input type="text" name="target" required class="form-control" value="{{ inv.active_targets[0] if inv.active_targets else '' }}" placeholder="e.g. 192.168.56.102">
+          </div>
+          <div>
+            <label class="form-label">Vetted Scan Profile</label>
+            <select name="profile_id" class="form-select">
+              <option value="nmap-service-detect">nmap-service-detect (Top ports + Version Detection)</option>
+              <option value="nmap-quick">nmap-quick (Fast Port Discovery)</option>
+              <option value="nmap-conservative">nmap-conservative (Low-Rate Timing)</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary" style="background-color: var(--active-primary); border-color: var(--active-hover);">
+              Launch Active Nmap Scan
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Discovered Ports Table -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Enumerated Open Ports &amp; Services ({{ scan_ports|length }})</h3>
+    </div>
+    {% if scan_ports %}
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Port / Protocol</th>
+            <th>State</th>
+            <th>Service</th>
+            <th>Product Fingerprint</th>
+            <th>Version</th>
+            <th>Host Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in scan_ports %}
+          <tr>
+            <td class="mono" style="font-weight: 700; color: var(--active-primary);">{{ p.port_number }}/{{ p.protocol }}</td>
+            <td>
+              {% if (p.state|lower) == 'open' %}
+                <span class="badge badge-emerald">OPEN</span>
+              {% else %}
+                <span class="badge badge-muted">{{ p.state|upper }}</span>
+              {% endif %}
+            </td>
+            <td style="font-weight: 600;">{{ p.service_name or 'unknown' }}</td>
+            <td>{{ p.product or '—' }}</td>
+            <td class="mono" style="font-size: 0.78rem;">{{ p.version or '—' }}</td>
+            <td class="mono" style="font-size: 0.78rem; color: var(--text-secondary);">
+              {{ p.host.address if p.host else '—' }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">&empty;</div>
+      <h3>No Open Ports Enumerated</h3>
+      <p>Ensure target host is authorized with operation <code class="mono">SCAN_PORTS</code> and dispatch an Nmap scan above.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- =========================================================================
+     TAB 5: VULNERABILITY ASSESSMENT (GREENBONE)
+     ========================================================================= -->
+<div id="tab-vulns" class="tab-content" style="display: none;">
+  <!-- Launch Greenbone Scan Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">
+        <span class="status-pill failed"></span>
+        Dispatch Greenbone / OpenVAS Assessment
+      </h3>
+      <span class="badge badge-crit">SCAN_VULN AUTHORIZATION REQUIRED</span>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="/investigations/{{ inv.id }}/scans/vuln">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="grid-3" style="align-items: flex-end; margin-bottom: 0;">
+          <div>
+            <label class="form-label">Authorized Target IP / Host</label>
+            <input type="text" name="target" required class="form-control" value="{{ inv.active_targets[0] if inv.active_targets else '' }}" placeholder="e.g. 192.168.56.102">
+          </div>
+          <div>
+            <label class="form-label">Approved GVM Profile</label>
+            <select name="profile_id" class="form-select">
+              <option value="openvas-basic">openvas-basic (Baseline Vulnerability Assessment)</option>
+              <option value="openvas-full-and-fast">openvas-full-and-fast (Comprehensive NVT Scan)</option>
+              <option value="openvas-discovery">openvas-discovery (Service &amp; Host Detection)</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary" style="background-color: var(--crit-primary);">
+              Launch Greenbone Assessment
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Vulnerability Findings Matrix -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Vulnerability Findings Matrix ({{ vuln_findings|length }})</h3>
+    </div>
+    {% if vuln_findings %}
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Severity</th>
+            <th>Vulnerability Title</th>
+            <th>Target Host:Port</th>
+            <th>CVSS</th>
+            <th>CVE References</th>
+            <th>QoD</th>
+            <th>Remediation Solution</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for vf in vuln_findings %}
+          <tr>
+            <td>
+              {% if (vf.severity|lower) == 'critical' %}
+                <span class="badge badge-crit">CRITICAL</span>
+              {% elif (vf.severity|lower) == 'high' %}
+                <span class="badge badge-high">HIGH</span>
+              {% elif (vf.severity|lower) == 'medium' %}
+                <span class="badge badge-med">MEDIUM</span>
+              {% elif (vf.severity|lower) == 'low' %}
+                <span class="badge badge-low">LOW</span>
+              {% else %}
+                <span class="badge badge-info">INFO</span>
+              {% endif %}
+            </td>
+            <td style="font-weight: 600; color: var(--text-primary); max-width: 220px;">
+              {{ vf.name }}
+            </td>
+            <td class="mono" style="font-size: 0.78rem;">
+              {{ vf.host }}{% if vf.port %}:{{ vf.port }}/{{ vf.protocol }}{% endif %}
+            </td>
+            <td class="mono" style="font-weight: 700;">
+              {{ "%.1f"|format(vf.cvss_score) if vf.cvss_score is not none else '—' }}
+            </td>
+            <td class="mono" style="font-size: 0.75rem;">
+              {% if vf.cve_references %}
+                {{ vf.cve_references|join(', ') }}
+              {% else %}
+                <span style="color: var(--text-muted);">—</span>
+              {% endif %}
+            </td>
+            <td class="mono" style="font-size: 0.75rem;">
+              {{ vf.qod }}%
+            </td>
+            <td style="font-size: 0.78rem; color: var(--text-secondary); max-width: 280px;">
+              {{ vf.solution or 'None supplied by scanner.' }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">&empty;</div>
+      <h3>No Vulnerabilities Recorded</h3>
+      <p>Ensure target host is authorized with operation <code class="mono">SCAN_VULN</code> and dispatch a Greenbone scan above.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- =========================================================================
+     TAB 6: FORENSIC EVIDENCE & SHA-256 HASHES
+     ========================================================================= -->
+<div id="tab-evidence" class="tab-content" style="display: none;">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Forensic Evidence Ledger &amp; Integrity Digests ({{ evidence_list|length }})</h3>
+    </div>
+    {% if evidence_list %}
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Evidence ID</th>
+            <th>Source Subsystem</th>
+            <th>Collector Name</th>
+            <th>Target</th>
+            <th>Size (Bytes)</th>
+            <th>SHA-256 Cryptographic Hash</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ev in evidence_list %}
+          <tr>
+            <td class="mono" style="font-weight: 600; color: var(--brand-primary);">{{ ev.id }}</td>
+            <td><span class="badge badge-brand">{{ ev.source_type }}</span></td>
+            <td>{{ ev.source_name }}</td>
+            <td class="mono" style="font-size: 0.78rem;">{{ ev.target }}</td>
+            <td class="mono" style="font-size: 0.75rem;">{{ ev.content_size_bytes }}</td>
+            <td class="mono" style="font-size: 0.72rem; color: var(--text-secondary);">
+              {{ ev.content_hash }}
+            </td>
+            <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+              {{ ev.collected_at.strftime('%Y-%m-%d %H:%M') if ev.collected_at else 'N/A' }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">&empty;</div>
+      <h3>No Forensic Evidence Archived</h3>
+      <p>Raw evidence artifacts are automatically captured and SHA-256 hashed when reconnaissance jobs run.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- =========================================================================
+     TAB 7: EXECUTION JOBS
+     ========================================================================= -->
+<div id="tab-jobs" class="tab-content" style="display: none;">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Reconnaissance &amp; Assessment Job History</h3>
+      <button onclick="location.reload()" class="btn btn-secondary" style="font-size: 0.75rem;">
+        Refresh Status
+      </button>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Job Identifier</th>
+            <th>Subsystem</th>
+            <th>Target</th>
+            <th>Profile / Collector</th>
+            <th>Current Status</th>
+            <th>Started At</th>
+            <th>Completed At</th>
+            <th>Findings / Outputs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cj in collection_jobs %}
+          <tr>
+            <td class="mono" style="font-weight: 600;">{{ cj.id }}</td>
+            <td><span class="badge badge-emerald">PASSIVE OSINT</span></td>
+            <td class="mono" style="font-size: 0.78rem;">{{ cj.target }}</td>
+            <td>{{ cj.collector_name }}</td>
+            <td>
+              {% if cj.status == 'COMPLETED' %}
+                <span class="badge badge-emerald">COMPLETED</span>
+              {% elif cj.status == 'RUNNING' %}
+                <span class="badge badge-amber">RUNNING</span>
+              {% else %}
+                <span class="badge badge-muted">{{ cj.status }}</span>
+              {% endif %}
+            </td>
+            <td class="mono" style="font-size: 0.75rem;">{{ cj.started_at.strftime('%Y-%m-%d %H:%M') if cj.started_at else '—' }}</td>
+            <td class="mono" style="font-size: 0.75rem;">{{ cj.completed_at.strftime('%Y-%m-%d %H:%M') if cj.completed_at else '—' }}</td>
+            <td>{{ cj.result_summary.findings_count if cj.result_summary else '—' }} entities</td>
+          </tr>
+          {% endfor %}
+
+          {% for nj in nmap_jobs %}
+          <tr>
+            <td class="mono" style="font-weight: 600;">{{ nj.id }}</td>
+            <td><span class="badge badge-amber">NMAP ACTIVE</span></td>
+            <td class="mono" style="font-size: 0.78rem;">{{ nj.target }}</td>
+            <td>{{ nj.scan_profile }}</td>
+            <td>
+              {% if nj.status == 'COMPLETED' %}
+                <span class="badge badge-emerald">COMPLETED</span>
+              {% elif nj.status == 'RUNNING' %}
+                <span class="badge badge-amber">RUNNING</span>
+              {% elif nj.status == 'FAILED' %}
+                <span class="badge badge-crit">FAILED</span>
+              {% else %}
+                <span class="badge badge-muted">{{ nj.status }}</span>
+              {% endif %}
+            </td>
+            <td class="mono" style="font-size: 0.75rem;">{{ nj.started_at.strftime('%Y-%m-%d %H:%M') if nj.started_at else '—' }}</td>
+            <td class="mono" style="font-size: 0.75rem;">{{ nj.completed_at.strftime('%Y-%m-%d %H:%M') if nj.completed_at else '—' }}</td>
+            <td>{{ nj.hosts|length if nj.hosts else 0 }} host(s)</td>
+          </tr>
+          {% endfor %}
+
+          {% for vj in vuln_jobs %}
+          <tr>
+            <td class="mono" style="font-weight: 600;">{{ vj.id }}</td>
+            <td><span class="badge badge-crit">GREENBONE GVM</span></td>
+            <td class="mono" style="font-size: 0.78rem;">{{ vj.target }}</td>
+            <td>{{ vj.profile_id }}</td>
+            <td>
+              {% if vj.status == 'COMPLETED' %}
+                <span class="badge badge-emerald">COMPLETED</span>
+              {% elif vj.status == 'RUNNING' %}
+                <span class="badge badge-amber">RUNNING ({{ vj.progress or 0 }}%)</span>
+              {% elif vj.status == 'FAILED' %}
+                <span class="badge badge-crit">FAILED</span>
+              {% else %}
+                <span class="badge badge-muted">{{ vj.status }}</span>
+              {% endif %}
+            </td>
+            <td class="mono" style="font-size: 0.75rem;">{{ vj.started_at.strftime('%Y-%m-%d %H:%M') if vj.started_at else '—' }}</td>
+            <td class="mono" style="font-size: 0.75rem;">{{ vj.completed_at.strftime('%Y-%m-%d %H:%M') if vj.completed_at else '—' }}</td>
+            <td>{{ vj.findings|length if vj.findings else 0 }} finding(s)</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     TAB 8: SCORE & REPORT DOSSIER
+     ========================================================================= -->
+<div id="tab-report" class="tab-content" style="display: none;">
+  <div class="grid-2">
+    <!-- 5-Factor Score Breakdown Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">5-Factor Exposure Score Breakdown</h3>
+        <span class="badge badge-brand mono">{{ score.total_score }} / 100 &middot; {{ score.tier|upper }}</span>
+      </div>
+      <div class="card-body" style="font-size: 0.82rem;">
+        <p style="margin-bottom: 0.75rem; color: var(--text-secondary);">
+          <strong>Formula:</strong> <code class="mono">{{ score.formula_version }}</code>
+        </p>
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <span>P &middot; Public Footprint (Disclosed emails, persons, documents)</span>
+            <span class="mono" style="font-weight: 700;">{{ score.P }} / 100</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <span>D &middot; Domain Hygiene (Subdomains, missing DMARC/SPF policy)</span>
+            <span class="mono" style="font-weight: 700;">{{ score.D }} / 100</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <span>S &middot; Service Exposure (Open ports, sensitive database listeners)</span>
+            <span class="mono" style="font-weight: 700;">{{ score.S }} / 100</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <span>V &middot; Vulnerability Severity (CVSS-rated Greenbone findings)</span>
+            <span class="mono" style="font-weight: 700;">{{ score.V }} / 100</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <span>C &middot; Correlation Confidence (Cross-collector verification)</span>
+            <span class="mono" style="font-weight: 700;">{{ score.C }} / 100</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; font-weight: 700; color: var(--brand-primary);">
+            <span>Total Calculated Exposure Score:</span>
+            <span class="mono">{{ score.total_score }} / 100 ({{ score.tier|upper }})</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate PDF Report Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Comprehensive 17-Section Dossier</h3>
+        <span class="badge badge-emerald">REPORTLAB PLATYPUS</span>
+      </div>
+      <div class="card-body" style="font-size: 0.82rem; line-height: 1.6;">
+        <p style="margin-bottom: 0.75rem; color: var(--text-secondary);">
+          Generates a multi-page PDF document containing scope records, target authorizations, executive summary,
+          5-factor score breakdown, asset inventory, Nmap port tables, Greenbone vulnerability matrix, prioritized remediation,
+          and forensic SHA-256 evidence digests.
+        </p>
+        <div style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--radius-md); margin-bottom: 1rem;">
+          <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">Report Integrity Safeguards:</div>
+          <ul style="padding-left: 1.2rem; color: var(--text-secondary); font-size: 0.78rem;">
+            <li>Derived strictly from persisted database records.</li>
+            <li>Does not fabricate findings for incomplete or failed scans.</li>
+            <li>Protected against arbitrary file reads and path traversal.</li>
+          </ul>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-direction: column;">
+          <a href="/investigations/{{ inv.id }}/report/pdf" class="btn btn-primary" style="text-align: center; justify-content: center;">
+            Generate &amp; Download PDF Dossier &rarr;
+          </a>
+          <a href="/investigations/{{ inv.id }}/report/graphml" class="btn btn-secondary" style="text-align: center; justify-content: center;">
+            Export Knowledge Graph (GraphML XML) &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Form: Authorize New Target -->
+<div id="new-authz-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 100; overflow-y: auto;">
+  <div style="max-width: 540px; margin: 4rem auto; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); box-shadow: var(--shadow-lg); overflow: hidden;">
+    <div class="card-header">
+      <h3 class="card-title">Authorize Target for Reconnaissance Operations</h3>
+      <button type="button" onclick="document.getElementById('new-authz-modal').style.display='none'" style="background: none; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+    </div>
+    <form method="POST" action="/investigations/{{ inv.id }}/authorizations" style="padding: 1.25rem;">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+      <div class="form-group">
+        <label class="form-label">Target Address / Hostname *</label>
+        <input type="text" name="target" required class="form-control" value="{{ inv.active_targets[0] if inv.active_targets else '192.168.56.102' }}" placeholder="e.g. 192.168.56.102">
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Target Type *</label>
+          <select name="target_type" class="form-select">
+            <option value="IP">IP Address</option>
+            <option value="DOMAIN">Domain / FQDN</option>
+            <option value="CIDR">Network CIDR</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Approved By *</label>
+          <input type="text" name="approved_by" required class="form-control" value="{{ current_user.username if current_user else 'Security Officer' }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Authorization Reference *</label>
+        <input type="text" name="authorization_reference" required class="form-control" value="{{ inv.authorization_reference or 'AUTHZ-LAB-2026-001' }}">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Permitted Operations</label>
+        <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; margin-top: 0.35rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <input type="checkbox" name="operations" value="SCAN_PASSIVE" checked>
+            <span><strong style="color: var(--passive-primary);">SCAN_PASSIVE:</strong> Public OSINT, DNS, RDAP</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <input type="checkbox" name="operations" value="SCAN_PORTS" checked>
+            <span><strong style="color: var(--active-primary);">SCAN_PORTS:</strong> Nmap network port and service detection</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <input type="checkbox" name="operations" value="SCAN_VULN" checked>
+            <span><strong style="color: var(--crit-primary);">SCAN_VULN:</strong> Greenbone / OpenVAS vulnerability assessment</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Validity Duration (Days)</label>
+        <input type="number" name="valid_days" class="form-control" value="30" min="1" max="365">
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+        <button type="button" onclick="document.getElementById('new-authz-modal').style.display='none'" class="btn btn-secondary">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Commit Authorization
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function switchTab(evt, tabId) {
+  var contents = document.getElementsByClassName("tab-content");
+  for (var i = 0; i < contents.length; i++) {
+    contents[i].style.display = "none";
+  }
+  var buttons = document.getElementsByClassName("tab-btn");
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].classList.remove("active");
+  }
+  document.getElementById(tabId).style.display = "block";
+  evt.currentTarget.classList.add("active");
+}
+</script>
+{% endblock %}

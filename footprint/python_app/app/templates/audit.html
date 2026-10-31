@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Audit Trail &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+  <div>
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Security &amp; Reconnaissance Audit Trail</h2>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Immutable audit ledger tracking authentication, target authorization decisions, scanner invocations, and findings exports.</p>
+  </div>
+</div>
+
+<!-- Audit Logs Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Chronological Audit Events ({{ audit_logs|length }})</h3>
+  </div>
+  {% if audit_logs %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Event Identifier</th>
+          <th>Event Type</th>
+          <th>Actor ID</th>
+          <th>Outcome</th>
+          <th>IP Address</th>
+          <th>Timestamp</th>
+          <th>Event Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in audit_logs %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--brand-primary);">{{ log.id }}</td>
+          <td>
+            {% if 'AUTH' in log.event_type %}
+              <span class="badge badge-brand mono" style="font-size: 0.65rem;">{{ log.event_type }}</span>
+            {% elif 'VULN' in log.event_type %}
+              <span class="badge badge-crit mono" style="font-size: 0.65rem;">{{ log.event_type }}</span>
+            {% elif 'SCAN' in log.event_type %}
+              <span class="badge badge-amber mono" style="font-size: 0.65rem;">{{ log.event_type }}</span>
+            {% else %}
+              <span class="badge badge-info mono" style="font-size: 0.65rem;">{{ log.event_type }}</span>
+            {% endif %}
+          </td>
+          <td class="mono" style="font-size: 0.75rem;">{{ log.actor_id or 'SYSTEM' }}</td>
+          <td>
+            {% if log.outcome == 'SUCCESS' %}
+              <span class="badge badge-emerald">SUCCESS</span>
+            {% elif log.outcome in ('DENIED', 'REJECTED') %}
+              <span class="badge badge-crit">DENIED</span>
+            {% elif log.outcome == 'FAILURE' %}
+              <span class="badge badge-crit">FAILURE</span>
+            {% else %}
+              <span class="badge badge-muted">{{ log.outcome }}</span>
+            {% endif %}
+          </td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">{{ log.ip_address or '—' }}</td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S UTC') if log.timestamp else 'N/A' }}
+          </td>
+          <td class="mono" style="font-size: 0.72rem; color: var(--text-secondary); max-width: 320px; word-break: break-all;">
+            {{ log.details }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">&empty;</div>
+    <h3>No Audit Records Logged</h3>
+    <p>System security audit events will appear here as authentication and reconnaissance actions take place.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

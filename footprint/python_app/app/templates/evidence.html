@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Forensic Evidence Ledger &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+  <div>
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Forensic Evidence Ledger</h2>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Cryptographically sealed, immutable raw reconnaissance and vulnerability evidence records with SHA-256 digests.</p>
+  </div>
+</div>
+
+<!-- Evidence Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Preserved Forensic Evidence Records ({{ evidence_list|length }})</h3>
+  </div>
+  {% if evidence_list %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Evidence ID</th>
+          <th>Source Subsystem</th>
+          <th>Collector / Tool</th>
+          <th>Target</th>
+          <th>Size</th>
+          <th>Cryptographic SHA-256 Digest</th>
+          <th>Investigation</th>
+          <th>Captured</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ev in evidence_list %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--brand-primary);">{{ ev.id }}</td>
+          <td><span class="badge badge-brand">{{ ev.source_type }}</span></td>
+          <td>{{ ev.source_name }}</td>
+          <td class="mono" style="font-size: 0.78rem;">{{ ev.target }}</td>
+          <td class="mono" style="font-size: 0.75rem;">{{ ev.content_size_bytes }} B</td>
+          <td class="mono" style="font-size: 0.72rem; color: var(--text-secondary); max-width: 200px; word-break: break-all;">
+            {{ ev.content_hash }}
+          </td>
+          <td class="mono" style="font-size: 0.75rem;">
+            <a href="/investigations/{{ ev.investigation_id }}" style="color: var(--brand-primary); text-decoration: none;">
+              {{ ev.investigation_id }}
+            </a>
+          </td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ ev.collected_at.strftime('%Y-%m-%d %H:%M') if ev.collected_at else 'N/A' }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">&empty;</div>
+    <h3>No Evidence Records Found</h3>
+    <p>Forensic evidence records are created automatically when collection or scanner jobs execute.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

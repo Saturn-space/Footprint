@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Findings Matrix &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+  <div>
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Unified Findings Matrix</h2>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Correlated network exposures and vulnerability assessment findings across authorized investigations.</p>
+  </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card" style="margin-bottom: 1.25rem;">
+  <div class="card-body" style="padding: 0.85rem 1.25rem;">
+    <form method="GET" action="/findings" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 220px;">
+        <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search by finding name, CVE, or target host..." class="form-control" style="padding: 0.4rem 0.75rem;">
+      </div>
+      <div>
+        <select name="severity" class="form-select" style="padding: 0.4rem 0.75rem;">
+          <option value="">All Severities</option>
+          <option value="critical" {% if severity_filter == 'critical' %}selected{% endif %}>Critical</option>
+          <option value="high" {% if severity_filter == 'high' %}selected{% endif %}>High</option>
+          <option value="medium" {% if severity_filter == 'medium' %}selected{% endif %}>Medium</option>
+          <option value="low" {% if severity_filter == 'low' %}selected{% endif %}>Low</option>
+          <option value="info" {% if severity_filter == 'info' %}selected{% endif %}>Info</option>
+        </select>
+      </div>
+      <div>
+        <select name="investigation_id" class="form-select" style="padding: 0.4rem 0.75rem;">
+          <option value="">All Investigations</option>
+          {% for inv in investigations %}
+            <option value="{{ inv.id }}" {% if inv_filter == inv.id %}selected{% endif %}>{{ inv.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-secondary">Filter</button>
+      {% if search_query or severity_filter or inv_filter %}
+      <a href="/findings" class="btn btn-outline">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+<!-- Findings Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Vulnerability &amp; Service Findings ({{ findings|length }})</h3>
+  </div>
+  {% if findings %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Severity</th>
+          <th>Finding Name</th>
+          <th>Target Host : Port</th>
+          <th>CVSS</th>
+          <th>CVE References</th>
+          <th>Source Scanner</th>
+          <th>Campaign</th>
+          <th>Discovered</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for f in findings %}
+        <tr>
+          <td>
+            {% if (f.severity|lower) == 'critical' %}
+              <span class="badge badge-crit">CRITICAL</span>
+            {% elif (f.severity|lower) == 'high' %}
+              <span class="badge badge-high">HIGH</span>
+            {% elif (f.severity|lower) == 'medium' %}
+              <span class="badge badge-med">MEDIUM</span>
+            {% elif (f.severity|lower) == 'low' %}
+              <span class="badge badge-low">LOW</span>
+            {% else %}
+              <span class="badge badge-info">INFO</span>
+            {% endif %}
+          </td>
+          <td style="font-weight: 600; color: var(--text-primary); max-width: 250px;">
+            {{ f.name }}
+          </td>
+          <td class="mono" style="font-size: 0.78rem;">
+            {{ f.host }}{% if f.port %}:{{ f.port }}/{{ f.protocol }}{% endif %}
+          </td>
+          <td class="mono" style="font-weight: 700;">
+            {{ "%.1f"|format(f.cvss_score) if f.cvss_score is not none else '—' }}
+          </td>
+          <td class="mono" style="font-size: 0.75rem;">
+            {% if f.cve_references %}
+              {{ f.cve_references|join(', ') }}
+            {% else %}
+              <span style="color: var(--text-muted);">—</span>
+            {% endif %}
+          </td>
+          <td>
+            <span class="badge badge-muted">GREENBONE GVM</span>
+          </td>
+          <td class="mono" style="font-size: 0.75rem;">
+            <a href="/investigations/{{ f.investigation_id }}" style="color: var(--brand-primary); text-decoration: none;">
+              {{ f.investigation_id }}
+            </a>
+          </td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ f.first_seen.strftime('%Y-%m-%d %H:%M') if f.first_seen else 'N/A' }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">&empty;</div>
+    <h3>No Findings Identified</h3>
+    <p>
+      {% if search_query or severity_filter or inv_filter %}
+        No findings matched your filter parameters. Try clearing the filters.
+      {% else %}
+        No vulnerability findings have been recorded. Note: The absence of findings does not imply a target is secure.
+      {% endif %}
+    </p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

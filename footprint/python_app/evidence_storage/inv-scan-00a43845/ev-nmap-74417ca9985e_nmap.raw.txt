@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nmaprun scanner="nmap" args="nmap -sT -T3 --top-ports 100 -Pn 127.0.0.1" version="7.98">
+  <host>
+    <status state="up"/>
+    <address addr="127.0.0.1" addrtype="ipv4"/>
+    <hostnames>
+      <hostname name="localhost" type="user"/>
+    </hostnames>
+    <ports>
+      <port protocol="tcp" portid="80">
+        <state state="open"/>
+        <service name="http" product="Apache" version="2.4"/>
+      </port>
+      <port protocol="tcp" portid="443">
+        <state state="closed"/>
+      </port>
+    </ports>
+  </host>
+</nmaprun>

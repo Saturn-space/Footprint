@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="max-width: 440px; margin: 3.5rem auto 5rem; padding: 0 1rem;">
+  <!-- Product Branding & Header -->
+  <div style="text-align: center; margin-bottom: 2rem;" class="anim-hero-badge">
+    <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: #ffffff; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.03em; margin-bottom: 0.85rem; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);">
+      IQ
+    </div>
+    <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; letter-spacing: -0.02em;">
+      FootprintIQ
+    </h2>
+    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+      Digital Footprint Investigator &amp; Threat Reconnaissance
+    </p>
+  </div>
+
+  <!-- Authentication Card -->
+  <div class="card anim-hero-preview" style="box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08); border: 1px solid var(--border-card); border-radius: 16px; background: var(--bg-card); padding: 2.25rem;">
+    <div style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <h3 style="font-size: 1.15rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.35rem;">
+        Sign In to Workspace
+      </h3>
+      <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+        Authorized access only. Enter your credentials to manage active digital footprint campaigns.
+      </p>
+    </div>
+
+    <!-- Feedback Banners -->
+    {% if error %}
+    <div style="display: flex; align-items: flex-start; gap: 0.65rem; background-color: var(--crit-bg); border: 1px solid var(--crit-border); border-radius: var(--radius-md); padding: 0.75rem 0.9rem; margin-bottom: 1.25rem; color: #7f1d1d; font-size: 0.8rem; line-height: 1.5;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <div>
+        <strong style="font-weight: 600;">Authentication Error:</strong> {{ error }}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if message %}
+    <div style="display: flex; align-items: flex-start; gap: 0.65rem; background-color: var(--passive-bg); border: 1px solid var(--passive-border); border-radius: var(--radius-md); padding: 0.75rem 0.9rem; margin-bottom: 1.25rem; color: #14532d; font-size: 0.8rem; line-height: 1.5;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <div>{{ message }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Login Form -->
+    <form id="login-form" method="POST" action="/auth/login" onsubmit="handleLoginSubmit(event)">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <input type="hidden" name="next" value="{{ next_url or '/' }}">
+
+      <div class="form-group">
+        <label for="username_or_email" class="form-label">
+          Username or Email Address
+        </label>
+        <input 
+          type="text" 
+          id="username_or_email" 
+          name="username_or_email" 
+          required 
+          autofocus
+          autocomplete="username"
+          placeholder="e.g. investigator or analyst@footprintiq.local"
+          class="form-control"
+          style="padding: 0.6rem 0.85rem; font-size: 0.85rem;"
+        >
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+          <label for="password" class="form-label" style="margin: 0;">
+            Password
+          </label>
+        </div>
+        <div style="position: relative;">
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required 
+            autocomplete="current-password"
+            placeholder="Enter account password"
+            class="form-control"
+            style="padding: 0.6rem 2.6rem 0.6rem 0.85rem; font-size: 0.85rem;"
+          >
+          <button 
+            type="button" 
+            id="toggle-password-btn"
+            onclick="togglePasswordVisibility('password', this)"
+            title="Toggle password visibility"
+            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; padding: 4px; color: var(--text-muted); cursor: pointer; display: flex; align-items: center;"
+            aria-label="Show password"
+          >
+            <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button 
+        type="submit" 
+        id="submit-btn"
+        class="btn btn-primary" 
+        style="width: 100%; padding: 0.75rem; font-size: 0.9rem; font-weight: 600; border-radius: var(--radius-md);"
+      >
+        Sign In to Workspace &rarr;
+      </button>
+    </form>
+
+    <!-- Registration Link -->
+    <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); text-align: center; font-size: 0.8rem; color: var(--text-secondary);">
+      Need investigator access? 
+      <a href="/signup" style="color: var(--brand-primary); font-weight: 600; text-decoration: none; margin-left: 0.25rem;">
+        Register for an account &rarr;
+      </a>
+    </div>
+
+    <!-- Setup & Demo Instructions Callout -->
+    <div style="margin-top: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 0.85rem 1rem; font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5;">
+      <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.35rem;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        Local Lab Demonstration Setup
+      </div>
+      <span>To provision accounts, run the CLI utility in your terminal:</span>
+      <code class="mono" style="display: block; background: #ffffff; border: 1px solid var(--border-subtle); padding: 0.35rem 0.5rem; border-radius: 4px; margin-top: 0.35rem; color: var(--brand-hover);">
+        python scripts/provision_demo_account.py
+      </code>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePasswordVisibility(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    if (!input) return;
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    btn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+    btn.innerHTML = isPassword ? `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+        <line x1="1" y1="1" x2="23" y2="23"/>
+      </svg>
+    ` : `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    `;
+  }
+
+  function handleLoginSubmit(event) {
+    const btn = document.getElementById('submit-btn');
+    if (btn) {
+      btn.disabled = true;
+      btn.style.opacity = '0.75';
+      btn.innerHTML = 'Signing In &hellip;';
+    }
+  }
+</script>
+{% endblock %}

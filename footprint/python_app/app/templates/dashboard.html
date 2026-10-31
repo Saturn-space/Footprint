@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<!-- Operational Policy Notice -->
+<div class="banner banner-passive">
+  <div style="display: flex; align-items: center; gap: 0.75rem;">
+    <span class="status-pill online"></span>
+    <div>
+      <strong style="color: #14532d;">Python Application Foundation (Phase 2) &middot; Authentication &amp; RBAC (Phase 3) Active:</strong>
+      <span>Passive OSINT collection queries public resolvers without packet delivery to target interfaces. Active Nmap and Greenbone scans require explicit target authorization.</span>
+    </div>
+  </div>
+  <span class="badge badge-passive mono" style="font-size: 0.7rem;">RBAC &amp; SCOPE ENFORCED</span>
+</div>
+
+<!-- Key Metric Overview Cards (Genuine Database Counts) -->
+<div class="grid-4">
+  <div class="stat-card">
+    <span class="stat-label">Total Investigations</span>
+    <span class="stat-value" style="color: var(--brand-primary);">{{ total_investigations }}</span>
+    <span class="stat-meta">{{ active_investigations }} active &middot; {{ completed_investigations }} completed</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Discovered Assets</span>
+    <span class="stat-value" style="color: var(--passive-primary);">{{ total_entities }}</span>
+    <span class="stat-meta">Normalized OSINT entities</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Enumerated Ports</span>
+    <span class="stat-value" style="color: var(--active-primary);">{{ total_open_ports }}</span>
+    <span class="stat-meta">Across {{ total_scans }} active Nmap scans</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Vulnerabilities Identified</span>
+    <span class="stat-value" style="color: var(--crit-primary);">{{ total_vulns }}</span>
+    <span class="stat-meta">Across {{ total_vuln_scans }} Greenbone assessments</span>
+  </div>
+</div>
+
+<!-- Subsystem Diagnostics & Status -->
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-primary);">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+        </svg>
+        Runtime Architecture &amp; Subsystems
+      </h3>
+      <div id="health-indicator" hx-get="/health/badge" hx-trigger="load, every 15s" hx-swap="innerHTML">
+        <span class="badge badge-info">Checking...</span>
+      </div>
+    </div>
+    
+    <div class="card-body" style="font-size: 0.8rem; color: var(--text-secondary); space-y: 0.5rem;">
+      <div style="display: flex; justify-content: space-between; padding: 0.35rem 0; border-bottom: 1px solid var(--border-subtle);">
+        <span>ASGI Framework</span>
+        <span class="mono" style="color: var(--brand-primary); font-weight: 600;">FastAPI {{ fastapi_version }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 0.35rem 0; border-bottom: 1px solid var(--border-subtle);">
+        <span>ORM &amp; Database Engine</span>
+        <span class="mono" style="color: var(--passive-primary); font-weight: 600;">SQLAlchemy 2.x ({{ db_dialect }})</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 0.35rem 0; border-bottom: 1px solid var(--border-subtle);">
+        <span>Active Nmap Scanner</span>
+        <span class="mono" style="color: var(--text-primary); font-weight: 600;">{{ nmap_status }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 0.35rem 0; border-bottom: 1px solid var(--border-subtle);">
+        <span>Greenbone Vulnerability Manager</span>
+        <span class="mono" style="color: var(--text-primary); font-weight: 600;">{{ greenbone_status }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 0.35rem 0;">
+        <span>Forensic Evidence Store</span>
+        <span class="mono" style="color: var(--text-primary);">{{ total_evidence }} items &middot; SHA-256 Verified</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--active-primary);">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Reconnaissance Workflow &amp; Scopes
+      </h3>
+      <span class="badge badge-emerald">PHASES 1–6 VERIFIED</span>
+    </div>
+    <div class="card-body" style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;">
+      <p style="margin-bottom: 0.5rem;">
+        <strong style="color: var(--text-primary);">Enforced Workflow Stages:</strong>
+      </p>
+      <ul style="padding-left: 1.2rem; margin-bottom: 0.75rem;">
+        <li><strong>Passive Collection:</strong> Authoritative DNS, RDAP registration, Search disclosure enumeration.</li>
+        <li><strong>Active Port Detection:</strong> Nmap service versioning gated by explicit target allowlists.</li>
+        <li><strong>Vulnerability Management:</strong> Greenbone GVM assessments with verified GMP tasks and CVSS scoring.</li>
+        <li><strong>Forensic Provenance:</strong> Immutable raw evidence storage hashed with true SHA-256.</li>
+      </ul>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <a href="/investigations" class="btn btn-outline" style="font-size: 0.75rem;">Browse Investigations</a>
+        <a href="/findings" class="btn btn-secondary" style="font-size: 0.75rem;">View Findings Matrix</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Investigations Workspace Table -->
+<div class="card" id="investigations">
+  <div class="card-header">
+    <h3 class="card-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-primary);">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+      </svg>
+      Investigation Workspace
+    </h3>
+    <div style="display: flex; gap: 0.5rem; align-items: center;">
+      <a href="/investigations" class="btn btn-outline" style="font-size: 0.75rem;">
+        View All ({{ total_investigations }})
+      </a>
+      <a href="/investigations#new" class="btn btn-primary" style="font-size: 0.75rem;">
+        + New Investigation
+      </a>
+    </div>
+  </div>
+
+  {% if investigations %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Case ID</th>
+          <th>Campaign Name</th>
+          <th>Target Organization</th>
+          <th>Lead Investigator</th>
+          <th>Scope Target(s)</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inv in investigations[:10] %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--brand-primary);">
+            <a href="/investigations/{{ inv.id }}" style="text-decoration: none; color: inherit;">
+              {{ inv.id }}
+            </a>
+          </td>
+          <td style="font-weight: 600; color: var(--text-primary);">
+            <a href="/investigations/{{ inv.id }}" style="text-decoration: none; color: inherit;">
+              {{ inv.name }}
+            </a>
+          </td>
+          <td>{{ inv.organization_name }}</td>
+          <td>{{ inv.lead_investigator }}</td>
+          <td class="mono" style="font-size: 0.78rem;">
+            {% if inv.owned_domains %}
+              {{ inv.owned_domains[0] }}
+            {% elif inv.approved_ips %}
+              {{ inv.approved_ips[0] }}
+            {% else %}
+              <span style="color: var(--text-muted);">None</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if inv.status == 'active' %}
+              <span class="badge badge-emerald">ACTIVE</span>
+            {% elif inv.status == 'completed' %}
+              <span class="badge badge-brand">COMPLETED</span>
+            {% elif inv.status == 'archived' %}
+              <span class="badge badge-info">ARCHIVED</span>
+            {% else %}
+              <span class="badge badge-amber">{{ inv.status|upper }}</span>
+            {% endif %}
+          </td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ inv.created_at.strftime('%Y-%m-%d %H:%M') if inv.created_at else 'N/A' }}
+          </td>
+          <td>
+            <a href="/investigations/{{ inv.id }}" class="btn btn-secondary" style="font-size: 0.7rem; padding: 0.25rem 0.5rem;">
+              Open Workspace &rarr;
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">&empty;</div>
+    <h3>No Investigations Available</h3>
+    <p>
+      The platform is initialized and ready. Create your first authorized cybersecurity reconnaissance campaign.
+    </p>
+    <a href="/investigations" class="btn btn-primary" style="font-size: 0.8rem;">
+      Create Investigation
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

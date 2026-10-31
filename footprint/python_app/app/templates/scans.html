@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Scans &amp; Jobs &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+  <div>
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Reconnaissance &amp; Scan Execution Monitor</h2>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Real-time execution status of passive collection pipelines, active Nmap scans, and Greenbone assessments.</p>
+  </div>
+  <div style="display: flex; gap: 0.5rem; align-items: center;">
+    <button onclick="location.reload()" class="btn btn-secondary" style="font-size: 0.78rem;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 4v6h-6"/>
+        <path d="M1 20v-6h6"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Refresh
+    </button>
+  </div>
+</div>
+
+<!-- Active Greenbone Vulnerability Jobs -->
+<div class="card" style="margin-bottom: 1.25rem;">
+  <div class="card-header">
+    <h3 class="card-title">
+      <span class="status-pill running"></span>
+      Greenbone / OpenVAS Vulnerability Assessment Tasks
+    </h3>
+  </div>
+  {% if vuln_jobs %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Target</th>
+          <th>Profile ID</th>
+          <th>GVM Task ID</th>
+          <th>Status</th>
+          <th>Progress</th>
+          <th>Started</th>
+          <th>Findings</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vj in vuln_jobs %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--brand-primary);">{{ vj.id }}</td>
+          <td class="mono" style="font-size: 0.78rem;">{{ vj.target }}</td>
+          <td><span class="badge badge-brand">{{ vj.profile_id }}</span></td>
+          <td class="mono" style="font-size: 0.72rem; color: var(--text-secondary);">{{ vj.gvm_task_id or '—' }}</td>
+          <td>
+            {% if vj.status == 'COMPLETED' %}
+              <span class="badge badge-emerald">COMPLETED</span>
+            {% elif vj.status == 'RUNNING' %}
+              <span class="badge badge-amber">RUNNING</span>
+            {% elif vj.status == 'QUEUED' %}
+              <span class="badge badge-info">QUEUED</span>
+            {% elif vj.status == 'CANCELLED' %}
+              <span class="badge badge-muted">CANCELLED</span>
+            {% elif vj.status == 'FAILED' %}
+              <span class="badge badge-crit">FAILED</span>
+            {% else %}
+              <span class="badge badge-info">{{ vj.status }}</span>
+            {% endif %}
+          </td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div style="flex: 1; height: 6px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; min-width: 60px;">
+                <div style="width: {{ vj.progress or 0 }}%; height: 100%; background: var(--brand-primary);"></div>
+              </div>
+              <span class="mono" style="font-size: 0.72rem;">{{ vj.progress or 0 }}%</span>
+            </div>
+          </td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ vj.started_at.strftime('%Y-%m-%d %H:%M') if vj.started_at else '—' }}
+          </td>
+          <td>
+            <span class="mono" style="font-weight: 600;">{{ vj.findings|length if vj.findings else 0 }}</span>
+          </td>
+          <td>
+            {% if vj.status in ('QUEUED', 'RUNNING') %}
+            <form method="POST" action="/scans/vuln/{{ vj.id }}/cancel" style="display: inline;">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <button type="submit" class="btn btn-danger" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+                Cancel
+              </button>
+            </form>
+            {% else %}
+            <a href="/investigations/{{ vj.investigation_id }}" class="btn btn-secondary" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+              View &rarr;
+            </a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding: 1.5rem;">
+    <p>No vulnerability assessment jobs recorded.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Active Nmap Scan Jobs -->
+<div class="card" style="margin-bottom: 1.25rem;">
+  <div class="card-header">
+    <h3 class="card-title">
+      <span class="status-pill online"></span>
+      Active Nmap Port &amp; Service Scans
+    </h3>
+  </div>
+  {% if nmap_jobs %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Target</th>
+          <th>Scan Profile</th>
+          <th>Status</th>
+          <th>Exit Code</th>
+          <th>Duration</th>
+          <th>Started</th>
+          <th>Hosts Discovered</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for nj in nmap_jobs %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--active-primary);">{{ nj.id }}</td>
+          <td class="mono" style="font-size: 0.78rem;">{{ nj.target }}</td>
+          <td><span class="badge badge-amber">{{ nj.scan_profile }}</span></td>
+          <td>
+            {% if nj.status == 'COMPLETED' %}
+              <span class="badge badge-emerald">COMPLETED</span>
+            {% elif nj.status == 'RUNNING' %}
+              <span class="badge badge-amber">RUNNING</span>
+            {% elif nj.status == 'FAILED' %}
+              <span class="badge badge-crit">FAILED</span>
+            {% else %}
+              <span class="badge badge-muted">{{ nj.status }}</span>
+            {% endif %}
+          </td>
+          <td class="mono" style="font-size: 0.75rem;">{{ nj.exit_code if nj.exit_code is not none else '—' }}</td>
+          <td class="mono" style="font-size: 0.75rem;">{{ "%.1fs"|format(nj.duration_seconds) if nj.duration_seconds is not none else '—' }}</td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ nj.started_at.strftime('%Y-%m-%d %H:%M') if nj.started_at else '—' }}
+          </td>
+          <td>
+            <span class="mono" style="font-weight: 600;">{{ nj.hosts|length if nj.hosts else 0 }}</span>
+          </td>
+          <td>
+            <a href="/investigations/{{ nj.investigation_id }}" class="btn btn-secondary" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+              View &rarr;
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding: 1.5rem;">
+    <p>No active Nmap scans recorded.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Passive Collection Jobs -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      <span class="status-pill completed"></span>
+      Passive OSINT Collection Pipelines
+    </h3>
+  </div>
+  {% if collection_jobs %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Job ID</th>
+          <th>Collector</th>
+          <th>Target</th>
+          <th>Status</th>
+          <th>Started</th>
+          <th>Completed</th>
+          <th>Summary Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cj in collection_jobs %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--passive-primary);">{{ cj.id }}</td>
+          <td><span class="badge badge-emerald">{{ cj.collector_name }}</span></td>
+          <td class="mono" style="font-size: 0.78rem;">{{ cj.target }}</td>
+          <td>
+            {% if cj.status == 'COMPLETED' %}
+              <span class="badge badge-emerald">COMPLETED</span>
+            {% elif cj.status == 'FAILED' %}
+              <span class="badge badge-crit">FAILED</span>
+            {% else %}
+              <span class="badge badge-info">{{ cj.status }}</span>
+            {% endif %}
+          </td>
+          <td class="mono" style="font-size: 0.75rem;">{{ cj.started_at.strftime('%Y-%m-%d %H:%M') if cj.started_at else '—' }}</td>
+          <td class="mono" style="font-size: 0.75rem;">{{ cj.completed_at.strftime('%Y-%m-%d %H:%M') if cj.completed_at else '—' }}</td>
+          <td style="font-size: 0.78rem;">
+            {% if cj.result_summary %}
+              {{ cj.result_summary.findings_count or 0 }} entities discovered
+            {% else %}
+              —
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state" style="padding: 1.5rem;">
+    <p>No passive collection jobs recorded.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

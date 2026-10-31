@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Tool &amp; Scanner Diagnostics &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+  <div>
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Scanner &amp; Integration Diagnostics</h2>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Real-time availability and connectivity verification for reconnaissance and vulnerability engines.</p>
+  </div>
+  <a href="/admin/authorizations" class="btn btn-secondary" style="font-size: 0.8rem;">
+    &larr; Target Authorizations
+  </a>
+</div>
+
+<div class="grid-2">
+  <!-- Greenbone GVM Diagnostic Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Greenbone Vulnerability Manager (GMP)</h3>
+      {% if greenbone_diag.status == 'READY' %}
+        <span class="badge badge-emerald">READY</span>
+      {% elif greenbone_diag.status == 'NOT_CONFIGURED' %}
+        <span class="badge badge-info">NOT CONFIGURED</span>
+      {% else %}
+        <span class="badge badge-crit">{{ greenbone_diag.status }}</span>
+      {% endif %}
+    </div>
+    <div class="card-body" style="font-size: 0.82rem;">
+      <div style="margin-bottom: 0.75rem;">
+        <span class="mono" style="color: var(--text-muted);">Connection Mode:</span>
+        <strong style="margin-left: 0.5rem;">{{ greenbone_diag.connection_mode or 'None' }}</strong>
+      </div>
+      <div style="margin-bottom: 0.75rem;">
+        <span class="mono" style="color: var(--text-muted);">GVM Version:</span>
+        <span class="mono" style="margin-left: 0.5rem; font-weight: 600;">{{ greenbone_diag.version or 'Unavailable' }}</span>
+      </div>
+      <div style="margin-bottom: 0.75rem;">
+        <span class="mono" style="color: var(--text-muted);">Diagnostic Message:</span>
+        <p style="color: var(--text-secondary); margin-top: 0.25rem;">{{ greenbone_diag.message }}</p>
+      </div>
+      <div style="background: var(--bg-secondary); padding: 0.65rem; border-radius: var(--radius-sm); font-size: 0.75rem; color: var(--text-muted);">
+        Honest Integration Policy: If GVM is not running or unconfigured, FootprintIQ reports UNAVAILABLE or NOT_CONFIGURED rather than fabricating synthetic findings.
+      </div>
+    </div>
+  </div>
+
+  <!-- Nmap Scanner Diagnostic Card -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Active Nmap Reconnaissance Engine</h3>
+      {% if nmap_diag.available %}
+        <span class="badge badge-emerald">READY</span>
+      {% else %}
+        <span class="badge badge-amber">NOT FOUND</span>
+      {% endif %}
+    </div>
+    <div class="card-body" style="font-size: 0.82rem;">
+      <div style="margin-bottom: 0.75rem;">
+        <span class="mono" style="color: var(--text-muted);">Executable Path:</span>
+        <span class="mono" style="margin-left: 0.5rem;">{{ nmap_diag.executable_path or 'Not in PATH' }}</span>
+      </div>
+      <div style="margin-bottom: 0.75rem;">
+        <span class="mono" style="color: var(--text-muted);">Detected Version:</span>
+        <span class="mono" style="margin-left: 0.5rem; font-weight: 600;">{{ nmap_diag.version or 'Unavailable' }}</span>
+      </div>
+      <div style="margin-bottom: 0.75rem;">
+        <span class="mono" style="color: var(--text-muted);">Status Details:</span>
+        <p style="color: var(--text-secondary); margin-top: 0.25rem;">{{ nmap_diag.message }}</p>
+      </div>
+      <div style="background: var(--bg-secondary); padding: 0.65rem; border-radius: var(--radius-sm); font-size: 0.75rem; color: var(--text-muted);">
+        Security Guard: Nmap subprocess execution is strictly sandboxed. Commands can only execute against targets matching an active <code class="mono">SCAN_PORTS</code> authorization record.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

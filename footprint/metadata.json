@@ -1,0 +1,6 @@
+{
+  "name": "FootprintIQ: OSINT Recon Toolkit",
+  "description": "Educational and authorized cybersecurity reconnaissance management platform for OSINT footprint correlation, exposure scoring, and audit logging.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

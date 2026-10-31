@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Target Authorizations Administration &middot; FootprintIQ{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+  <div>
+    <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Target Authorization Administration</h2>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">Manage explicit reconnaissance allowlist policies and operational permissions.</p>
+  </div>
+  <div style="display: flex; gap: 0.5rem;">
+    <a href="/admin/tools" class="btn btn-secondary" style="font-size: 0.8rem;">
+      Scanner Diagnostics &rarr;
+    </a>
+  </div>
+</div>
+
+<!-- Authorizations Table -->
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Active &amp; Historical Target Allowlist Records ({{ authorizations|length }})</h3>
+  </div>
+  {% if authorizations %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Target Host / Range</th>
+          <th>Type</th>
+          <th>Permitted Operations</th>
+          <th>Investigation</th>
+          <th>Approved By</th>
+          <th>Ticket Reference</th>
+          <th>Validity Window</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in authorizations %}
+        <tr>
+          <td class="mono" style="font-weight: 600; color: var(--brand-primary);">{{ a.target }}</td>
+          <td><span class="badge badge-info">{{ a.target_type }}</span></td>
+          <td>
+            {% for op in a.allowed_operations %}
+              {% if op in ('SCAN_PORTS', 'SCAN_ACTIVE') %}
+                <span class="badge badge-amber mono" style="font-size: 0.65rem;">{{ op }}</span>
+              {% elif op in ('SCAN_VULN', 'SCAN_VULNERABILITY') %}
+                <span class="badge badge-crit mono" style="font-size: 0.65rem;">{{ op }}</span>
+              {% else %}
+                <span class="badge badge-emerald mono" style="font-size: 0.65rem;">{{ op }}</span>
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td class="mono" style="font-size: 0.75rem;">
+            <a href="/investigations/{{ a.investigation_id }}" style="color: var(--brand-primary); text-decoration: none;">
+              {{ a.investigation_id }}
+            </a>
+          </td>
+          <td>{{ a.approved_by }}</td>
+          <td class="mono" style="font-size: 0.75rem;">{{ a.authorization_reference }}</td>
+          <td class="mono" style="font-size: 0.75rem; color: var(--text-secondary);">
+            {{ a.valid_from.strftime('%Y-%m-%d') }} to {{ a.valid_to.strftime('%Y-%m-%d') }}
+          </td>
+          <td>
+            {% if a.is_revoked %}
+              <span class="badge badge-crit">REVOKED</span>
+            {% else %}
+              <span class="badge badge-emerald">ACTIVE</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if not a.is_revoked %}
+            <form method="POST" action="/admin/authorizations/{{ a.id }}/revoke" style="display: inline;">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <button type="submit" class="btn btn-danger" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;" onclick="return confirm('Are you sure you want to revoke target authorization for {{ a.target }}?')">
+                Revoke
+              </button>
+            </form>
+            {% else %}
+            <span style="color: var(--text-muted); font-size: 0.75rem;">Revoked</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-state-icon">&empty;</div>
+    <h3>No Target Authorizations Registered</h3>
+    <p>Target authorizations can be registered from individual investigation workspaces.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
