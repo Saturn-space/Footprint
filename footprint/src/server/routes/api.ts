@@ -379,7 +379,7 @@ apiRouter.post(
         source: filename || 'openvas_report.xml',
         rawData: { findings: result.findings },
         collectedAt: new Date().toISOString()
-      );
+      });
 
       await evidenceNormalizer.normalizeAndCorrelate(evidence, inv);
 
@@ -496,7 +496,7 @@ apiRouter.patch(
 );
 
 apiRouter.get('/investigations/:id/score', async (req: Request, res: Response) => {
-  const score = await exposureScorer.calculate(invId: req.params.id);
+  const score = await exposureScorer.calculate(req.params.id);
   return (res as any).sendApiResponse(200, true, score, null, 'Exposure score calculated');
 });
 
