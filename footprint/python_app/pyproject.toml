@@ -25,6 +25,7 @@ dependencies = [
     "argon2-cffi>=23.1.0",
     "python-gvm>=24.0.0",
     "lxml>=4.5.0",
+    "psycopg>=3.2.0",
 ]
 
 [project.optional-dependencies]
