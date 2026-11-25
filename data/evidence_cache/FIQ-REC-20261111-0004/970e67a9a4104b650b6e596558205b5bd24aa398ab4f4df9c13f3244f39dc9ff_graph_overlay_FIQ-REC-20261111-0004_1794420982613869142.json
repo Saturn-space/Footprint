@@ -1,0 +1,358 @@
+{
+  "entities": [
+    {
+      "node_id": "ENT:SERVICE:06085c52dfed",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "value": "http-admin-check",
+      "label": "http-admin-check",
+      "source_tool": "analyst_manual",
+      "evidence_ref": "manual:FIQ-REC-20261111-0004",
+      "risk_level": "info",
+      "confidence": 0.85,
+      "attributes": {
+        "added_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:IP:da1f1bf65b4c",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "value": "192.168.56.111",
+      "label": "192.168.56.111",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "risk_level": "info",
+      "confidence": 0.98,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:SERVICE:769a4aa4ad27",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "value": "192.168.56.111:21/tcp (ftp)",
+      "label": "21/tcp ftp [vsftpd 2.3.4]",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:SERVICE:b70b484fc763",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "value": "192.168.56.111:22/tcp (ssh)",
+      "label": "22/tcp ssh [OpenSSH 4.7p1 Debian 8ub]",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:SERVICE:d26e07ce53ec",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "value": "192.168.56.111:80/tcp (http)",
+      "label": "80/tcp http [Apache httpd 2.2.8]",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:257489b2bfae",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-7CA930412687|192.168.56.111|80|HTTP Missing Security Headers (permissions-policy)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (permissions-policy)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:31de34fd981b",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-C70A537577E2|192.168.56.111|80|HTTP Missing Security Headers (referrer-policy)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (referrer-policy)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:347351356437",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-A8A7BFCDC451|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-opener-policy)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-opener-policy)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:4160240a7f1e",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-C579929F34BB|192.168.56.111|80|HTTP Missing Security Headers (x-content-type-options)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (x-content-type-options)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:5b9a89dd9ea7",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-67350C76FD92|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-resource-policy)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-resource-policy)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:93ae42352c51",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-4AC90863F87B|192.168.56.111|80|HTTP Missing Security Headers (strict-transport-security)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (strict-transport-security)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:9daf6f32740e",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-73D416D18A64|192.168.56.111|80|HTTP Missing Security Headers (x-frame-options)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (x-frame-options)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:b51a9373897c",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+      "label": "[CRITICAL] Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ftp-vsftpd-backdoor",
+      "risk_level": "critical",
+      "confidence": 0.95,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:bad58fcb3027",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-B1D1EB825735|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-embedder-policy)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-embedder-policy)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:d81cbf947845",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-F2382085C41A|192.168.56.111|80|HTTP Missing Security Headers (x-permitted-cross-domain-policies)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (x-permitted-cross-domain-poli",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:VULNERABILITY:fa85cbf2ab8f",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "value": "NUC-8719E0B43855|192.168.56.111|80|HTTP Missing Security Headers (content-security-policy)",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (content-security-policy)",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "imported_by": "investigator1"
+      }
+    },
+    {
+      "node_id": "ENT:SERVICE:1b73fd9f57b6",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "value": "e2e-svc-1794420982",
+      "label": "e2e-svc-1794420982",
+      "source_tool": "analyst_manual",
+      "evidence_ref": "manual:FIQ-REC-20261111-0004",
+      "risk_level": "info",
+      "confidence": 0.85,
+      "attributes": {
+        "added_by": "investigator1"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:06085c52dfed",
+      "relationship": "RESOLVES_TO",
+      "confidence": 0.85,
+      "evidence_ref": "manual_link:investigator1"
+    },
+    {
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:06085c52dfed",
+      "relationship": "RESOLVES_TO",
+      "confidence": 0.85,
+      "evidence_ref": "manual_link:investigator1"
+    },
+    {
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:769a4aa4ad27",
+      "relationship": "EXPOSES_SERVICE",
+      "confidence": 0.95,
+      "evidence_ref": "nmap:192.168.56.111:21"
+    },
+    {
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:b70b484fc763",
+      "relationship": "EXPOSES_SERVICE",
+      "confidence": 0.95,
+      "evidence_ref": "nmap:192.168.56.111:22"
+    },
+    {
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:d26e07ce53ec",
+      "relationship": "EXPOSES_SERVICE",
+      "confidence": 0.95,
+      "evidence_ref": "nmap:192.168.56.111:80"
+    },
+    {
+      "source": "ENT:SERVICE:769a4aa4ad27",
+      "target": "ENT:VULNERABILITY:b51a9373897c",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.95,
+      "evidence_ref": "nse_script:ftp-vsftpd-backdoor"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:257489b2bfae",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:31de34fd981b",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:347351356437",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:4160240a7f1e",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:5b9a89dd9ea7",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:93ae42352c51",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:9daf6f32740e",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:bad58fcb3027",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:d81cbf947845",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    },
+    {
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:fa85cbf2ab8f",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "confidence": 0.78,
+      "evidence_ref": "4,01e18f68f59d"
+    }
+  ],
+  "revision_ns": 1794420982613869142,
+  "updated_at": "2026-11-11T18:16:22.613874+00:00"
+}

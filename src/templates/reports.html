@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+{% block title %}Reports &amp; Analysis Archive — FootprintIQ{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-7xl mx-auto pb-12">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-slate-900">Security Reports &amp; Executive Deliverables</h1>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Generate investigation-named PDF deliverables linked strictly to individual scan runs, filter archived reports, and launch interactive risk analysis.
+      </p>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-600">
+        Archived PDFs: <strong class="text-slate-900">{{ reports|length }}</strong>
+      </span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-600">
+        Scoped Findings: <strong class="text-slate-900">{{ total_findings }}</strong>
+      </span>
+    </div>
+  </div>
+
+  {% if not is_admin %}
+  <!-- Generate Report Form: Investigation -> Scan Run -> Report Type -->
+  <div class="fiq-card p-6 space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Generate Investigation Report</h2>
+        <p class="text-[11px] text-slate-500">
+          Select an Investigation, choose the exact Scan Run to scope the PDF cleanly without overwriting prior reports, and pick the deliverable type.
+        </p>
+      </div>
+      <span id="repFilePreviewBadge" class="mono text-[11px] px-2.5 py-1 rounded bg-blue-50 text-blue-700 border border-blue-200">
+        Filename preview: investigation_executive.pdf
+      </span>
+    </div>
+
+    <div id="repFeedback" class="hidden"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end text-xs">
+      <div class="md:col-span-4">
+        <label for="repInvSelect" class="block font-semibold text-slate-700 mb-1">1. Investigation / Campaign</label>
+        <select id="repInvSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white font-medium">
+          {% for c in campaigns %}
+          <option value="{{ c.recon_id }}" data-name="{{ c.name }}" {% if preselect_inv == c.recon_id %}selected{% endif %}>
+            {{ c.name }} ({{ c.recon_id }}) — {{ c.target_value }}
+          </option>
+          {% endfor %}
+          {% for inv in investigations %}
+          <option value="{{ inv.investigation_id }}" data-name="{{ inv.title }}" {% if preselect_inv == inv.investigation_id %}selected{% endif %}>
+            {{ inv.title }} ({{ inv.investigation_id }})
+          </option>
+          {% endfor %}
+          {% if not campaigns and not investigations %}
+          <option value="">No scoped investigations found</option>
+          {% endif %}
+        </select>
+      </div>
+
+      <div class="md:col-span-4">
+        <label for="repRunSelect" class="block font-semibold text-slate-700 mb-1">2. Scan Run Scope</label>
+        <select id="repRunSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white font-medium">
+          <option value="">Latest Available Run / Full Scope</option>
+        </select>
+      </div>
+
+      <div class="md:col-span-2">
+        <label for="repFormatSelect" class="block font-semibold text-slate-700 mb-1">3. Report Type</label>
+        <select id="repFormatSelect" class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white font-medium">
+          <option value="executive">Executive Summary</option>
+          <option value="technical">Technical Report</option>
+          <option value="active">Active Recon</option>
+          <option value="passive">Passive OSINT</option>
+          <option value="combined">Combined Recon &amp; Vuln</option>
+          <option value="nmap">Nmap Discovery</option>
+          <option value="nse">Nmap NSE Scripts</option>
+          <option value="nuclei">Nuclei Vulnerabilities</option>
+          <option value="nessus">Nessus Findings</option>
+        </select>
+      </div>
+
+      <div class="md:col-span-2">
+        <button id="btnGenerateReport" type="button" onclick="generatePdfReport()"
+                class="w-full px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg shadow-sm transition">
+          Generate PDF
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+      <label class="inline-flex items-center space-x-2 text-xs text-slate-600 cursor-pointer">
+        <input type="checkbox" id="repCompareCheck" class="rounded border-slate-300 text-blue-600">
+        <span>Include Run-to-Run Baseline Comparison section inside PDF (when &ge; 2 runs exist)</span>
+      </label>
+      <div id="repRunStatusNotice" class="hidden text-[11px] font-medium px-2.5 py-1 rounded border"></div>
+    </div>
+  </div>
+  {% else %}
+  <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-xs text-indigo-900 flex items-center justify-between">
+    <span>
+      <strong>Administrator Oversight Mode:</strong> You can inspect interactive report analyses and download existing reports across all investigations. PDF report generation is performed exclusively by investigators.
+    </span>
+    <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold text-[10px] uppercase">Read-Only</span>
+  </div>
+  {% endif %}
+
+  <!-- Archive Filter & Search Bar -->
+  <div class="fiq-card p-5 space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <h2 class="text-sm font-bold text-slate-900">Report Archive</h2>
+      <div class="text-[11px] text-slate-500">
+        Showing <strong id="archiveVisibleCount" class="text-slate-900">{{ reports|length }}</strong> of {{ reports|length }} PDF deliverables (IST)
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
+      <div class="lg:col-span-2">
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Search</label>
+        <input id="filterSearch" type="text" placeholder="Filter by report name, ID, investigation, run, user..."
+               oninput="filterArchiveRows()"
+               class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Investigation</label>
+        <select id="filterInv" onchange="filterArchiveRows()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Investigations</option>
+          {% for c in campaigns %}
+          <option value="{{ c.recon_id }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Report Type</label>
+        <select id="filterType" onchange="filterArchiveRows()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Types</option>
+          <option value="executive">Executive</option>
+          <option value="technical">Technical</option>
+          <option value="active">Active</option>
+          <option value="passive">Passive</option>
+          <option value="combined">Combined</option>
+          <option value="nmap">Nmap</option>
+          <option value="nse">NSE</option>
+          <option value="nuclei">Nuclei</option>
+          <option value="nessus">Nessus</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Status</label>
+        <select id="filterStatus" onchange="filterArchiveRows()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Statuses</option>
+          <option value="completed">Completed</option>
+          <option value="partial">Partial Coverage</option>
+          <option value="empty">Empty (0 Findings)</option>
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button type="button" onclick="resetArchiveFilters()"
+                class="w-full px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg transition">
+          Reset Filters
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="fiq-table" id="reportsArchiveTable">
+        <thead>
+          <tr>
+            <th>Report Name &amp; ID</th>
+            <th>Investigation</th>
+            <th>Scan Run</th>
+            <th>Type</th>
+            <th>Generated By &amp; IST Time</th>
+            <th>Size &amp; Status</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reportsArchiveBody">
+          {% for rep in reports %}
+          <tr data-inv="{{ rep.investigation_id }}"
+              data-type="{{ rep.report_format }}"
+              data-status="{{ rep.report_status or 'completed' }}"
+              data-search="{{ (rep.report_name ~ ' ' ~ (rep.report_id or '') ~ ' ' ~ (rep.investigation_name or '') ~ ' ' ~ rep.investigation_id ~ ' ' ~ (rep.run_label or '') ~ ' ' ~ (rep.scan_id or '') ~ ' ' ~ (rep.generated_by_username or ''))|lower }}">
+            <td>
+              <div class="font-bold text-xs text-slate-900">{{ rep.report_name or rep.file_name }}</div>
+              <div class="mono text-[10px] text-slate-500 mt-0.5">
+                {% if rep.report_id %}{{ rep.report_id }}{% else %}Archive PDF{% endif %}
+                {% if rep.sha256_hash %} &bull; SHA-256: {{ rep.sha256_hash[:12] }}...{% endif %}
+              </div>
+            </td>
+            <td>
+              <div class="text-xs font-semibold text-slate-800">{{ rep.investigation_name or rep.investigation_id }}</div>
+              <a href="/recon/{{ rep.investigation_id }}/results{% if rep.scan_id %}?scan_id={{ rep.scan_id }}{% endif %}" class="mono text-[10px] text-blue-600 hover:underline">
+                {{ rep.investigation_id }}
+              </a>
+            </td>
+            <td>
+              <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[11px] font-bold text-slate-700">
+                {{ rep.run_label or 'Full Scope' }}
+              </span>
+              {% if rep.scan_id %}
+              <div class="mono text-[10px] text-slate-500 mt-0.5">{{ rep.scan_id }}</div>
+              {% endif %}
+            </td>
+            <td>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-50 text-blue-700 border border-blue-200">
+                {{ rep.report_format }}
+              </span>
+              {% if rep.scan_type and rep.scan_type != rep.report_format %}
+              <div class="text-[10px] text-slate-500 mt-0.5">{{ rep.scan_type }}</div>
+              {% endif %}
+            </td>
+            <td>
+              <div class="text-xs font-medium text-slate-800">{{ rep.generated_by_username or 'Operator' }}</div>
+              <div class="text-[11px] text-slate-500">{{ rep.created_at_ist or (rep.created_at|ist) }}</div>
+            </td>
+            <td>
+              <div class="mono text-[11px] text-slate-700">{{ ((rep.file_size or 0) / 1024)|round(1) }} KB</div>
+              {% set st = (rep.report_status or 'completed')|lower %}
+              <span class="inline-block mt-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase
+                {% if st == 'completed' %}bg-emerald-50 text-emerald-700 border border-emerald-200
+                {% elif st == 'partial' %}bg-amber-50 text-amber-700 border border-amber-200
+                {% else %}bg-slate-100 text-slate-600 border border-slate-200{% endif %}">
+                {{ st }}
+              </span>
+            </td>
+            <td class="text-right">
+              <div class="inline-flex flex-wrap justify-end items-center gap-1.5">
+                <a href="{{ rep.download_url }}&inline=true" target="_blank" rel="noopener"
+                   class="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold transition">
+                  View Report
+                </a>
+                <a href="{{ rep.analysis_url }}"
+                   class="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold transition">
+                  Analyse This Report
+                </a>
+                <a href="{{ rep.download_url }}"
+                   class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition">
+                  Download PDF
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr id="reportsEmptyRow">
+            <td colspan="7" class="py-10 text-center text-slate-400 text-xs">
+              No PDF reports found yet. Select an investigation and scan run above to generate your first investigation-named PDF deliverable.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const SCANS_BY_RECON = {{ (scans_by_recon or {})|tojson }};
+const PRESELECT_SCAN = {{ (preselect_scan or '')|tojson }};
+
+function slugifyInv(name) {
+  return String(name || 'investigation').trim().toLowerCase().replace(/[^a-z0-9_-]+/g, '_').replace(/_+/g, '_').replace(/^[_-]+|[_-]+$/g, '') || 'investigation';
+}
+
+function updateScanRunsForInvestigation() {
+  const invSel = document.getElementById('repInvSelect');
+  const runSel = document.getElementById('repRunSelect');
+  const notice = document.getElementById('repRunStatusNotice');
+  if (!invSel || !runSel) return;
+
+  const invId = invSel.value;
+  const runs = SCANS_BY_RECON[invId] || [];
+  while (runSel.firstChild) runSel.removeChild(runSel.firstChild);
+
+  if (runs.length === 0) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = 'No scan runs recorded yet (campaign overview)';
+    runSel.appendChild(opt);
+  } else {
+    runs.forEach(function (r) {
+      const opt = document.createElement('option');
+      opt.value = r.scan_id;
+      opt.dataset.runNum = String(r.run_number || '');
+      opt.dataset.status = String(r.status || '');
+      opt.dataset.findings = String(r.findings_count || 0);
+      opt.textContent = `${r.run_label} (${r.scan_id}) — ${r.scan_type} — ${r.status} — ${r.started_at_ist || ''} — ${r.findings_count} finding(s)`;
+      if (PRESELECT_SCAN && PRESELECT_SCAN === r.scan_id) opt.selected = true;
+      runSel.appendChild(opt);
+    });
+  }
+  updateReportPreviewAndNotice();
+}
+
+function updateReportPreviewAndNotice() {
+  const invSel = document.getElementById('repInvSelect');
+  const runSel = document.getElementById('repRunSelect');
+  const fmtSel = document.getElementById('repFormatSelect');
+  const badge = document.getElementById('repFilePreviewBadge');
+  const notice = document.getElementById('repRunStatusNotice');
+  if (!invSel || !fmtSel || !badge) return;
+
+  const opt = invSel.options[invSel.selectedIndex];
+  const invName = opt ? (opt.getAttribute('data-name') || invSel.value) : 'investigation';
+  const fmt = fmtSel.value || 'executive';
+  badge.textContent = `Filename pattern: ${slugifyInv(invName)}_${fmt}.pdf`;
+
+  if (runSel && notice) {
+    const rOpt = runSel.options[runSel.selectedIndex];
+    const st = (rOpt && rOpt.dataset.status ? rOpt.dataset.status : '').toLowerCase();
+    const fc = Number(rOpt && rOpt.dataset.findings ? rOpt.dataset.findings : 0);
+    if (st === 'failed' || st === 'cancelled' || st === 'interrupted' || st === 'partially completed') {
+      notice.textContent = `Coverage Notice: Selected run status is "${rOpt.dataset.status}". Generated report will document partial/incomplete status honestly.`;
+      notice.className = 'text-[11px] font-medium px-2.5 py-1 rounded border bg-amber-50 text-amber-800 border-amber-200';
+      notice.classList.remove('hidden');
+    } else if (rOpt && rOpt.value && fc === 0) {
+      notice.textContent = 'Note: Selected scan run recorded 0 findings. PDF will document verified empty execution honestly.';
+      notice.className = 'text-[11px] font-medium px-2.5 py-1 rounded border bg-slate-100 text-slate-700 border-slate-200';
+      notice.classList.remove('hidden');
+    } else {
+      notice.classList.add('hidden');
+    }
+  }
+}
+
+async function generatePdfReport() {
+  const invId = document.getElementById('repInvSelect').value;
+  const scanId = document.getElementById('repRunSelect') ? document.getElementById('repRunSelect').value : '';
+  const fmt = document.getElementById('repFormatSelect').value;
+  const includeComp = document.getElementById('repCompareCheck') ? document.getElementById('repCompareCheck').checked : false;
+  const btn = document.getElementById('btnGenerateReport');
+
+  if (!invId) {
+    FIQ_Alert('repFeedback', 'Select an investigation before generating a report.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  FIQ_Alert('repFeedback', 'Compiling PDF report & visual vector charts...', 'loading');
+
+  try {
+    const res = await fetch('/api/v1/reports/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        investigation_id: invId,
+        scan_id: scanId || null,
+        report_format: fmt,
+        include_comparison: includeComp,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Failed to generate PDF report');
+    FIQ_Alert('repFeedback', `Generated ${data.file_name} (${data.created_at_ist || ''}). Refreshing archive...`, 'success');
+    setTimeout(() => window.location.reload(), 650);
+  } catch (err) {
+    FIQ_Alert('repFeedback', 'Generation failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate PDF';
+  }
+}
+
+function filterArchiveRows() {
+  const q = (document.getElementById('filterSearch').value || '').trim().toLowerCase();
+  const inv = document.getElementById('filterInv').value;
+  const typ = document.getElementById('filterType').value;
+  const st = document.getElementById('filterStatus').value;
+  const rows = document.querySelectorAll('#reportsArchiveBody tr[data-inv]');
+  let shown = 0;
+
+  rows.forEach(function (tr) {
+    const okInv = !inv || tr.dataset.inv === inv;
+    const okType = !typ || tr.dataset.type === typ;
+    const okStatus = !st || tr.dataset.status === st;
+    const okQ = !q || (tr.dataset.search || '').includes(q);
+    const vis = okInv && okType && okStatus && okQ;
+    tr.style.display = vis ? '' : 'none';
+    if (vis) shown += 1;
+  });
+  const counter = document.getElementById('archiveVisibleCount');
+  if (counter) counter.textContent = String(shown);
+}
+
+function resetArchiveFilters() {
+  document.getElementById('filterSearch').value = '';
+  document.getElementById('filterInv').value = '';
+  document.getElementById('filterType').value = '';
+  document.getElementById('filterStatus').value = '';
+  filterArchiveRows();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const invSel = document.getElementById('repInvSelect');
+  const runSel = document.getElementById('repRunSelect');
+  const fmtSel = document.getElementById('repFormatSelect');
+  if (invSel) {
+    invSel.addEventListener('change', updateScanRunsForInvestigation);
+    updateScanRunsForInvestigation();
+  }
+  if (runSel) runSel.addEventListener('change', updateReportPreviewAndNotice);
+  if (fmtSel) fmtSel.addEventListener('change', updateReportPreviewAndNotice);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Completed",
+  "findings_count": 3,
+  "exposure_score": 40.3,
+  "exposure_level": "Medium",
+  "elapsed_seconds": 181.07,
+  "scanners_executed": [
+    "nmap_nse",
+    "nuclei"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Findings: 0"
+    },
+    {
+      "scanner": "ProjectDiscovery Nuclei",
+      "target": "192.168.56.111",
+      "status": "PARTIAL",
+      "detail": "Profile: safe-all | Findings: 3"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [],
+  "active_hosts": [],
+  "discovered_ports": []
+}

@@ -1,0 +1,259 @@
+{
+  "target": "mozilla.or",
+  "targets": [
+    "mozilla.or"
+  ],
+  "status": "Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 64.16,
+  "scanners_executed": [
+    "passive_recon"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Passive Intelligence",
+      "target": "mozilla.or",
+      "status": "COMPLETED",
+      "detail": "DNS records: 0, Subdomains: 1, Emails: 1",
+      "execution_meta": {
+        "target_kind": "domain",
+        "executed_count": 18,
+        "skipped_count": 0
+      }
+    }
+  ],
+  "failed_stages": [],
+  "partial_stages": [],
+  "passive_results": [
+    {
+      "target": "mozilla.or",
+      "target_kind": "domain",
+      "ip_scope": null,
+      "timestamp_utc": "2026-11-12T05:59:22.111354+00:00",
+      "checks_requested": [
+        "reverse_dns",
+        "rdap_lookup",
+        "asn_ip_hosting",
+        "dns_security_posture",
+        "dns_records",
+        "public_org_info",
+        "whois_lookup",
+        "public_metadata",
+        "certificate_info",
+        "public_emails",
+        "nameserver_analysis",
+        "technology_intel",
+        "ip_intelligence",
+        "hosting_info",
+        "search_engine_intel",
+        "dns_enumeration",
+        "subdomains_ct",
+        "ip_geolocation",
+        "crtsh_history"
+      ],
+      "checks_executed": [
+        {
+          "id": "whois_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "PARTIAL"
+        },
+        {
+          "id": "rdap_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "NOT_FOUND"
+        },
+        {
+          "id": "asn_ip_hosting",
+          "interaction_type": "Pure Passive",
+          "status": "NOT_FOUND"
+        },
+        {
+          "id": "dns_records",
+          "interaction_type": "Pure Passive",
+          "status": "FAILED"
+        },
+        {
+          "id": "dns_enumeration",
+          "interaction_type": "Pure Passive",
+          "status": "PARTIAL"
+        },
+        {
+          "id": "nameserver_analysis",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "dns_security_posture",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "subdomains_ct",
+          "interaction_type": "Pure Passive",
+          "status": "UNAVAILABLE",
+          "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Read timed out. (read timeout=12)"
+        },
+        {
+          "id": "crtsh_history",
+          "interaction_type": "Pure Passive",
+          "status": "UNAVAILABLE",
+          "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Read timed out. (read timeout=12)"
+        },
+        {
+          "id": "certificate_info",
+          "interaction_type": "Pure Passive",
+          "status": "UNAVAILABLE",
+          "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Read timed out. (read timeout=12)"
+        },
+        {
+          "id": "search_engine_intel",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_emails",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "reverse_dns",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "ip_intelligence",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "hosting_info",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_org_info",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_metadata",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "technology_intel",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        }
+      ],
+      "checks_skipped": [],
+      "unavailable_checks": [
+        {
+          "id": "ip_geolocation",
+          "reason": "No resolved IP address available for geolocation lookup."
+        }
+      ],
+      "domain_intel": {
+        "whois": {
+          "registrar": null,
+          "organization": null,
+          "creation_date": null,
+          "expiration_date": null,
+          "name_servers": [],
+          "status": "PARTIAL"
+        },
+        "rdap": {
+          "status": "NOT_FOUND",
+          "http_code": 404,
+          "domain": "mozilla.or"
+        },
+        "dns_records": {},
+        "dns_enumeration": {},
+        "nameserver_analysis": {
+          "count": 0,
+          "nameservers": []
+        },
+        "subdomains": [
+          "mozilla.or"
+        ],
+        "dns_security": {
+          "spf_configured": false,
+          "spf_records": [],
+          "dmarc_configured": false,
+          "dmarc_records": [],
+          "dnssec_configured": false,
+          "notes": [
+            "No SPF (v=spf1) record detected in domain TXT records.",
+            "No DMARC (_dmarc) policy record detected.",
+            "No DNSSEC DS/DNSKEY chain observed."
+          ]
+        }
+      },
+      "osint_intel": {
+        "emails": [
+          "cmartorella@edge-security.com"
+        ],
+        "crtsh_certificates": [],
+        "public_org_info": {
+          "organization": null,
+          "registrar": null,
+          "country": null,
+          "verification_tokens": []
+        },
+        "public_metadata": {
+          "txt_metadata_count": 0,
+          "txt_records_sample": [],
+          "certificate_issuers": []
+        },
+        "search_engine_intel": {
+          "hosts_found": [
+            "mozilla.or"
+          ],
+          "emails_found": [
+            "cmartorella@edge-security.com"
+          ],
+          "ips_found": [],
+          "status": "SUCCESS"
+        },
+        "technology_intel": [],
+        "external_apis": {}
+      },
+      "infrastructure_intel": {
+        "resolved_ips": [],
+        "ip_intelligence": {
+          "resolved_ips": [],
+          "reverse_dns": [],
+          "network_cidr": null,
+          "network_name": null
+        },
+        "reverse_dns": [],
+        "asn_hosting": {
+          "handle": null,
+          "name": null,
+          "scope": null,
+          "ownership_status": null,
+          "start_address": null,
+          "end_address": null,
+          "country": null,
+          "cidr": null,
+          "org": null
+        },
+        "ip_geolocation": null,
+        "hosting_info": {
+          "organization": null,
+          "asn_handle": null,
+          "network_name": null,
+          "country": null,
+          "nameservers": []
+        },
+        "tls_certificates": null,
+        "http_headers": []
+      },
+      "errors": []
+    }
+  ],
+  "active_hosts": [],
+  "discovered_ports": []
+}

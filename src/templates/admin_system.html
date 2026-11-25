@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}System Administration — FootprintIQ Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-6xl mx-auto">
+  <div>
+    <h1 class="text-xl font-bold text-slate-900">System Administration</h1>
+    <p class="text-xs text-slate-500 mt-0.5">Manage approved lab network ranges, authorized assessment domains, and platform runtime readiness</p>
+  </div>
+
+  <div id="sysAdminFeedback" class="hidden"></div>
+
+  <!-- Infrastructure Summary (Admin-Only) -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div class="fiq-card p-5">
+      <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Primary Persistence</div>
+      <div class="text-sm font-bold mt-1 {% if db_available %}text-emerald-700{% else %}text-amber-700{% endif %}">
+        {% if db_available %}Database Online{% else %}Offline / Fallback Store{% endif %}
+      </div>
+    </div>
+
+    <div class="fiq-card p-5">
+      <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Evidence Vault</div>
+      <div class="text-sm font-bold mt-1 {% if storage.get('seaweedfs_healthy') %}text-emerald-700{% else %}text-amber-700{% endif %}">
+        {% if storage.get('seaweedfs_healthy') %}Distributed Storage Healthy{% else %}Local Vault Fallback{% endif %}
+      </div>
+    </div>
+
+    <div class="fiq-card p-5">
+      <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Developer API Docs</div>
+      <div class="text-sm font-bold mt-1 {% if docs_enabled %}text-amber-700{% else %}text-emerald-700{% endif %}">
+        {% if docs_enabled %}Enabled (Dev Mode){% else %}Disabled in Production UI{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Approved Lab Ranges & Authorized Domains Management -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Lab Ranges -->
+    <div class="fiq-card p-6 space-y-4">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Approved Lab Network Ranges</h2>
+        <p class="text-xs text-slate-500">CIDR subnets approved for active reconnaissance and vulnerability assessments.</p>
+      </div>
+
+      <form onsubmit="addRange(event)" class="flex gap-2">
+        <input id="newRangeInput" type="text" required placeholder="e.g. 192.0.2.0/24"
+               class="flex-1 mono text-xs px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+        <button type="submit" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition">
+          Add Range
+        </button>
+      </form>
+
+      <div class="space-y-2">
+        {% for item in scope_summary.approved_lab_ranges %}
+        {% set cidr = item.get('range', item) if item is mapping else item %}
+        <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 border border-slate-200">
+          <span class="mono text-xs font-semibold text-slate-800">{{ cidr }}</span>
+          <button type="button" data-range="{{ cidr }}" onclick="removeRange(this.dataset.range)"
+                  class="text-[11px] font-semibold text-rose-600 hover:text-rose-800">
+            Remove
+          </button>
+        </div>
+        {% else %}
+        <div class="text-xs text-slate-400">No approved lab ranges configured.</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Authorized Domains -->
+    <div class="fiq-card p-6 space-y-4">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Authorized Domains (Active Scope)</h2>
+        <p class="text-xs text-slate-500">Explicitly authorized domains permitted for active probing or vulnerability assessment.</p>
+      </div>
+
+      <form onsubmit="addDomain(event)" class="flex gap-2">
+        <input id="newDomainInput" type="text" required placeholder="e.g. lab.example.local"
+               class="flex-1 mono text-xs px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+        <button type="submit" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition">
+          Add Domain
+        </button>
+      </form>
+
+      <div class="space-y-2">
+        {% for item in scope_summary.authorized_domains %}
+        {% set dom = item.get('domain', item) if item is mapping else item %}
+        <div class="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 border border-slate-200">
+          <span class="mono text-xs font-semibold text-slate-800">{{ dom }}</span>
+          <button type="button" data-domain="{{ dom }}" onclick="removeDomain(this.dataset.domain)"
+                  class="text-[11px] font-semibold text-rose-600 hover:text-rose-800">
+            Remove
+          </button>
+        </div>
+        {% else %}
+        <div class="text-xs text-slate-400">No active domains authorized yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function addRange(e) {
+  e.preventDefault();
+  const range_spec = document.getElementById('newRangeInput').value.trim();
+  const res = await fetch('/api/v1/admin/scope/ranges', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ range_spec })
+  });
+  const data = await res.json();
+  if (res.ok) { window.location.reload(); }
+  else { FIQ_Alert('sysAdminFeedback', data.detail || 'Could not add network range.', 'error'); }
+}
+
+async function removeRange(range_spec) {
+  const res = await fetch('/api/v1/admin/scope/ranges?range_spec=' + encodeURIComponent(range_spec), {
+    method: 'DELETE'
+  });
+  if (res.ok) { window.location.reload(); }
+  else { FIQ_Alert('sysAdminFeedback', 'Could not remove network range.', 'error'); }
+}
+
+async function addDomain(e) {
+  e.preventDefault();
+  const domain = document.getElementById('newDomainInput').value.trim();
+  const res = await fetch('/api/v1/admin/scope/domains', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ domain })
+  });
+  const data = await res.json();
+  if (res.ok) { window.location.reload(); }
+  else { FIQ_Alert('sysAdminFeedback', data.detail || 'Could not add domain.', 'error'); }
+}
+
+async function removeDomain(domain) {
+  const res = await fetch('/api/v1/admin/scope/domains?domain=' + encodeURIComponent(domain), {
+    method: 'DELETE'
+  });
+  if (res.ok) { window.location.reload(); }
+  else { FIQ_Alert('sysAdminFeedback', 'Could not remove domain.', 'error'); }
+}
+</script>
+{% endblock %}

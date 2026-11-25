@@ -1,0 +1,21 @@
+{
+  "entities": [
+    {
+      "node_id": "ENT:SERVICE:06085c52dfed",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "value": "http-admin-check",
+      "label": "http-admin-check",
+      "source_tool": "analyst_manual",
+      "evidence_ref": "manual:FIQ-REC-20261111-0004",
+      "risk_level": "info",
+      "confidence": 0.85,
+      "attributes": {
+        "added_by": "investigator1"
+      }
+    }
+  ],
+  "relationships": [],
+  "revision_ns": 1794420952130210561,
+  "updated_at": "2026-11-11T18:15:52.130214+00:00"
+}

@@ -1,0 +1,77 @@
+{
+  "investigation_id": "FIQ-REC-20261117-0010",
+  "campaign_name": "PSA Scenario A Execution",
+  "target": "192.168.56.111",
+  "generated_at": "2026-11-17T18:29:18.269796+00:00",
+  "metrics": {
+    "node_count": 1,
+    "edge_count": 0,
+    "isolated_node_count": 1,
+    "connected_component_count": 1,
+    "graph_density": 0.0,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "ip": 1
+  },
+  "source_breakdown": {
+    "campaign_scope": 1
+  },
+  "nodes": [
+    {
+      "id": "ENT:IP:da1f1bf65b4c",
+      "type": "ip",
+      "label": "192.168.56.111",
+      "canonical_value": "192.168.56.111",
+      "tags": [],
+      "sources": [
+        "campaign_scope"
+      ],
+      "risk_level": "info",
+      "confidence": 1.0,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "PSA Scenario A Execution",
+        "value": "192.168.56.111",
+        "source_tool": "campaign_scope",
+        "evidence_ref": "campaign:FIQ-REC-20261117-0010",
+        "risk_level": "info",
+        "confidence": 1.0,
+        "maltego_type": "maltego.IPv4Address"
+      },
+      "first_seen": "2026-11-17T18:29:18.269706+00:00",
+      "last_seen": "2026-11-17T18:29:18.269706+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "campaign_scope",
+      "evidence_ref": "campaign:FIQ-REC-20261117-0010",
+      "value": "192.168.56.111"
+    }
+  ],
+  "edges": [],
+  "components": [
+    [
+      "ENT:IP:da1f1bf65b4c"
+    ]
+  ],
+  "isolated_nodes": [
+    "ENT:IP:da1f1bf65b4c"
+  ],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

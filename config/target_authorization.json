@@ -1,0 +1,121 @@
+{
+  "default_target": "192.168.56.111",
+  "authorized_targets": [
+    {
+      "target": "192.168.56.111",
+      "target_type": "ipv4",
+      "name": "Metasploitable2 (Local VirtualBox Lab VM)",
+      "category": "intentionally_vulnerable_lab",
+      "authorization_status": "AUTHORIZED_LOCAL_LAB",
+      "scope": "192.168.56.111 (Host-Only Network 192.168.56.0/24)",
+      "permitted_profiles": [
+        "lab-basic",
+        "lab-safe-minimal",
+        "lab-common-services"
+      ],
+      "allowed_ports": "1-65535",
+      "operator": "asip_ali",
+      "notes": "Deliberately vulnerable local VM running on VirtualBox host-only adapter. Authorized exclusively for controlled active reconnaissance."
+    },
+    {
+      "target": "127.0.0.1",
+      "target_type": "ipv4",
+      "name": "Local Loopback (Self-Diagnostic)",
+      "category": "local_loopback",
+      "authorization_status": "AUTHORIZED_LOCAL_LAB",
+      "scope": "127.0.0.1 (Loopback interface port 22 testing)",
+      "permitted_profiles": [
+        "lab-basic",
+        "lab-safe-minimal",
+        "lab-common-services"
+      ],
+      "allowed_ports": "22",
+      "operator": "asip_ali",
+      "notes": "Local diagnostic loopback for automated CI testing and verification."
+    },
+    {
+      "target": "192.168.56.112",
+      "target_type": "ipv4",
+      "name": "E-Commerce API & Web Gateway",
+      "category": "authorized_lab_node",
+      "authorization_status": "AUTHORIZED_LOCAL_LAB",
+      "scope": "192.168.56.112 (Host-Only Network 192.168.56.0/24)",
+      "permitted_profiles": [
+        "lab-basic",
+        "lab-safe-minimal",
+        "lab-common-services"
+      ],
+      "allowed_ports": "1-65535",
+      "operator": "asip_ali",
+      "notes": "Authorized web & API staging node for multi-scanner security assessment."
+    },
+    {
+      "target": "192.168.56.113",
+      "target_type": "ipv4",
+      "name": "Corporate Cloud Edge & DNS Node",
+      "category": "authorized_lab_node",
+      "authorization_status": "AUTHORIZED_LOCAL_LAB",
+      "scope": "192.168.56.113 (Host-Only Network 192.168.56.0/24)",
+      "permitted_profiles": [
+        "lab-basic",
+        "lab-safe-minimal",
+        "lab-common-services"
+      ],
+      "allowed_ports": "1-65535",
+      "operator": "asip_ali",
+      "notes": "Authorized external edge infrastructure and DNS enumeration node."
+    },
+    {
+      "target": "192.168.56.114",
+      "target_type": "ipv4",
+      "name": "Enterprise DMZ & Remote Access Gateway",
+      "category": "authorized_lab_node",
+      "authorization_status": "AUTHORIZED_LOCAL_LAB",
+      "scope": "192.168.56.114 (Host-Only Network 192.168.56.0/24)",
+      "permitted_profiles": [
+        "lab-basic",
+        "lab-safe-minimal",
+        "lab-common-services"
+      ],
+      "allowed_ports": "1-65535",
+      "operator": "asip_ali",
+      "notes": "Authorized perimeter gateway for directory service and remote access auditing."
+    },
+    {
+      "target": "192.168.56.115",
+      "target_type": "ipv4",
+      "name": "Industrial SCADA & Core Database Node",
+      "category": "authorized_lab_node",
+      "authorization_status": "AUTHORIZED_LOCAL_LAB",
+      "scope": "192.168.56.115 (Host-Only Network 192.168.56.0/24)",
+      "permitted_profiles": [
+        "lab-basic",
+        "lab-safe-minimal",
+        "lab-common-services"
+      ],
+      "allowed_ports": "1-65535",
+      "operator": "asip_ali",
+      "notes": "Authorized database and operational technology assessment node."
+    }
+  ],
+  "rules": {
+    "allow_cidr_ranges": false,
+    "allow_public_ips": false,
+    "allow_unlisted_targets": false,
+    "require_explicit_authorization": true
+  },
+  "approved_lab_ranges": [
+    {
+      "range": "192.168.56.0/24",
+      "description": "Approved Private Assessment Range",
+      "permitted_profiles": [
+        "lab-basic",
+        "lab-safe-minimal",
+        "lab-common-services"
+      ],
+      "added_by": "admin",
+      "added_at": "2026-11-18T14:13:11.769896+00:00"
+    }
+  ],
+  "authorized_domains": []
+}

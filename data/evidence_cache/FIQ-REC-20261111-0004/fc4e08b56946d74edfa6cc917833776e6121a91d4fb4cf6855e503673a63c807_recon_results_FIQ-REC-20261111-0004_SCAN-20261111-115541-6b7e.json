@@ -1,0 +1,96 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Completed",
+  "findings_count": 1,
+  "exposure_score": 46.2,
+  "exposure_level": "Medium",
+  "elapsed_seconds": 37.64,
+  "scanners_executed": [
+    "nmap_services",
+    "nmap_nse"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Hosts UP: 1, Open ports: 6"
+    },
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Findings: 1"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.111",
+      "hostname": null,
+      "status": "up",
+      "os_matches": [],
+      "open_ports_count": 6
+    }
+  ],
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.111",
+      "port": 21,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ftp",
+      "service_version": "vsftpd 2.3.4",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ssh",
+      "service_version": "OpenSSH 4.7p1 Debian 8ubuntu1",
+      "extrainfo": "protocol 2.0"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 23,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "telnet",
+      "service_version": "Linux telnetd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Apache httpd 2.2.8",
+      "extrainfo": "(Ubuntu) DAV/2"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 445,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "netbios-ssn",
+      "service_version": "Samba smbd 3.X - 4.X",
+      "extrainfo": "workgroup: WORKGROUP"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 3306,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "mysql",
+      "service_version": "MySQL 5.0.51a-3ubuntu5",
+      "extrainfo": null
+    }
+  ]
+}

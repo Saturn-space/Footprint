@@ -1,0 +1,365 @@
+{
+  "target": "mozilla.org",
+  "target_kind": "domain",
+  "ip_scope": null,
+  "timestamp_utc": "2026-11-18T04:41:08.128945+00:00",
+  "checks_requested": [
+    "public_metadata",
+    "hosting_info",
+    "rdap_lookup",
+    "reverse_dns",
+    "dns_security_posture",
+    "dns_enumeration",
+    "crtsh_history",
+    "certificate_info",
+    "search_engine_intel",
+    "ip_intelligence",
+    "ip_geolocation",
+    "public_emails",
+    "whois_lookup",
+    "asn_ip_hosting",
+    "technology_intel",
+    "subdomains_ct",
+    "nameserver_analysis",
+    "dns_records",
+    "public_org_info"
+  ],
+  "checks_executed": [
+    {
+      "id": "whois_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "FAILED"
+    },
+    {
+      "id": "rdap_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "ERROR"
+    },
+    {
+      "id": "asn_ip_hosting",
+      "interaction_type": "Pure Passive",
+      "status": "ERROR"
+    },
+    {
+      "id": "dns_records",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "dns_enumeration",
+      "interaction_type": "Pure Passive",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "nameserver_analysis",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "dns_security_posture",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "subdomains_ct",
+      "interaction_type": "Pure Passive",
+      "status": "UNAVAILABLE",
+      "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Max retries exceeded with url: /?q=%25.mozilla.org&output=json (Caused by NameResolutionError(\"HTTPSConnection(host='crt.sh', port=443): Failed to resolve 'crt.sh' ([Errno -3] Temporary failure in name resolution)\"))"
+    },
+    {
+      "id": "crtsh_history",
+      "interaction_type": "Pure Passive",
+      "status": "UNAVAILABLE",
+      "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Max retries exceeded with url: /?q=%25.mozilla.org&output=json (Caused by NameResolutionError(\"HTTPSConnection(host='crt.sh', port=443): Failed to resolve 'crt.sh' ([Errno -3] Temporary failure in name resolution)\"))"
+    },
+    {
+      "id": "certificate_info",
+      "interaction_type": "Pure Passive",
+      "status": "UNAVAILABLE",
+      "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Max retries exceeded with url: /?q=%25.mozilla.org&output=json (Caused by NameResolutionError(\"HTTPSConnection(host='crt.sh', port=443): Failed to resolve 'crt.sh' ([Errno -3] Temporary failure in name resolution)\"))"
+    },
+    {
+      "id": "search_engine_intel",
+      "interaction_type": "Pure Passive",
+      "status": "FAILED"
+    },
+    {
+      "id": "public_emails",
+      "interaction_type": "Pure Passive",
+      "status": "FAILED"
+    },
+    {
+      "id": "reverse_dns",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "ip_intelligence",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "hosting_info",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "ip_geolocation",
+      "interaction_type": "Pure Passive",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "public_org_info",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "public_metadata",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "technology_intel",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    }
+  ],
+  "checks_skipped": [],
+  "unavailable_checks": [],
+  "domain_intel": {
+    "whois": {
+      "registrar": null,
+      "organization": null,
+      "creation_date": null,
+      "expiration_date": null,
+      "name_servers": [],
+      "status": "FAILED"
+    },
+    "rdap": {
+      "status": "ERROR",
+      "error": "HTTPSConnectionPool(host='rdap.org', port=443): Max retries exceeded with url: /domain/mozilla.org (Caused by NameResolutionError(\"HTTPSConnection(host='rdap.org', port=443): Failed to resolve 'rdap.org' ([Errno -3] Temporary failure in name resolution)\"))",
+      "domain": "mozilla.org"
+    },
+    "dns_records": {
+      "A": [
+        "35.190.14.201"
+      ],
+      "AAAA": [
+        "2600:1901:0:c197::"
+      ],
+      "MX": [
+        "alt1.aspmx.l.google.com",
+        "aspmx3.googlemail.com",
+        "aspmx.l.google.com",
+        "alt2.aspmx.l.google.com"
+      ],
+      "NS": [
+        "ns5-65.akam.net",
+        "ns7-66.akam.net",
+        "ns1-240.akam.net",
+        "ns4-64.akam.net"
+      ],
+      "TXT": [
+        "MS=ms14343235",
+        "ZOOM_verify_lGxIzL49Id7PipUgDgTd9K",
+        "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+        "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+        "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+        "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+        "rz8t7zvjv5frpfbjs3y5n6g5tkw7gt2q",
+        "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+        "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+        "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+        "anthropic-domain-verification-w5rph5=bZ2V4N0ps4oFSU6yrv4DfD6nA",
+        "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all",
+        "yandex-verification",
+        "_zojr3c56nq36tokzhnj9crit28tiqly",
+        "bzbkzkxj2ws8gvtw6hpssfy7lv9kym88",
+        "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+        "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE"
+      ]
+    },
+    "dns_enumeration": {},
+    "nameserver_analysis": {
+      "count": 4,
+      "nameservers": [
+        {
+          "nameserver": "ns5-65.akam.net",
+          "ipv4": []
+        },
+        {
+          "nameserver": "ns7-66.akam.net",
+          "ipv4": []
+        },
+        {
+          "nameserver": "ns1-240.akam.net",
+          "ipv4": []
+        },
+        {
+          "nameserver": "ns4-64.akam.net",
+          "ipv4": []
+        }
+      ]
+    },
+    "subdomains": [],
+    "dns_security": {
+      "spf_configured": true,
+      "spf_records": [
+        "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all"
+      ],
+      "dmarc_configured": false,
+      "dmarc_records": [],
+      "dnssec_configured": false,
+      "notes": [
+        "No DMARC (_dmarc) policy record detected.",
+        "No DNSSEC DS/DNSKEY chain observed."
+      ]
+    }
+  },
+  "osint_intel": {
+    "emails": [],
+    "crtsh_certificates": [],
+    "public_org_info": {
+      "organization": null,
+      "registrar": null,
+      "country": null,
+      "verification_tokens": [
+        "MS=ms14343235",
+        "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+        "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+        "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+        "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+        "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+        "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+        "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+        "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+        "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE"
+      ]
+    },
+    "public_metadata": {
+      "txt_metadata_count": 17,
+      "txt_records_sample": [
+        "MS=ms14343235",
+        "ZOOM_verify_lGxIzL49Id7PipUgDgTd9K",
+        "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+        "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+        "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+        "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+        "rz8t7zvjv5frpfbjs3y5n6g5tkw7gt2q",
+        "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+        "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+        "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e"
+      ],
+      "certificate_issuers": []
+    },
+    "search_engine_intel": {
+      "hosts_found": [],
+      "emails_found": [],
+      "ips_found": [],
+      "status": "FAILED"
+    },
+    "technology_intel": [
+      {
+        "technology": "Google Workspace / DNS",
+        "category": "Mail / Cloud",
+        "evidence": "MX/NS references google.com"
+      },
+      {
+        "technology": "Google Workspace",
+        "category": "Email Hosting",
+        "evidence": "MX record matches aspmx.l.google.com"
+      },
+      {
+        "technology": "Google Search Console Verified",
+        "category": "Site Verification",
+        "evidence": "DNS TXT verification record"
+      },
+      {
+        "technology": "SPF Email Authentication",
+        "category": "Email Security",
+        "evidence": "DNS TXT v=spf1 policy"
+      }
+    ],
+    "external_apis": {}
+  },
+  "infrastructure_intel": {
+    "resolved_ips": [
+      "2600:1901:0:c197::",
+      "35.190.14.201"
+    ],
+    "ip_intelligence": {
+      "resolved_ips": [
+        "2600:1901:0:c197::",
+        "35.190.14.201"
+      ],
+      "reverse_dns": [
+        {
+          "status": "NO_PTR",
+          "ip": "2600:1901:0:c197::",
+          "ptr_records": [],
+          "note": "[Errno 2] Host name lookup failure"
+        },
+        {
+          "status": "NO_PTR",
+          "ip": "35.190.14.201",
+          "ptr_records": [],
+          "note": "[Errno 2] Host name lookup failure"
+        }
+      ],
+      "network_cidr": null,
+      "network_name": null
+    },
+    "reverse_dns": [
+      {
+        "status": "NO_PTR",
+        "ip": "2600:1901:0:c197::",
+        "ptr_records": [],
+        "note": "[Errno 2] Host name lookup failure"
+      },
+      {
+        "status": "NO_PTR",
+        "ip": "35.190.14.201",
+        "ptr_records": [],
+        "note": "[Errno 2] Host name lookup failure"
+      }
+    ],
+    "asn_hosting": {
+      "handle": null,
+      "name": null,
+      "scope": null,
+      "ownership_status": null,
+      "start_address": null,
+      "end_address": null,
+      "country": null,
+      "cidr": null,
+      "org": null
+    },
+    "ip_geolocation": [
+      {
+        "ip": "2600:1901:0:c197::",
+        "status": "UNAVAILABLE",
+        "reason": "HTTPConnectionPool(host='ip-api.com', port=80): Max retries exceeded with url: /json/2600:1901:0:c197::?fields=status,country,regionName,city,isp,org,as,query (Caused by NameResolutionError(\"HTTPConnection(host='ip-api.com', port=80): Failed to resolve 'ip-api.com' ([Errno -3] Temporary failure in name resolution)\"))"
+      },
+      {
+        "ip": "35.190.14.201",
+        "status": "UNAVAILABLE",
+        "reason": "HTTPConnectionPool(host='ip-api.com', port=80): Max retries exceeded with url: /json/35.190.14.201?fields=status,country,regionName,city,isp,org,as,query (Caused by NameResolutionError(\"HTTPConnection(host='ip-api.com', port=80): Failed to resolve 'ip-api.com' ([Errno -3] Temporary failure in name resolution)\"))"
+      }
+    ],
+    "hosting_info": {
+      "organization": null,
+      "asn_handle": null,
+      "network_name": null,
+      "country": null,
+      "nameservers": [
+        "ns5-65.akam.net",
+        "ns7-66.akam.net",
+        "ns1-240.akam.net",
+        "ns4-64.akam.net"
+      ]
+    },
+    "tls_certificates": null,
+    "http_headers": []
+  },
+  "errors": []
+}

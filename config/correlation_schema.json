@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSINTCorrelationResult",
+  "description": "Standardized schema for OSINT-RECON Week 4 Intelligence Correlation findings",
+  "type": "object",
+  "required": [
+    "correlation_id",
+    "source_scan_ids",
+    "overall_status",
+    "start_time_utc",
+    "end_time_utc",
+    "assets",
+    "relationships",
+    "evidence",
+    "profiles",
+    "graph"
+  ],
+  "properties": {
+    "correlation_id": { "type": "string" },
+    "investigation_id": { "type": ["string", "null"] },
+    "source_scan_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["SUCCESS", "PARTIAL", "FAILED"]
+    },
+    "start_time_utc": { "type": "string", "format": "date-time" },
+    "end_time_utc": { "type": "string", "format": "date-time" },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["asset_id", "asset_type", "canonical_value", "display_name", "first_seen", "last_seen", "sources", "tags", "attributes"],
+        "properties": {
+          "asset_id": { "type": "string" },
+          "asset_type": { "type": "string" },
+          "canonical_value": { "type": "string" },
+          "display_name": { "type": "string" },
+          "first_seen": { "type": "string" },
+          "last_seen": { "type": "string" },
+          "sources": { "type": "array", "items": { "type": "string" } },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "attributes": { "type": "object" }
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["relationship_id", "source_asset_id", "target_asset_id", "relationship_type", "evidence_ids", "confidence", "confidence_score", "confidence_explanation", "first_observed", "last_observed"],
+        "properties": {
+          "relationship_id": { "type": "string" },
+          "source_asset_id": { "type": "string" },
+          "target_asset_id": { "type": "string" },
+          "relationship_type": { "type": "string" },
+          "evidence_ids": { "type": "array", "items": { "type": "string" } },
+          "confidence": { "type": "string", "enum": ["DIRECT", "CORROBORATED", "INDIRECT", "UNCONFIRMED"] },
+          "confidence_score": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+          "confidence_explanation": { "type": "string" },
+          "first_observed": { "type": "string" },
+          "last_observed": { "type": "string" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["evidence_id", "source_module", "scan_id", "evidence_type", "original_value", "normalized_value", "observation_timestamp"],
+        "properties": {
+          "evidence_id": { "type": "string" },
+          "source_module": { "type": "string" },
+          "scan_id": { "type": "string" },
+          "evidence_type": { "type": "string" },
+          "original_value": { "type": "string" },
+          "normalized_value": { "type": "string" },
+          "source_file": { "type": ["string", "null"] },
+          "observation_timestamp": { "type": "string" },
+          "sha256": { "type": ["string", "null"] },
+          "context": { "type": "object" }
+        }
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["asset_id", "asset_type", "canonical_identity", "display_name", "environment", "related_domains", "related_hostnames", "related_ips", "open_ports", "detected_services"],
+        "properties": {
+          "asset_id": { "type": "string" },
+          "asset_type": { "type": "string" },
+          "canonical_identity": { "type": "string" },
+          "display_name": { "type": "string" },
+          "environment": { "type": "string" }
+        }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "properties": {
+        "metrics": { "type": "object" },
+        "nodes": { "type": "array" },
+        "edges": { "type": "array" },
+        "components": { "type": "array" },
+        "isolated_nodes": { "type": "array" }
+      }
+    },
+    "confidence_summary": { "type": "object" },
+    "unresolved_relationships": { "type": "array", "items": { "type": "string" } },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "errors": { "type": "array", "items": { "type": "string" } },
+    "processing_metadata": { "type": "object" },
+    "json_report_path": { "type": ["string", "null"] },
+    "pdf_report_path": { "type": ["string", "null"] }
+  }
+}
+

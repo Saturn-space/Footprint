@@ -1,0 +1,267 @@
+{
+  "investigation_id": "FIQ-REC-20261111-0002",
+  "campaign_name": "test 1",
+  "target": "192.168.56.111",
+  "generated_at": "2026-11-11T18:15:36.315449+00:00",
+  "metrics": {
+    "node_count": 5,
+    "edge_count": 4,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.2,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "ip": 1,
+    "service": 1,
+    "vulnerability": 3
+  },
+  "source_breakdown": {
+    "nuclei": 5
+  },
+  "nodes": [
+    {
+      "id": "ENT:IP:da1f1bf65b4c",
+      "type": "ip",
+      "label": "192.168.56.111",
+      "canonical_value": "192.168.56.111",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "test 1",
+        "value": "192.168.56.111",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,01e5d835c3db",
+        "risk_level": "info",
+        "confidence": 0.9,
+        "maltego_type": "maltego.IPv4Address"
+      },
+      "first_seen": "2026-11-11T18:15:36.315149+00:00",
+      "last_seen": "2026-11-11T18:15:36.315302+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,01e5d835c3db",
+      "value": "192.168.56.111"
+    },
+    {
+      "id": "ENT:SERVICE:d26e07ce53ec",
+      "type": "service",
+      "label": "80/tcp http",
+      "canonical_value": "192.168.56.111:80/tcp (http)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "low",
+      "confidence": 0.9,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 80,
+        "protocol": "tcp",
+        "service": "http",
+        "value": "192.168.56.111:80/tcp (http)",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,01e5d835c3db",
+        "risk_level": "low",
+        "confidence": 0.9,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-11T18:15:36.315323+00:00",
+      "last_seen": "2026-11-11T18:15:36.315323+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,01e5d835c3db",
+      "value": "192.168.56.111:80/tcp (http)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:12d5a6a0ce56",
+      "type": "vulnerability",
+      "label": "[HIGH] PHP CGI v5.3.12/5.4.2 Remote Code Execution",
+      "canonical_value": "CVE-2012-1823|192.168.56.111|80|PHP CGI v5.3.12/5.4.2 Remote Code Execution",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "high",
+      "confidence": 0.9,
+      "attributes": {
+        "finding_id": "NUC-B717EC227C72",
+        "cve": "CVE-2012-1823",
+        "cvss": 7.5,
+        "severity": "High",
+        "value": "CVE-2012-1823|192.168.56.111|80|PHP CGI v5.3.12/5.4.2 Remote Code Execution",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,01e5d835c3db",
+        "risk_level": "high",
+        "confidence": 0.9,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:15:36.315347+00:00",
+      "last_seen": "2026-11-11T18:15:36.315347+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,01e5d835c3db",
+      "value": "CVE-2012-1823|192.168.56.111|80|PHP CGI v5.3.12/5.4.2 Remote Code Execution"
+    },
+    {
+      "id": "ENT:VULNERABILITY:41da2b92edfc",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] phpMyAdmin Panel - Detect",
+      "canonical_value": "NUC-A3C5F870DD0B|192.168.56.111|80|phpMyAdmin Panel - Detect",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-A3C5F870DD0B",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-A3C5F870DD0B|192.168.56.111|80|phpMyAdmin Panel - Detect",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,01e5d835c3db",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:15:36.315368+00:00",
+      "last_seen": "2026-11-11T18:15:36.315368+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,01e5d835c3db",
+      "value": "NUC-A3C5F870DD0B|192.168.56.111|80|phpMyAdmin Panel - Detect"
+    },
+    {
+      "id": "ENT:VULNERABILITY:d466ff222654",
+      "type": "vulnerability",
+      "label": "[LOW] PHPinfo Page - Detect",
+      "canonical_value": "NUC-0897FD92D4DF|192.168.56.111|80|PHPinfo Page - Detect",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "low",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-0897FD92D4DF",
+        "cve": null,
+        "cvss": null,
+        "severity": "Low",
+        "value": "NUC-0897FD92D4DF|192.168.56.111|80|PHPinfo Page - Detect",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,01e5d835c3db",
+        "risk_level": "low",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:15:36.315387+00:00",
+      "last_seen": "2026-11-11T18:15:36.315387+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,01e5d835c3db",
+      "value": "NUC-0897FD92D4DF|192.168.56.111|80|PHPinfo Page - Detect"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:f17e4ae08825",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:d26e07ce53ec",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.9,
+      "confidence": 0.9,
+      "confidence_score": 0.9,
+      "evidence_ids": [
+        "6,01e5d835c3db"
+      ],
+      "first_observed": "2026-11-11T18:15:36.315331+00:00",
+      "last_observed": "2026-11-11T18:15:36.315331+00:00"
+    },
+    {
+      "id": "REL:f33e557f33ba",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:12d5a6a0ce56",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.9,
+      "confidence_score": 0.9,
+      "evidence_ids": [
+        "6,01e5d835c3db"
+      ],
+      "first_observed": "2026-11-11T18:15:36.315352+00:00",
+      "last_observed": "2026-11-11T18:15:36.315352+00:00"
+    },
+    {
+      "id": "REL:a8dbb91e449c",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:41da2b92edfc",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "6,01e5d835c3db"
+      ],
+      "first_observed": "2026-11-11T18:15:36.315373+00:00",
+      "last_observed": "2026-11-11T18:15:36.315373+00:00"
+    },
+    {
+      "id": "REL:5b77e5788494",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:d466ff222654",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "6,01e5d835c3db"
+      ],
+      "first_observed": "2026-11-11T18:15:36.315391+00:00",
+      "last_observed": "2026-11-11T18:15:36.315391+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:IP:da1f1bf65b4c",
+      "ENT:SERVICE:d26e07ce53ec",
+      "ENT:VULNERABILITY:12d5a6a0ce56",
+      "ENT:VULNERABILITY:41da2b92edfc",
+      "ENT:VULNERABILITY:d466ff222654"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

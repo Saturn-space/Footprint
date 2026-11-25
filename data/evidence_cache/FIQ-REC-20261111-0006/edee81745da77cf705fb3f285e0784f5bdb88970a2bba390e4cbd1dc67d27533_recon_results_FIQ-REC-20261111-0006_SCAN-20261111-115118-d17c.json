@@ -1,0 +1,26 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Failed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 0.28,
+  "scanners_executed": [],
+  "scanner_statuses": [
+    {
+      "scanner": "Tenable Nessus",
+      "target": "192.168.56.111",
+      "status": "FAILED",
+      "detail": "Failed to create Nessus scan task with selected template."
+    }
+  ],
+  "failed_stages": [
+    "Tenable Nessus (192.168.56.111)"
+  ],
+  "passive_results": [],
+  "active_hosts": [],
+  "discovered_ports": []
+}

@@ -1,0 +1,77 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Partially Completed",
+  "findings_count": 11,
+  "exposure_score": 97.4,
+  "exposure_level": "Critical",
+  "elapsed_seconds": 221.6,
+  "scanners_executed": [
+    "nmap_nse",
+    "nuclei"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Scripts: 21 in 40.85s | Findings: 7 (1 unavailable skipped)",
+      "execution_meta": {
+        "scanner": "nmap_nse",
+        "duration_seconds": 40.85,
+        "returncode": 0,
+        "xml_exit": "success",
+        "hosts_up": 1,
+        "scripts_executed_count": 21,
+        "skipped_scripts": [
+          "postgresql-info (not installed in local Nmap scripts directory)"
+        ],
+        "command_summary": "nmap -sT -sV -Pn --script <21 scripts>",
+        "stderr_excerpt": "Bug in http-security-headers: no string output."
+      }
+    },
+    {
+      "scanner": "ProjectDiscovery Nuclei",
+      "target": "192.168.56.111",
+      "status": "PARTIAL",
+      "detail": "Profile: safe-all | Findings: 4 | 180.28s/180s | Timeout reached at 180s during profile 'safe-all' across 2 target URL(s); remaining template subdirectories/checks did not finish.",
+      "execution_meta": {
+        "scanner": "nuclei",
+        "profile": "safe-all",
+        "template_subdirs": [],
+        "severities": [
+          "critical",
+          "high",
+          "medium",
+          "low",
+          "info"
+        ],
+        "duration_seconds": 180.28,
+        "timeout_seconds": 180,
+        "timed_out": true,
+        "returncode": -15,
+        "command_summary": "nuclei -profile safe-all -rl 30 -c 10 (targets=2, timeout=180s)",
+        "targets_scanned_count": 2,
+        "targets_scanned": [
+          "https://192.168.56.111",
+          "http://192.168.56.111"
+        ],
+        "stderr_excerpt": null,
+        "raw_records_count": 4,
+        "parsed_findings_count": 4,
+        "parse_errors_count": 0,
+        "incomplete_reason": "Timeout reached at 180s during profile 'safe-all' across 2 target URL(s); remaining template subdirectories/checks did not finish.",
+        "skipped_checks": []
+      }
+    }
+  ],
+  "failed_stages": [],
+  "partial_stages": [
+    "ProjectDiscovery Nuclei (192.168.56.111)"
+  ],
+  "passive_results": [],
+  "active_hosts": [],
+  "discovered_ports": []
+}

@@ -1,0 +1,33 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Failed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 7.44,
+  "scanners_executed": [],
+  "scanner_statuses": [
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "192.168.56.111",
+      "status": "FAILED",
+      "detail": "FootprintIQRepository.add_evidence_record() got an unexpected keyword argument 'scan_id'"
+    },
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.111",
+      "status": "FAILED",
+      "detail": "NSECollector.scan_target() got an unexpected keyword argument 'allow_vuln_checks'"
+    }
+  ],
+  "failed_stages": [
+    "Active Recon (192.168.56.111)",
+    "NSE Check (192.168.56.111)"
+  ],
+  "passive_results": [],
+  "active_hosts": [],
+  "discovered_ports": []
+}

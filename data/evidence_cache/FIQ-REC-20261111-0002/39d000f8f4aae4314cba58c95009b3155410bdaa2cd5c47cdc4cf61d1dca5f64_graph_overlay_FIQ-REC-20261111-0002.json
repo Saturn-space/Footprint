@@ -1,0 +1,55 @@
+{
+  "entities": [
+    {
+      "node_id": "ENT:PERSON:b64a37c70f0a",
+      "entity_type": "person",
+      "maltego_type": "maltego.Person",
+      "value": "Jane Doe (CISO)",
+      "label": "Jane Doe (CISO)",
+      "source_tool": "analyst_manual",
+      "evidence_ref": "LinkedIn OSINT note #14",
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "added_by": "graph_inv_a"
+      }
+    },
+    {
+      "node_id": "ENT:DOMAIN:7d6082ea5720",
+      "entity_type": "domain",
+      "maltego_type": "maltego.Domain",
+      "value": "partner.footprintiq.local",
+      "label": "partner.footprintiq.local",
+      "source_tool": "maltego_desktop",
+      "evidence_ref": "maltego_transform_1",
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "imported_by": "graph_inv_a"
+      }
+    },
+    {
+      "node_id": "ENT:IP:9128369f46a0",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "value": "192.168.56.200",
+      "label": "192.168.56.200",
+      "source_tool": "maltego_desktop",
+      "evidence_ref": "maltego_transform_1",
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "imported_by": "graph_inv_a"
+      }
+    }
+  ],
+  "relationships": [
+    {
+      "source": "ENT:DOMAIN:7d6082ea5720",
+      "target": "ENT:IP:9128369f46a0",
+      "relationship": "RESOLVES_TO",
+      "confidence": 0.8,
+      "evidence_ref": "maltego_import:FIQ-REC-20261111-0002"
+    }
+  ]
+}

@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% block title %}Evidence Vault &amp; Integrity Verification — FootprintIQ{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-7xl mx-auto pb-12">
+
+  <!-- Header & Required Informative Banner -->
+  <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+    <div class="space-y-1.5">
+      <h1 class="text-xl font-bold text-slate-900">SeaweedFS Cryptographic Evidence Catalog</h1>
+      <p class="text-xs text-slate-500 max-w-3xl">
+        Collected reconnaissance and vulnerability evidence artifacts, cryptographic verification digests (SHA-256), source attributions, scan-run linkages, and SeaweedFS storage references.
+      </p>
+    </div>
+    <div class="flex items-center space-x-2 shrink-0">
+      <span class="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-700">
+        Artifacts: <strong id="evCountHeader" class="text-slate-900">{{ total_evidence }}</strong>
+      </span>
+    </div>
+  </div>
+
+  <!-- Multi-Facet Evidence Filter Bar -->
+  <div class="fiq-card p-5 space-y-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
+      <div class="lg:col-span-2">
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Search Artifacts / Hash</label>
+        <input id="evSearch" type="text" placeholder="Filename, evidence ID, SHA-256 prefix, target..."
+               oninput="filterEvidenceRows()"
+               class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Investigation</label>
+        <select id="evInvFilter" onchange="filterEvidenceRows()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Investigations</option>
+          {% for c in campaigns or [] %}
+          <option value="{{ c.recon_id }}" {% if preselect_inv == c.recon_id %}selected{% endif %}>{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Scanner / Source</label>
+        <select id="evSourceFilter" onchange="filterEvidenceRows()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Sources</option>
+          <option value="nmap">Nmap / NSE</option>
+          <option value="nuclei">Nuclei</option>
+          <option value="nessus">Nessus</option>
+          <option value="theharvester">theHarvester</option>
+          <option value="whois">WHOIS / RDAP / DNS</option>
+          <option value="graph">Maltego / Entity Graph</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold uppercase text-slate-400 mb-1">Scan Run ID</label>
+        <select id="evRunFilter" onchange="filterEvidenceRows()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Scan Runs</option>
+          {% for s in scans or [] %}
+          <option value="{{ s.scan_id }}" {% if preselect_scan == s.scan_id %}selected{% endif %}>
+            Run {{ '%03d'|format(s.run_number or 1) }} ({{ s.scan_id }})
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex items-end">
+        <button type="button" onclick="resetEvidenceFilters()"
+                class="w-full px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
+          Reset Filters
+        </button>
+      </div>
+    </div>
+
+    <div class="text-[11px] text-slate-500 flex items-center justify-between">
+      <span>Showing <strong id="evVisibleCount" class="text-slate-900">{{ evidence|length }}</strong> artifact(s) with timestamps in IST (Asia/Kolkata).</span>
+      <span id="evCopyToast" class="hidden text-emerald-700 font-semibold">SHA-256 copied to clipboard!</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="fiq-table">
+        <thead>
+          <tr>
+            <th>Artifact &amp; ID</th>
+            <th>Investigation &amp; Scan Run</th>
+            <th>Source &amp; Type</th>
+            <th>SHA-256 Digest &amp; Size</th>
+            <th>Storage &amp; IST Timestamp</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="evidenceTableBody">
+          {% for ev in evidence %}
+          <tr data-inv="{{ ev.investigation_id or '' }}"
+              data-scan="{{ ev.scan_id or '' }}"
+              data-source="{{ (ev.scanner_source or ev.evidence_type or '')|lower }}"
+              data-search="{{ (ev.file_name ~ ' ' ~ ev.evidence_id ~ ' ' ~ (ev.investigation_name or '') ~ ' ' ~ (ev.investigation_id or '') ~ ' ' ~ (ev.scan_id or '') ~ ' ' ~ (ev.scanner_source or '') ~ ' ' ~ (ev.evidence_type or '') ~ ' ' ~ (ev.sha256_hash or '') ~ ' ' ~ (ev.target or ''))|lower }}">
+            <td>
+              <div class="font-bold text-xs text-slate-900">{{ ev.file_name or ev.evidence_id }}</div>
+              <div class="mono text-[10px] text-slate-500 mt-0.5">
+                {{ ev.evidence_id }}{% if ev.target %} &bull; Target: {{ ev.target }}{% endif %}
+              </div>
+            </td>
+            <td>
+              <div class="text-xs font-semibold text-slate-800">{{ ev.investigation_name or ev.investigation_id }}</div>
+              <div class="flex flex-wrap items-center gap-1.5 mt-0.5">
+                <a href="/recon/{{ ev.investigation_id }}/results{% if ev.scan_id %}?scan_id={{ ev.scan_id }}{% endif %}"
+                   class="mono text-[10px] text-blue-600 hover:underline">{{ ev.investigation_id }}</a>
+                <span class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700">
+                  {{ ev.run_label or 'Full Scope' }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold uppercase">
+                {{ ev.scanner_source or 'collector' }}
+              </span>
+              <div class="mono text-[10px] text-slate-500 mt-0.5">
+                {{ ev.evidence_type }}{% if ev.findings_count %} &bull; {{ ev.findings_count }} finding(s){% endif %}
+              </div>
+            </td>
+            <td>
+              <div class="flex items-center space-x-1.5">
+                <code class="mono text-[10px] px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700">
+                  {{ (ev.sha256_hash or '')[:16] }}{% if ev.sha256_hash %}...{% else %}—{% endif %}
+                </code>
+                {% if ev.sha256_hash %}
+                <button type="button" data-hash="{{ ev.sha256_hash }}" onclick="copyEvidenceHash(this.dataset.hash)"
+                        class="text-[10px] px-1.5 py-0.5 rounded border border-slate-200 bg-white hover:bg-slate-50 font-semibold text-slate-600">
+                  Copy
+                </button>
+                {% endif %}
+              </div>
+              <div class="mono text-[10px] text-slate-500 mt-0.5">{{ ((ev.file_size or 0) / 1024)|round(1) }} KB</div>
+            </td>
+            <td>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold
+                {% if 'SeaweedFS' in (ev.storage_status or '') %}bg-emerald-50 text-emerald-700 border border-emerald-200
+                {% elif 'Missing' in (ev.storage_status or '') %}bg-rose-50 text-rose-700 border border-rose-200
+                {% else %}bg-slate-100 text-slate-700 border border-slate-200{% endif %}">
+                {{ ev.storage_status or 'Vault' }}
+              </span>
+              <div class="text-[11px] text-slate-500 mt-0.5">{{ ev.created_at_ist or (ev.created_at|ist) }}</div>
+            </td>
+            <td class="text-right">
+              <div class="inline-flex items-center gap-1.5">
+                <button type="button" data-evid="{{ ev.evidence_id }}" onclick="openEvidenceModal(this.dataset.evid)"
+                        class="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold transition">
+                  View Metadata
+                </button>
+                <a href="/api/v1/evidence/{{ ev.evidence_id }}/download"
+                   class="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold transition">
+                  Download
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="py-10 text-center text-xs text-slate-400">
+              No evidence artifacts archived yet. Run a passive, active, or vulnerability scan to generate cryptographically hashed evidence records.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Evidence Metadata Inspection Modal -->
+<div id="evidenceMetaModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
+  <div class="fiq-card max-w-xl w-full p-6 space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+      <h3 class="text-sm font-bold text-slate-900">Evidence Integrity &amp; Provenance Metadata</h3>
+      <button type="button" onclick="closeEvidenceModal()" class="px-2.5 py-1 rounded border border-slate-200 text-xs font-semibold hover:bg-slate-100">Close</button>
+    </div>
+    <div id="evModalBody" class="space-y-2.5 text-xs text-slate-700"></div>
+  </div>
+</div>
+
+<script>
+function copyEvidenceHash(digest) {
+  if (!digest) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(digest).then(function () {
+      const toast = document.getElementById('evCopyToast');
+      if (toast) {
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 1800);
+      }
+    }).catch(() => {});
+  }
+}
+
+function filterEvidenceRows() {
+  const q = (document.getElementById('evSearch').value || '').trim().toLowerCase();
+  const inv = document.getElementById('evInvFilter').value;
+  const src = document.getElementById('evSourceFilter').value;
+  const run = document.getElementById('evRunFilter').value;
+  const rows = document.querySelectorAll('#evidenceTableBody tr[data-inv]');
+  let shown = 0;
+
+  rows.forEach(function (tr) {
+    const okInv = !inv || tr.dataset.inv === inv;
+    const okRun = !run || tr.dataset.scan === run;
+    const okSrc = !src || (tr.dataset.source || '').includes(src);
+    const okQ = !q || (tr.dataset.search || '').includes(q);
+    const vis = okInv && okRun && okSrc && okQ;
+    tr.style.display = vis ? '' : 'none';
+    if (vis) shown += 1;
+  });
+  const el = document.getElementById('evVisibleCount');
+  if (el) el.textContent = String(shown);
+}
+
+function resetEvidenceFilters() {
+  document.getElementById('evSearch').value = '';
+  document.getElementById('evInvFilter').value = '';
+  document.getElementById('evSourceFilter').value = '';
+  document.getElementById('evRunFilter').value = '';
+  filterEvidenceRows();
+}
+
+async function openEvidenceModal(evidenceId) {
+  const modal = document.getElementById('evidenceMetaModal');
+  const body = document.getElementById('evModalBody');
+  if (!modal || !body) return;
+  body.textContent = 'Loading verified metadata...';
+  modal.classList.remove('hidden');
+
+  try {
+    const res = await fetch(`/api/v1/evidence/${encodeURIComponent(evidenceId)}`);
+    const ev = await res.json();
+    if (!res.ok) throw new Error(ev.detail || 'Could not retrieve metadata');
+
+    while (body.firstChild) body.removeChild(body.firstChild);
+    const pairs = [
+      ['Evidence ID', ev.evidence_id],
+      ['Artifact File', ev.file_name],
+      ['Investigation', `${ev.investigation_name || ''} (${ev.investigation_id || 'N/A'})`],
+      ['Scan Run', `${ev.run_label || 'Unlinked'} (${ev.scan_id || 'N/A'})`],
+      ['Scanner / Source', ev.scanner_source || 'collector'],
+      ['Evidence Type', ev.evidence_type || 'artifact'],
+      ['Target Scope', ev.target || 'Investigation Scope'],
+      ['Findings Linked', String(ev.findings_count || 0)],
+      ['Content Type / Size', `${ev.content_type || 'application/octet-stream'} • ${ev.file_size || 0} bytes`],
+      ['Full SHA-256 Digest', ev.sha256_hash || '—'],
+      ['Storage Status / SeaweedFS FID', `${ev.storage_status || 'Vault'} • FID: ${ev.seaweed_fid || 'local'}`],
+      ['Timestamp (IST)', ev.created_at_ist || FIQ_FormatIST(ev.created_at)],
+    ];
+    pairs.forEach(function (kv) {
+      const row = document.createElement('div');
+      row.className = 'p-2 rounded bg-slate-50 border border-slate-200/80 flex flex-col gap-0.5';
+      const kEl = document.createElement('span');
+      kEl.className = 'text-[10px] font-bold uppercase text-slate-400';
+      kEl.textContent = kv[0];
+      const vEl = document.createElement('span');
+      vEl.className = 'mono text-[11px] text-slate-900 break-all';
+      vEl.textContent = String(kv[1] ?? '—');
+      row.appendChild(kEl);
+      row.appendChild(vEl);
+      body.appendChild(row);
+    });
+  } catch (err) {
+    body.textContent = 'Error: ' + err.message;
+  }
+}
+
+function closeEvidenceModal() {
+  const modal = document.getElementById('evidenceMetaModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', filterEvidenceRows);
+</script>
+{% endblock %}

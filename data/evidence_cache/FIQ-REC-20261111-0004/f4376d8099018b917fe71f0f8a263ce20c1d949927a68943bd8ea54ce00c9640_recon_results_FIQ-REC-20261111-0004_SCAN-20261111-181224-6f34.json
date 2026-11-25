@@ -1,0 +1,76 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Completed",
+  "findings_count": 11,
+  "exposure_score": 56.9,
+  "exposure_level": "Medium",
+  "elapsed_seconds": 41.25,
+  "scanners_executed": [
+    "nmap_services",
+    "nmap_nse",
+    "nuclei"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Hosts UP: 1, Open ports: 3"
+    },
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Findings: 1"
+    },
+    {
+      "scanner": "ProjectDiscovery Nuclei",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Profile: http-security | Findings: 10"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.111",
+      "hostname": null,
+      "status": "up",
+      "os_matches": [],
+      "open_ports_count": 3
+    }
+  ],
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.111",
+      "port": 21,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ftp",
+      "service_version": "vsftpd 2.3.4",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ssh",
+      "service_version": "OpenSSH 4.7p1 Debian 8ubuntu1",
+      "extrainfo": "protocol 2.0"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Apache httpd 2.2.8",
+      "extrainfo": "(Ubuntu) DAV/2"
+    }
+  ]
+}

@@ -1,0 +1,464 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Completed",
+  "findings_count": 1,
+  "exposure_score": 31.8,
+  "exposure_level": "Low",
+  "elapsed_seconds": 211.62,
+  "scanners_executed": [
+    "passive_recon",
+    "nmap_services",
+    "nmap_nse",
+    "nuclei"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Passive Intelligence",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "DNS records: 0, Subdomains: 0, Emails: 1"
+    },
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Hosts UP: 1, Open ports: 23"
+    },
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Findings: 0"
+    },
+    {
+      "scanner": "ProjectDiscovery Nuclei",
+      "target": "192.168.56.111",
+      "status": "PARTIAL",
+      "detail": "Profile: safe-all | Findings: 1"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [
+    {
+      "target": "192.168.56.111",
+      "target_kind": "ip",
+      "timestamp_utc": "2026-11-11T19:50:10.552907+00:00",
+      "checks_requested": [
+        "subdomains_ct",
+        "certificate_info",
+        "public_emails",
+        "technology_intel",
+        "rdap_lookup",
+        "public_metadata",
+        "ip_geolocation",
+        "crtsh_history",
+        "public_org_info",
+        "nameserver_analysis",
+        "asn_ip_hosting",
+        "dns_records",
+        "hosting_info",
+        "whois_lookup",
+        "dns_security_posture",
+        "search_engine_intel",
+        "reverse_dns",
+        "dns_enumeration",
+        "ip_intelligence"
+      ],
+      "checks_executed": [
+        {
+          "id": "whois_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "rdap_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "asn_ip_hosting",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "reverse_dns",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "ip_intelligence",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "hosting_info",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "ip_geolocation",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_org_info",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_metadata",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "technology_intel",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        }
+      ],
+      "unavailable_checks": [
+        {
+          "id": "dns_records",
+          "reason": "Forward domain DNS checks apply to domain/hostname targets, not bare IP addresses."
+        },
+        {
+          "id": "subdomains_ct",
+          "reason": "Certificate Transparency subdomain enumeration requires a domain target."
+        },
+        {
+          "id": "public_emails",
+          "reason": "Search-engine / public email OSINT applies to domain names."
+        },
+        {
+          "id": "search_engine_intel",
+          "reason": "Search-engine / public email OSINT applies to domain names."
+        }
+      ],
+      "domain_intel": {
+        "whois": {
+          "registrar": "Regional Internet Registry",
+          "organization": "Internet Assigned Numbers Authority",
+          "country": "US",
+          "status": "SUCCESS"
+        },
+        "rdap": {
+          "status": "LOCAL_PRIVATE_IP",
+          "ip": "192.168.56.111",
+          "name": "Private/Local Address Space (RFC 1918)",
+          "cidr": "192.168.56.111/24",
+          "country": "LOCAL_LAB",
+          "org": "Internal Lab Environment",
+          "remarks": [
+            "Private address range, RDAP queries are not sent to public RIRs."
+          ]
+        },
+        "dns_records": {},
+        "dns_enumeration": {},
+        "nameserver_analysis": null,
+        "subdomains": [],
+        "dns_security": null
+      },
+      "osint_intel": {
+        "emails": [
+          "abuse@iana.org"
+        ],
+        "crtsh_certificates": [],
+        "public_org_info": {
+          "organization": "Internet Assigned Numbers Authority",
+          "registrar": "Regional Internet Registry",
+          "country": "LOCAL_LAB",
+          "verification_tokens": []
+        },
+        "public_metadata": {
+          "txt_metadata_count": 0,
+          "txt_records_sample": [],
+          "certificate_issuers": []
+        },
+        "search_engine_intel": null,
+        "technology_intel": [],
+        "external_apis": {}
+      },
+      "infrastructure_intel": {
+        "resolved_ips": [
+          "192.168.56.111"
+        ],
+        "ip_intelligence": {
+          "resolved_ips": [
+            "192.168.56.111"
+          ],
+          "reverse_dns": [
+            {
+              "status": "NO_PTR",
+              "ip": "192.168.56.111",
+              "ptr_records": [],
+              "note": "[Errno 1] Unknown host"
+            }
+          ],
+          "network_cidr": "192.168.56.111/24",
+          "network_name": "Private/Local Address Space (RFC 1918)"
+        },
+        "reverse_dns": [
+          {
+            "status": "NO_PTR",
+            "ip": "192.168.56.111",
+            "ptr_records": [],
+            "note": "[Errno 1] Unknown host"
+          }
+        ],
+        "asn_hosting": {
+          "handle": null,
+          "name": "Private/Local Address Space (RFC 1918)",
+          "start_address": null,
+          "end_address": null,
+          "country": "LOCAL_LAB",
+          "cidr": "192.168.56.111/24",
+          "org": "Internal Lab Environment"
+        },
+        "ip_geolocation": [
+          {
+            "ip": "192.168.56.111",
+            "status": "NOT_APPLICABLE",
+            "scope": "Private / Non-Routable Address",
+            "note": "Private RFC1918 / loopback addresses do not have public Internet geolocation."
+          }
+        ],
+        "hosting_info": {
+          "organization": "Internal Lab Environment",
+          "asn_handle": null,
+          "network_name": "Private/Local Address Space (RFC 1918)",
+          "country": "LOCAL_LAB",
+          "nameservers": []
+        },
+        "tls_certificates": {
+          "interaction_type": "Active Target Contact",
+          "status": "UNREACHABLE_OR_NO_TLS",
+          "port": 443,
+          "note": "Port 443 did not accept TLS handshake: [Errno 111] Connection refused"
+        },
+        "http_headers": []
+      },
+      "errors": []
+    }
+  ],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.111",
+      "hostname": null,
+      "status": "up",
+      "os_matches": [],
+      "open_ports_count": 23
+    }
+  ],
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.111",
+      "port": 21,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ftp",
+      "service_version": "vsftpd 2.3.4",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ssh",
+      "service_version": "OpenSSH 4.7p1 Debian 8ubuntu1",
+      "extrainfo": "protocol 2.0"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 23,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "telnet",
+      "service_version": "Linux telnetd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 25,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "smtp",
+      "service_version": "Postfix smtpd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 53,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "domain",
+      "service_version": "ISC BIND 9.4.2",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Apache httpd 2.2.8",
+      "extrainfo": "(Ubuntu) DAV/2"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 111,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "rpcbind",
+      "service_version": "2",
+      "extrainfo": "RPC #100000"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 139,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "netbios-ssn",
+      "service_version": "Samba smbd 3.X - 4.X",
+      "extrainfo": "workgroup: WORKGROUP"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 445,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "netbios-ssn",
+      "service_version": "Samba smbd 3.X - 4.X",
+      "extrainfo": "workgroup: WORKGROUP"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 512,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "exec",
+      "service_version": "netkit-rsh rexecd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 513,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "login",
+      "service_version": "",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 514,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "shell",
+      "service_version": "Netkit rshd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 1099,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "java-rmi",
+      "service_version": "GNU Classpath grmiregistry",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 1524,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "bindshell",
+      "service_version": "Metasploitable root shell",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 2049,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "nfs",
+      "service_version": "2-4",
+      "extrainfo": "RPC #100003"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 2121,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ftp",
+      "service_version": "ProFTPD 1.3.1",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 3306,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "mysql",
+      "service_version": "MySQL 5.0.51a-3ubuntu5",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 5432,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "postgresql",
+      "service_version": "PostgreSQL DB 8.3.0 - 8.3.7",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 5900,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "vnc",
+      "service_version": "VNC",
+      "extrainfo": "protocol 3.3"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 6000,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "X11",
+      "service_version": "",
+      "extrainfo": "access denied"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 6667,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "irc",
+      "service_version": "UnrealIRCd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 8009,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ajp13",
+      "service_version": "Apache Jserv",
+      "extrainfo": "Protocol v1.3"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 8180,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Apache Tomcat/Coyote JSP engine 1.1",
+      "extrainfo": null
+    }
+  ]
+}

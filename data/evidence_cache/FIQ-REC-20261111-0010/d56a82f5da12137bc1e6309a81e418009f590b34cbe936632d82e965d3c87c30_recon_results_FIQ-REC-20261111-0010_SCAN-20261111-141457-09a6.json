@@ -1,0 +1,745 @@
+{
+  "target": "mozilla.org",
+  "targets": [
+    "mozilla.org"
+  ],
+  "status": "Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 72.86,
+  "scanners_executed": [
+    "passive_recon"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Passive Intelligence",
+      "target": "mozilla.org",
+      "status": "COMPLETED",
+      "detail": "DNS records: 27, Subdomains: 99, Emails: 2"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [
+    {
+      "target": "mozilla.org",
+      "target_kind": "domain",
+      "timestamp_utc": "2026-11-11T14:14:57.974806+00:00",
+      "checks_requested": [
+        "dns_security_posture",
+        "crtsh_history",
+        "subdomains_ct",
+        "public_org_info",
+        "dns_enumeration",
+        "ip_intelligence",
+        "ip_geolocation",
+        "reverse_dns",
+        "public_emails",
+        "whois_lookup",
+        "hosting_info",
+        "asn_ip_hosting",
+        "rdap_lookup",
+        "technology_intel",
+        "certificate_info",
+        "dns_records",
+        "nameserver_analysis",
+        "search_engine_intel",
+        "public_metadata"
+      ],
+      "checks_executed": [
+        {
+          "id": "whois_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "rdap_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "asn_ip_hosting",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "dns_records",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "dns_enumeration",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "nameserver_analysis",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "dns_security_posture",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "subdomains_ct",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS",
+          "error": null
+        },
+        {
+          "id": "crtsh_history",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS",
+          "error": null
+        },
+        {
+          "id": "certificate_info",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS",
+          "error": null
+        },
+        {
+          "id": "search_engine_intel",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_emails",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "reverse_dns",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "ip_intelligence",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "hosting_info",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "ip_geolocation",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_org_info",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "public_metadata",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "technology_intel",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        }
+      ],
+      "unavailable_checks": [],
+      "domain_intel": {
+        "whois": {
+          "registrar": "MarkMonitor Inc.",
+          "organization": null,
+          "creation_date": "1998-01-24T05:00:00+00:00",
+          "expiration_date": "2027-01-23T05:00:00+00:00",
+          "name_servers": [
+            "ns1-240.akam.net",
+            "ns4-64.akam.net",
+            "ns5-65.akam.net",
+            "ns7-66.akam.net"
+          ],
+          "status": "SUCCESS"
+        },
+        "rdap": {
+          "status": "SUCCESS",
+          "query": "mozilla.org",
+          "handle": null,
+          "name": "",
+          "start_address": null,
+          "end_address": null,
+          "ip_version": null,
+          "country": null,
+          "entities": [
+            {
+              "handle": "292",
+              "roles": [
+                "registrar"
+              ]
+            }
+          ],
+          "status_list": [
+            "client delete prohibited",
+            "server delete prohibited",
+            "client transfer prohibited",
+            "server transfer prohibited",
+            "client update prohibited",
+            "server update prohibited"
+          ]
+        },
+        "dns_records": {
+          "A": [
+            "35.190.14.201"
+          ],
+          "AAAA": [
+            "2600:1901:0:c197::"
+          ],
+          "MX": [
+            "alt1.aspmx.l.google.com",
+            "aspmx3.googlemail.com",
+            "alt2.aspmx.l.google.com",
+            "aspmx.l.google.com"
+          ],
+          "NS": [
+            "ns1-240.akam.net",
+            "ns5-65.akam.net",
+            "ns7-66.akam.net",
+            "ns4-64.akam.net"
+          ],
+          "TXT": [
+            "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+            "_zojr3c56nq36tokzhnj9crit28tiqly",
+            "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+            "ZOOM_verify_lGxIzL49Id7PipUgDgTd9K",
+            "yandex-verification",
+            "rz8t7zvjv5frpfbjs3y5n6g5tkw7gt2q",
+            "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+            "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all",
+            "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+            "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+            "MS=ms14343235",
+            "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+            "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE",
+            "anthropic-domain-verification-w5rph5=bZ2V4N0ps4oFSU6yrv4DfD6nA",
+            "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+            "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+            "bzbkzkxj2ws8gvtw6hpssfy7lv9kym88"
+          ]
+        },
+        "dns_enumeration": {
+          "A": [
+            "35.190.14.201"
+          ],
+          "AAAA": [
+            "2600:1901:0:c197::"
+          ],
+          "MX": [
+            "5 alt1.aspmx.l.google.com.",
+            "10 aspmx3.googlemail.com.",
+            "1 aspmx.l.google.com.",
+            "5 alt2.aspmx.l.google.com."
+          ],
+          "NS": [
+            "ns5-65.akam.net.",
+            "ns7-66.akam.net.",
+            "ns1-240.akam.net.",
+            "ns4-64.akam.net."
+          ],
+          "TXT": [
+            "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+            "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE",
+            "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+            "ZOOM_verify_lGxIzL49Id7PipUgDgTd9K",
+            "bzbkzkxj2ws8gvtw6hpssfy7lv9kym88",
+            "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+            "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+            "MS=ms14343235",
+            "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+            "yandex-verification",
+            "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+            "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+            "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all",
+            "rz8t7zvjv5frpfbjs3y5n6g5tkw7gt2q",
+            "anthropic-domain-verification-w5rph5=bZ2V4N0ps4oFSU6yrv4DfD6nA",
+            "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+            "_zojr3c56nq36tokzhnj9crit28tiqly"
+          ],
+          "SOA": [
+            "ns5-65.akam.net. hostmaster.mozilla.com. 2024020846 180 180 1209600 60"
+          ],
+          "CAA": [
+            "0 issue \"digicert.com",
+            "0 issue \"certainly.com",
+            "0 issue \"letsencrypt.org",
+            "0 issue \"pki.goog",
+            "0 issue \"amazon.com",
+            "0 issue \"awstrust.com",
+            "0 issue \"sectigo.com",
+            "0 issue \"amazontrust.com",
+            "0 issue \"amazonaws.com",
+            "0 iodef \"mailto:foxsec+caaiodef@mozilla.com",
+            "0 issue \"comodoca.com"
+          ]
+        },
+        "nameserver_analysis": {
+          "count": 4,
+          "nameservers": [
+            {
+              "nameserver": "ns1-240.akam.net",
+              "ipv4": [
+                "193.108.91.240"
+              ]
+            },
+            {
+              "nameserver": "ns5-65.akam.net",
+              "ipv4": [
+                "184.85.248.65"
+              ]
+            },
+            {
+              "nameserver": "ns7-66.akam.net",
+              "ipv4": [
+                "96.7.49.66"
+              ]
+            },
+            {
+              "nameserver": "ns4-64.akam.net",
+              "ipv4": [
+                "84.53.139.64"
+              ]
+            }
+          ]
+        },
+        "subdomains": [
+          "activations.mozilla.org",
+          "addons.update.mozilla.org",
+          "air.mozilla.org",
+          "airmo.mozilla.org",
+          "ambassadors.mozilla.org",
+          "apps.mozilla.org",
+          "ask.mozilla.org",
+          "aurora.mozilla.org",
+          "beta.mozilla.org",
+          "blog.mozilla.org",
+          "college.mozilla.org",
+          "community.mozilla.org",
+          "communitystore.mozilla.org",
+          "confsurvey.mozilla.org",
+          "content.mozilla.org",
+          "contribute.mozilla.org",
+          "creative.mozilla.org",
+          "designlanguage.mozilla.org",
+          "dev.mozilla.org",
+          "devderby.mozilla.org",
+          "dnt.mozilla.org",
+          "docs.iot.mozilla.org",
+          "docs.pub.build.mozilla.org",
+          "dynamicua-origin.mozilla.org",
+          "events.mozilla.org",
+          "extensions.mozilla.org",
+          "extranet.mozilla.org",
+          "feedback.mozilla.org",
+          "festival.mozilla.org",
+          "firefoxflicks.mozilla.org",
+          "firefoxlive.mozilla.org",
+          "forum.learning.mozilla.org",
+          "forums.mozilla.org",
+          "foundation.mozilla.org",
+          "friends.mozilla.org",
+          "fsa.mozilla.org",
+          "git.mozilla.org",
+          "give.mozilla.org",
+          "goggles.mozilla.org",
+          "guides.mozilla.org",
+          "hub.mozilla.org",
+          "input.mozilla.org",
+          "iot.mozilla.org",
+          "jobs.mozilla.org",
+          "join.mozilla.org",
+          "krakenbenchmark.mozilla.org",
+          "l10n.mozilla.org",
+          "labs.mozilla.org",
+          "learning.mozilla.org",
+          "library.mozilla.org",
+          "m.input.mozilla.org",
+          "market.mozilla.org",
+          "masterfirefoxos.mozilla.org",
+          "mobilepartners.mozilla.org",
+          "mozilla.org",
+          "mpl.mozilla.org",
+          "nightly.mozilla.org",
+          "note-blog.mozilla.org",
+          "open.mozilla.org",
+          "openinnovation.mozilla.org",
+          "pastebin.mozilla.org",
+          "phonebook.mozilla.org",
+          "planet.mozilla.org",
+          "ref-blog.mozilla.org",
+          "refractr.mozilla.org",
+          "release.mozilla.org",
+          "reports.telemetry.mozilla.org",
+          "reviewboard.mozilla.org",
+          "science.mozilla.org",
+          "sendto.mozilla.org",
+          "spark.mozilla.org",
+          "sre-blocklist.mozilla.org",
+          "ssl-config.mozilla.org",
+          "ssr2020.mozilla.org",
+          "start.mozilla.org",
+          "store.mozilla.org",
+          "students.mozilla.org",
+          "surf.mozilla.org",
+          "talkback-public.mozilla.org",
+          "talkback-reports.mozilla.org",
+          "talkback.mozilla.org",
+          "teach.mozilla.org",
+          "techspeakers.mozilla.org",
+          "themes.mozilla.org",
+          "thimble.mozilla.org",
+          "treestatus.mozilla.org",
+          "triagebot.mozilla.org",
+          "university.mozilla.org",
+          "update.mozilla.org",
+          "updates.mozilla.org",
+          "videos.mozilla.org",
+          "webdev.mozilla.org",
+          "website-beta.mozilla.org",
+          "webwewant.mozilla.org",
+          "wot.iot.mozilla.org",
+          "www-archive.mozilla.org",
+          "www.blog.mozilla.org",
+          "www.store.mozilla.org",
+          "www.support.mozilla.org"
+        ],
+        "dns_security": {
+          "spf_configured": true,
+          "spf_records": [
+            "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all"
+          ],
+          "dmarc_configured": true,
+          "dmarc_records": [
+            "v=DMARC1; p=reject; pct=100; adkim=r; aspf=r; rua=mailto:dmarc_agg@vali.email,mailto:dmarc@mozilla.com"
+          ],
+          "dnssec_configured": false,
+          "notes": [
+            "No DNSSEC DS/DNSKEY chain observed."
+          ]
+        }
+      },
+      "osint_intel": {
+        "emails": [
+          "abusecomplaints@markmonitor.com",
+          "cmartorella@edge-security.com"
+        ],
+        "crtsh_certificates": [
+          {
+            "common_name": "apps.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-02T16:01:34",
+            "not_after": "2020-12-31T16:01:34",
+            "serial_number": "04d00993e8a9ef2ad1196ad54898f0c360d4"
+          },
+          {
+            "common_name": "apps.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-02T15:02:11",
+            "not_after": "2020-12-31T15:02:11",
+            "serial_number": "0347baae0e434c02dd45d8694ff9000b953d"
+          },
+          {
+            "common_name": "phonebook.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T13:58:56",
+            "not_after": "2020-12-30T13:58:56",
+            "serial_number": "04d8e92e43d997e8dcaefa07834bfb142161"
+          },
+          {
+            "common_name": "market.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T13:23:35",
+            "not_after": "2020-12-30T13:23:35",
+            "serial_number": "032b21c70835190ec8355d4d476a8f0c3bd9"
+          },
+          {
+            "common_name": "extranet.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T13:08:00",
+            "not_after": "2020-12-30T13:08:00",
+            "serial_number": "03601ac8dbc68b01c04973e19176e83fb83f"
+          },
+          {
+            "common_name": "university.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T13:06:38",
+            "not_after": "2020-12-30T13:06:38",
+            "serial_number": "040611125cdc44304df747b7f05c26030536"
+          },
+          {
+            "common_name": "college.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T13:06:26",
+            "not_after": "2020-12-30T13:06:26",
+            "serial_number": "04bc6e265f1c0043a4c022218505f54b32d1"
+          },
+          {
+            "common_name": "input.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T10:56:30",
+            "not_after": "2020-12-30T10:56:30",
+            "serial_number": "04a29650c27603ae04c38cb85a968ec5a6bc"
+          },
+          {
+            "common_name": "www.support.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T01:12:28",
+            "not_after": "2020-12-30T01:12:28",
+            "serial_number": "040750a3d0dbf191d3ce4e5b3bf1f919186d"
+          },
+          {
+            "common_name": "www.support.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-10-01T00:12:59",
+            "not_after": "2020-12-30T00:12:59",
+            "serial_number": "043d0b8a0297fc9288a90f5464c2cef3d79a"
+          },
+          {
+            "common_name": "events.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T22:20:43",
+            "not_after": "2020-12-29T22:20:43",
+            "serial_number": "03c034d1be85332451652bab10bb9d90b88d"
+          },
+          {
+            "common_name": "addons.update.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T21:05:45",
+            "not_after": "2020-12-29T21:05:45",
+            "serial_number": "03b59413d18f15de58b5ccba94922b313ca0"
+          },
+          {
+            "common_name": "updates.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T21:05:43",
+            "not_after": "2020-12-29T21:05:43",
+            "serial_number": "034bfeb617960f219435cea813ff958b2804"
+          },
+          {
+            "common_name": "extensions.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T21:04:42",
+            "not_after": "2020-12-29T21:04:42",
+            "serial_number": "035399f23658c57ec6f1f2c2c14c79606f3c"
+          },
+          {
+            "common_name": "themes.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T21:04:40",
+            "not_after": "2020-12-29T21:04:40",
+            "serial_number": "03b3425609e154e9840bc145cf780b9fe30c"
+          },
+          {
+            "common_name": "update.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T21:04:38",
+            "not_after": "2020-12-29T21:04:38",
+            "serial_number": "0317fb2573f0ce3ba8d2656197c763054461"
+          },
+          {
+            "common_name": "videos.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T20:43:51",
+            "not_after": "2020-12-29T20:43:51",
+            "serial_number": "03a06a9252c87aacc87264eed756b4c564e2"
+          },
+          {
+            "common_name": "activations.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T20:43:45",
+            "not_after": "2020-12-29T20:43:45",
+            "serial_number": "03af91a43ad31a929630b094027a6f4a9af8"
+          },
+          {
+            "common_name": "air.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T19:04:22",
+            "not_after": "2020-12-29T19:04:22",
+            "serial_number": "031fdf436b3f7e57c1b7c757df67e1e0577d"
+          },
+          {
+            "common_name": "content.mozilla.org",
+            "issuer": "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3",
+            "not_before": "2020-09-30T19:02:56",
+            "not_after": "2020-12-29T19:02:56",
+            "serial_number": "038588f4968ccbb0ca6cf4ab651e01e52ab6"
+          }
+        ],
+        "public_org_info": {
+          "organization": null,
+          "registrar": "MarkMonitor Inc.",
+          "country": null,
+          "verification_tokens": [
+            "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+            "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+            "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+            "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+            "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+            "MS=ms14343235",
+            "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+            "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE",
+            "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+            "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw"
+          ]
+        },
+        "public_metadata": {
+          "txt_metadata_count": 17,
+          "txt_records_sample": [
+            "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+            "_zojr3c56nq36tokzhnj9crit28tiqly",
+            "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+            "ZOOM_verify_lGxIzL49Id7PipUgDgTd9K",
+            "yandex-verification",
+            "rz8t7zvjv5frpfbjs3y5n6g5tkw7gt2q",
+            "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+            "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all",
+            "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+            "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s"
+          ],
+          "certificate_issuers": [
+            "C=US, O=Let's Encrypt, CN=Let's Encrypt Authority X3"
+          ]
+        },
+        "search_engine_intel": {
+          "hosts_found": [
+            "mozilla.org",
+            "blog.mozilla.org",
+            "firefoxlive.mozilla.org",
+            "foundation.mozilla.org",
+            "www-archive.mozilla.org",
+            "note-blog.mozilla.org",
+            "ref-blog.mozilla.org"
+          ],
+          "emails_found": [
+            "cmartorella@edge-security.com"
+          ],
+          "ips_found": [],
+          "status": "SUCCESS"
+        },
+        "technology_intel": [
+          {
+            "technology": "Google Workspace / DNS",
+            "category": "Mail / Cloud",
+            "evidence": "MX/NS references google.com"
+          },
+          {
+            "technology": "Google Workspace",
+            "category": "Email Hosting",
+            "evidence": "MX record matches aspmx.l.google.com"
+          },
+          {
+            "technology": "Google Search Console Verified",
+            "category": "Site Verification",
+            "evidence": "DNS TXT verification record"
+          },
+          {
+            "technology": "SPF Email Authentication",
+            "category": "Email Security",
+            "evidence": "DNS TXT v=spf1 policy"
+          }
+        ],
+        "external_apis": {}
+      },
+      "infrastructure_intel": {
+        "resolved_ips": [
+          "2600:1901:0:c197::",
+          "35.190.14.201"
+        ],
+        "ip_intelligence": {
+          "resolved_ips": [
+            "2600:1901:0:c197::",
+            "35.190.14.201"
+          ],
+          "reverse_dns": [
+            {
+              "status": "NO_PTR",
+              "ip": "2600:1901:0:c197::",
+              "ptr_records": [],
+              "note": "[Errno 1] Unknown host"
+            },
+            {
+              "status": "SUCCESS",
+              "ip": "35.190.14.201",
+              "ptr_records": [
+                "201.14.190.35.bc.googleusercontent.com"
+              ]
+            }
+          ],
+          "network_cidr": null,
+          "network_name": ""
+        },
+        "reverse_dns": [
+          {
+            "status": "NO_PTR",
+            "ip": "2600:1901:0:c197::",
+            "ptr_records": [],
+            "note": "[Errno 1] Unknown host"
+          },
+          {
+            "status": "SUCCESS",
+            "ip": "35.190.14.201",
+            "ptr_records": [
+              "201.14.190.35.bc.googleusercontent.com"
+            ]
+          }
+        ],
+        "asn_hosting": {
+          "handle": null,
+          "name": "",
+          "start_address": null,
+          "end_address": null,
+          "country": null,
+          "cidr": null,
+          "org": null
+        },
+        "ip_geolocation": [
+          {
+            "ip": "2600:1901:0:c197::",
+            "status": "SUCCESS",
+            "country": "United States",
+            "region": "Missouri",
+            "city": "Kansas City",
+            "isp": "Google LLC",
+            "org": "Google Cloud",
+            "asn": "AS396982 Google LLC"
+          },
+          {
+            "ip": "35.190.14.201",
+            "status": "SUCCESS",
+            "country": "United States",
+            "region": "Missouri",
+            "city": "Kansas City",
+            "isp": "Google LLC",
+            "org": "Google Cloud",
+            "asn": "AS396982 Google LLC"
+          }
+        ],
+        "hosting_info": {
+          "organization": null,
+          "asn_handle": null,
+          "network_name": "",
+          "country": null,
+          "nameservers": [
+            "ns1-240.akam.net",
+            "ns5-65.akam.net",
+            "ns7-66.akam.net",
+            "ns4-64.akam.net"
+          ]
+        },
+        "tls_certificates": null,
+        "http_headers": []
+      },
+      "errors": []
+    }
+  ],
+  "active_hosts": [],
+  "discovered_ports": []
+}

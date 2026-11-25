@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSINTReconRecord",
+  "description": "Standardized schema for OSINT-RECON digital footprint findings",
+  "type": "object",
+  "required": [
+    "target_info",
+    "timestamp_utc",
+    "tool_info",
+    "recon_category",
+    "discovered_domains",
+    "ip_addresses",
+    "dns_records",
+    "email_addresses",
+    "open_ports",
+    "service_information",
+    "evidence_source",
+    "scan_status",
+    "errors_and_warnings"
+  ],
+  "properties": {
+    "target_info": {
+      "type": "object",
+      "required": ["target", "category", "authorization_status", "scope"],
+      "properties": {
+        "target": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["intentionally_vulnerable_lab", "nmap_practice_target", "normal_benchmark_domain", "local_loopback"]
+        },
+        "authorization_status": { "type": "string" },
+        "scope": { "type": "string" }
+      }
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tool_info": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "execution_args": { "type": ["string", "null"] }
+      }
+    },
+    "recon_category": {
+      "type": "string",
+      "enum": ["whois", "dns", "search_engine_harvesting", "port_scan", "vulnerability_scan"]
+    },
+    "scan_id": {
+      "type": ["string", "null"]
+    },
+    "discovered_domains": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "ip_addresses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "dns_records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["record_type", "value"],
+        "properties": {
+          "record_type": { "type": "string" },
+          "value": { "type": "string" },
+          "ttl": { "type": ["integer", "null"] },
+          "priority": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "email_addresses": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "open_ports": {
+      "type": "array",
+      "items": { "type": "integer" }
+    },
+    "service_information": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["port", "protocol", "state"],
+        "properties": {
+          "port": { "type": "integer" },
+          "protocol": { "type": "string" },
+          "state": { "type": "string" },
+          "service_name": { "type": ["string", "null"] },
+          "product": { "type": ["string", "null"] },
+          "version": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "whois_data": {
+      "type": ["object", "null"],
+      "properties": {
+        "domain_name": { "type": ["string", "null"] },
+        "registrar": { "type": ["string", "null"] },
+        "creation_date": { "type": ["string", "null"] },
+        "expiration_date": { "type": ["string", "null"] },
+        "updated_date": { "type": ["string", "null"] },
+        "status": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "name_servers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "registrant_name": { "type": ["string", "null"] },
+        "registrant_organization": { "type": ["string", "null"] },
+        "registrant_country": { "type": ["string", "null"] },
+        "emails": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "dnssec": { "type": ["string", "null"] },
+        "raw_text": { "type": ["string", "null"] }
+      }
+    },
+    "evidence_source": {
+      "type": "string"
+    },
+    "scan_status": {
+      "type": "string",
+      "enum": ["SUCCESS", "PARTIAL", "FAILED"]
+    },
+    "errors_and_warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "raw_output_reference": {
+      "type": ["string", "null"]
+    }
+  }
+}

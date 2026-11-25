@@ -1,0 +1,1423 @@
+{% extends "base.html" %}
+{% block title %}Recon Workspace — {{ recon_id }} — FootprintIQ{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-6 pb-16">
+
+  <!-- Created Banner (shown cleanly right after Step 1 redirect) -->
+  {% if created %}
+  <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-3">
+    <div class="flex items-center space-x-2.5 text-xs text-emerald-900">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+      <span>
+        Recon campaign created and saved in <strong>Draft</strong> status:
+        <span class="mono font-bold">{{ recon_id }}</span>. No scan has started yet &mdash; select your assessments below to launch Run 001.
+      </span>
+    </div>
+    <a href="/recon" class="text-xs font-semibold text-emerald-800 hover:underline shrink-0">All Campaigns</a>
+  </div>
+  {% elif run_new %}
+  <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-between gap-3">
+    <div class="flex items-center space-x-2.5 text-xs text-blue-900">
+      <i data-lucide="layers" class="w-4 h-4 text-blue-600 shrink-0"></i>
+      <span>
+        Configuring <strong>Run {{ '%03d'|format(next_run_number or 1) }}</strong> under investigation <span class="mono font-bold">{{ recon_id }}</span>.
+        Each scan run is stored independently &mdash; prior runs, findings, evidence, and PDFs remain preserved cleanly.
+      </span>
+    </div>
+    <a href="/recon/{{ recon_id }}/results" class="text-xs font-semibold text-blue-800 hover:underline shrink-0">Scan History ({{ (runs or [])|length }})</a>
+  </div>
+  {% endif %}
+
+  <!-- Compact Campaign Workspace Header -->
+  <div class="fiq-card p-6 border-l-4 border-l-blue-600 reveal-on-scroll">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="mono px-2.5 py-0.5 text-[11px] font-bold bg-slate-100 text-slate-800 rounded border border-slate-200">
+            {{ recon_id }}
+          </span>
+          <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase rounded bg-blue-100 text-blue-800">
+            {{ campaign.status or 'Draft' }}
+          </span>
+          <span class="px-2.5 py-0.5 text-[11px] font-semibold bg-emerald-50 text-emerald-700 rounded border border-emerald-200">
+            Auth: {{ campaign.authorization_status or 'Pending' }}
+          </span>
+        </div>
+        <h1 class="text-xl font-bold text-slate-900">{{ campaign.name }}</h1>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
+          <span>Target: <strong class="mono text-slate-800">{{ campaign.target_value }}</strong></span>
+          <span>Purpose: <strong class="text-slate-800">{{ campaign.purpose or 'Security Assessment' }}</strong></span>
+          <span>Created: <strong class="mono text-slate-700">{{ (campaign.created_at|ist) if campaign.created_at else 'Now' }}</strong></span>
+          <span>Scope: <strong class="text-slate-700">{{ campaign.scope_description or 'Authorized Campaign Scope' }}</strong></span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" onclick="toggleScopeDrawer()" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
+          Edit Basic Scope
+        </button>
+        <a href="/recon/{{ recon_id }}/live" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
+          Live Monitor
+        </a>
+        <a href="/recon" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition">
+          Campaigns
+        </a>
+      </div>
+    </div>
+
+    <!-- Optional Scope Metadata Drawer -->
+    <div id="scopeDrawer" class="hidden mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Recon Name</label>
+        <input id="wsNameInput" type="text" value="{{ campaign.name }}" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Purpose</label>
+        <input id="wsPurposeInput" type="text" value="{{ campaign.purpose or 'Security Assessment' }}" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Scope Notes</label>
+        <input id="wsScopeInput" type="text" value="{{ campaign.scope_description or '' }}" placeholder="Authorized scope notes" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Excluded Targets</label>
+        <input id="wsExcludedInput" type="text" value="{{ campaign.excluded_targets or '' }}" placeholder="Comma-separated exclusions" class="w-full mono px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+      </div>
+    </div>
+  </div>
+
+  <!-- Workspace Feedback Banner -->
+  <div id="workspaceFeedback" class="hidden" role="alert"></div>
+
+  <!-- Step 2: Configure Your Security Assessment (3 Accessible 3D Category Cards) -->
+  <section id="categorySelectionSection" class="space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+      <div>
+        <h2 class="text-base font-bold text-slate-900">Configure Your Security Assessment</h2>
+        <p class="text-xs text-slate-500">
+          Manually choose one, two, or all three assessment categories below. No category is pre-selected or forced automatically.
+        </p>
+      </div>
+      <div class="text-[11px] text-slate-500">
+        Selected Categories: <strong id="selectedCatCount" class="text-blue-700">0</strong> of 3
+      </div>
+    </div>
+
+    {% set p_groups = options_catalog.passive.groups %}
+    {% set p_count = (p_groups.domain_intelligence.options|length + p_groups.osint_intelligence.options|length + p_groups.infrastructure_intelligence.options|length) %}
+    {% set a_groups = options_catalog.active.groups %}
+    {% set a_count = (a_groups.host_discovery.options|length + a_groups.port_scanning.port_scopes|length + a_groups.service_enumeration.options|length) %}
+    {% set nse_count = (options_catalog.vulnerability.nse.discovery_scripts|length + options_catalog.vulnerability.nse.vulnerability_scripts|length) %}
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 fiq-3d-perspective">
+      <!-- Card 1: Passive Reconnaissance -->
+      <div id="cardCatPassive"
+           role="button"
+           tabindex="0"
+           aria-pressed="false"
+           data-fiq-key-click="1"
+           onclick="toggleCategory('passive')"
+           class="fiq-3d-card p-6 cursor-pointer flex flex-col justify-between space-y-4 select-none">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="fiq-3d-icon w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center">
+              <i data-lucide="globe" class="w-5 h-5"></i>
+            </div>
+            <span id="badgeCatPassive" class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-slate-100 text-slate-600">
+              Not Selected
+            </span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">Passive Reconnaissance</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              Public Domain, OSINT, Certificate Transparency, ASN &amp; Hosting intelligence &mdash; {{ p_count }} modules available.
+            </p>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-700">
+          <span>Explore Passive Recon</span>
+          <span aria-hidden="true">&rarr;</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Active Reconnaissance -->
+      <div id="cardCatActive"
+           role="button"
+           tabindex="0"
+           aria-pressed="false"
+           data-fiq-key-click="1"
+           onclick="toggleCategory('active')"
+           class="fiq-3d-card p-6 cursor-pointer flex flex-col justify-between space-y-4 select-none">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="fiq-3d-icon w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-200 flex items-center justify-center">
+              <i data-lucide="radar" class="w-5 h-5"></i>
+            </div>
+            <span id="badgeCatActive" class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-slate-100 text-slate-600">
+              Not Selected
+            </span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">Active Reconnaissance</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              Host discovery, TCP/UDP port sweeps, Nmap fingerprinting, and service enumeration &mdash; {{ a_count }} options.
+            </p>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-indigo-700">
+          <span>Explore Active Recon</span>
+          <span aria-hidden="true">&rarr;</span>
+        </div>
+      </div>
+
+      <!-- Card 3: Vulnerability Assessment -->
+      <div id="cardCatVuln"
+           role="button"
+           tabindex="0"
+           aria-pressed="false"
+           data-fiq-key-click="1"
+           onclick="toggleCategory('vulnerability')"
+           class="fiq-3d-card p-6 cursor-pointer flex flex-col justify-between space-y-4 select-none">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="fiq-3d-icon w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-200 flex items-center justify-center">
+              <i data-lucide="shield-alert" class="w-5 h-5"></i>
+            </div>
+            <span id="badgeCatVuln" class="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-slate-100 text-slate-600">
+              Not Selected
+            </span>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wide">Vulnerability Assessment</h3>
+            <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+              Multi-engine scanning with {{ nse_count }} allowlisted NSE scripts, ProjectDiscovery Nuclei, and Tenable Nessus capabilities.
+            </p>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-rose-700">
+          <span>Explore Vulnerability Assessment</span>
+          <span aria-hidden="true">&rarr;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- PANEL 1: PASSIVE RECONNAISSANCE CONFIGURATION                          -->
+  <!-- ====================================================================== -->
+  <section id="panelPassive" class="hidden fiq-card p-6 space-y-6 border-t-4 border-t-blue-600">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+      <div>
+        <h3 class="text-sm font-bold text-slate-900">1. Passive Reconnaissance Modules</h3>
+        <p class="text-xs text-slate-500">Select individual Domain, OSINT, and Infrastructure checks or apply a preset.</p>
+      </div>
+      <div class="flex flex-wrap gap-1.5">
+        {% for pid, pdata in options_catalog.passive.presets.items() %}
+        <button type="button" onclick="applyPassivePreset('{{ pid }}')"
+                class="px-2.5 py-1 text-[11px] font-semibold bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-md transition"
+                title="{{ pdata.description }}">
+          {{ pdata.label }}
+        </button>
+        {% endfor %}
+        <button type="button" onclick="clearPassiveChecks()"
+                class="px-2.5 py-1 text-[11px] font-semibold bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 rounded-md transition">
+          Custom Selection
+        </button>
+      </div>
+    </div>
+
+    <!-- Pure Passive Groups -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      {% for gkey, gdata in options_catalog.passive.groups.items() %}
+      <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 space-y-3">
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">{{ gdata.title }}</h4>
+        <div class="space-y-2.5">
+          {% for opt in gdata.options if not opt.get('requires_target_contact') %}
+          <label class="flex items-start space-x-2.5 text-xs {% if not opt.available %}opacity-60 cursor-not-allowed{% else %}cursor-pointer{% endif %}">
+            <input type="checkbox"
+                   class="passive-check mt-0.5 rounded border-slate-300 text-blue-600"
+                   value="{{ opt.id }}"
+                   data-label="{{ opt.label }}"
+                   {% if not opt.available %}disabled{% endif %}
+                   onchange="refreshReviewSummary()">
+            <span class="space-y-0.5">
+              <span class="font-semibold text-slate-800 block">{{ opt.label }}</span>
+              <span class="text-[11px] text-slate-500 block">{{ opt.description }}</span>
+              <span class="inline-flex items-center gap-1.5 pt-0.5">
+                <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  Pure Passive
+                </span>
+                {% if not opt.available %}
+                <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                  {{ opt.availability_note or 'Unavailable' }}
+                </span>
+                {% endif %}
+              </span>
+            </span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Optional Active Target Contact Infrastructure Checks -->
+    <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200 space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h4 class="text-xs font-bold text-amber-900">Optional Infrastructure Checks Involving Target Contact</h4>
+          <p class="text-[11px] text-amber-800">
+            These read-only probes connect directly to the target host (TLS port 443 / HTTP HEAD) and are disabled unless explicitly opted in.
+          </p>
+        </div>
+        <label class="inline-flex items-center space-x-2 text-xs font-bold text-amber-900 cursor-pointer shrink-0">
+          <input id="passiveTargetContactCheck" type="checkbox" class="rounded border-amber-400 text-amber-600" onchange="toggleTargetContactOptions()">
+          <span>Allow Direct Target Contact</span>
+        </label>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {% for opt in options_catalog.passive.groups.infrastructure_intelligence.options if opt.get('requires_target_contact') %}
+        <label class="flex items-start space-x-2.5 text-xs p-3 rounded-lg bg-white border border-amber-200 cursor-pointer">
+          <input type="checkbox"
+                 class="passive-check passive-contact-opt mt-0.5 rounded border-amber-400 text-amber-600"
+                 value="{{ opt.id }}"
+                 data-label="{{ opt.label }}"
+                 disabled
+                 onchange="refreshReviewSummary()">
+          <span>
+            <span class="font-semibold text-slate-800 block">{{ opt.label }}</span>
+            <span class="text-[11px] text-slate-500 block">{{ opt.description }}</span>
+            <span class="inline-block mt-1 px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-900">Active Target Contact</span>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- PANEL 2: ACTIVE RECONNAISSANCE CONFIGURATION                           -->
+  <!-- ====================================================================== -->
+  <section id="panelActive" class="hidden fiq-card p-6 space-y-6 border-t-4 border-t-indigo-600">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+      <div>
+        <h3 class="text-sm font-bold text-slate-900">2. Active Reconnaissance Configuration</h3>
+        <p class="text-xs text-slate-500">
+          Configure Host Discovery, TCP &amp; UDP Port Scopes, Safe Nmap Options, and Service Enumeration. Capability mode:
+          <strong class="text-slate-700">{{ 'Raw Sockets Enabled' if options_catalog.active.capabilities.has_raw_socket else 'Unprivileged TCP Connect (-sT)' }}</strong>.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-1.5">
+        {% for pid, pdata in options_catalog.active.presets.items() %}
+        <button type="button" onclick="applyActivePreset('{{ pid }}')"
+                {% if pdata.get('available') is sameas false %}disabled title="{{ pdata.availability_note }}"{% else %}title="{{ pdata.description }}"{% endif %}
+                class="px-2.5 py-1 text-[11px] font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-md transition disabled:opacity-50">
+          {{ pdata.label }}
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- A. Host Discovery & B. Port Scanning -->
+      <div class="space-y-4">
+        <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 space-y-3">
+          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">A. Host Discovery</h4>
+          <select id="activeHostDiscovery" onchange="refreshReviewSummary()"
+                  class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+            {% for opt in options_catalog.active.groups.host_discovery.options %}
+            <option value="{{ opt.id }}" {% if not opt.available %}disabled{% endif %}>
+              {{ opt.label }}{% if not opt.available %} ({{ opt.availability_note or 'Unavailable' }}){% endif %}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 space-y-3">
+          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">B. TCP &amp; UDP Port Scanning</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">TCP Scan Technique</label>
+              <select id="activeTcpType" onchange="refreshReviewSummary()" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+                {% for opt in options_catalog.active.groups.port_scanning.tcp_scan_types %}
+                <option value="{{ opt.id }}" {% if not opt.available %}disabled{% endif %}>
+                  {{ opt.label }}{% if not opt.available %} (Requires Privileges){% endif %}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">TCP Port Scope</label>
+              <select id="activePortMode" onchange="togglePortInputs(); refreshReviewSummary();" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+                {% for sc in options_catalog.active.groups.port_scanning.port_scopes %}
+                <option value="{{ sc.id }}" {% if sc.id == 'service_common' %}selected{% endif %}>{{ sc.label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Custom TCP Ports Input -->
+          <div id="customPortsBox" class="hidden space-y-1.5">
+            <label class="block text-[11px] font-semibold text-slate-700">Custom TCP Ports (comma-separated &amp; ranges)</label>
+            <div class="flex gap-2">
+              <input id="activeCustomPorts" type="text" placeholder="22,80,443,3306,8080 or 1-1024" oninput="refreshReviewSummary()"
+                     class="flex-1 mono text-xs px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+              <button type="button" onclick="validatePortsInput('activeCustomPorts', 'customPortsValidation')"
+                      class="px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-xs font-semibold rounded-lg">
+                Validate
+              </button>
+            </div>
+            <div id="customPortsValidation" class="text-[11px]"></div>
+          </div>
+
+          <!-- TCP Start-End Range Input -->
+          <div id="portRangeBox" class="hidden space-y-1.5">
+            <label class="block text-[11px] font-semibold text-slate-700">TCP Port Range (Start &ndash; End)</label>
+            <div class="flex items-center gap-2">
+              <input id="activeRangeStart" type="number" min="1" max="65535" value="1" oninput="syncPortRange(); refreshReviewSummary();"
+                     class="w-28 mono text-xs px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+              <span class="text-xs text-slate-500">to</span>
+              <input id="activeRangeEnd" type="number" min="1" max="65535" value="1024" oninput="syncPortRange(); refreshReviewSummary();"
+                     class="w-28 mono text-xs px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+              <span id="portRangePreview" class="mono text-[11px] text-slate-500">1-1024</span>
+            </div>
+          </div>
+
+          <!-- UDP Mode -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200/70">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">UDP Port Scanning</label>
+              <select id="activeUdpMode" onchange="toggleUdpInput(); refreshReviewSummary();" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+                {% for u in options_catalog.active.groups.port_scanning.udp_port_modes %}
+                <option value="{{ u.id }}" {% if not u.available %}disabled{% endif %}>
+                  {{ u.label }}{% if not u.available %} ({{ u.availability_note }}){% endif %}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Excluded Ports (Optional)</label>
+              <input id="activeExcludePorts" type="text" placeholder="e.g. 25,135" oninput="refreshReviewSummary()"
+                     class="w-full mono text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+            </div>
+          </div>
+
+          <div id="customUdpBox" class="hidden">
+            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Selected UDP Ports</label>
+            <input id="activeUdpPorts" type="text" placeholder="53,67,123,161" oninput="refreshReviewSummary()"
+                   class="w-full mono text-xs px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          </div>
+        </div>
+      </div>
+
+      <!-- C. Nmap Options & D. Targeted Service Enumeration -->
+      <div class="space-y-4">
+        <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 space-y-3">
+          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">C. Nmap Scanning &amp; Approved Profiles</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {% for opt in options_catalog.active.groups.nmap_options.options %}
+            <label class="flex items-start space-x-2 text-xs {% if not opt.available %}opacity-50 cursor-not-allowed{% else %}cursor-pointer{% endif %}">
+              <input type="checkbox"
+                     id="activeOpt_{{ opt.id }}"
+                     class="active-nmap-opt mt-0.5 rounded border-slate-300 text-indigo-600"
+                     value="{{ opt.id }}"
+                     {% if opt.get('default') and opt.available %}checked{% endif %}
+                     {% if not opt.available %}disabled{% endif %}
+                     onchange="refreshReviewSummary()">
+              <span>
+                <span class="font-semibold text-slate-800 block">{{ opt.label }}</span>
+                <span class="text-[11px] text-slate-500 block">{{ opt.description }}</span>
+              </span>
+            </label>
+            {% endfor %}
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200/70">
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Timing Profile</label>
+              <select id="activeTiming" onchange="refreshReviewSummary()" class="w-full text-xs px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+                {% for tm in options_catalog.active.groups.nmap_options.timing_profiles %}
+                <option value="{{ tm.id }}" {% if tm.id == 'T3' %}selected{% endif %}>{{ tm.label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-slate-600 mb-1">Custom Approved Profile</label>
+              <select id="activeApprovedProfile" onchange="refreshReviewSummary()" class="w-full text-xs px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+                <option value="">Manual Option Selection</option>
+                {% for prof in options_catalog.active.groups.nmap_options.approved_profiles %}
+                <option value="{{ prof.id }}">{{ prof.label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 space-y-2.5">
+          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">D. Targeted Service Enumeration</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {% for svc in options_catalog.active.groups.service_enumeration.options %}
+            <label class="flex items-center space-x-2 text-xs cursor-pointer">
+              <input type="checkbox"
+                     class="active-svc-check rounded border-slate-300 text-indigo-600"
+                     value="{{ svc.id }}"
+                     data-label="{{ svc.label }}"
+                     onchange="refreshReviewSummary()">
+              <span class="font-medium text-slate-800">{{ svc.label }}</span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Recon Privilege Consent & Authorization Checkbox -->
+    <div class="p-4 rounded-xl bg-indigo-50/70 border border-indigo-200">
+      <label class="flex items-start space-x-3 cursor-pointer">
+        <input id="activePrivilegeConsentCheck" type="checkbox"
+               class="psa-consent-check mt-0.5 rounded border-indigo-400 text-indigo-600 focus:ring-indigo-500"
+               onchange="syncPrivilegeConsent(this); refreshReviewSummary();">
+        <div class="space-y-0.5">
+          <span class="text-xs font-bold text-indigo-950 block">Privilege Consent &amp; Elevation (Optional)</span>
+          <span class="text-xs text-indigo-900 block font-medium">
+            I authorize FootprintIQ to request elevated privileges for scan operations that require them.
+          </span>
+          <span class="text-[11px] text-indigo-700 block">
+            Authorizes raw-socket packet operations (TCP SYN stealth scan, OS fingerprinting, UDP scan). If left unchecked, FootprintIQ automatically falls back to safe unprivileged alternatives (TCP Connect).
+          </span>
+        </div>
+      </label>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- PANEL 3: VULNERABILITY ASSESSMENT CONFIGURATION                        -->
+  <!-- ====================================================================== -->
+  <section id="panelVuln" class="hidden fiq-card p-6 space-y-6 border-t-4 border-t-rose-600">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+      <div>
+        <h3 class="text-sm font-bold text-slate-900">3. Vulnerability Assessment Engines &amp; Policies</h3>
+        <p class="text-xs text-slate-500">Choose one or combine multiple operational engines honestly. Unavailable engines cannot be silently substituted.</p>
+      </div>
+      <div class="flex flex-wrap gap-1.5">
+        {% for pid, pdata in options_catalog.vulnerability.presets.items() %}
+        <button type="button" onclick="applyVulnPreset('{{ pid }}')"
+                {% if pdata.get('available') is sameas false %}disabled title="{{ pdata.availability_note }}"{% else %}title="{{ pdata.description }}"{% endif %}
+                class="px-2.5 py-1 text-[11px] font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-md transition disabled:opacity-50">
+          {{ pdata.label }}
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Multi-Engine Checkboxes -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- NSE Engine -->
+      <label class="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex items-start space-x-3 cursor-pointer">
+        <input id="vEngineNse" type="checkbox" value="nse" checked
+               class="vuln-engine-check mt-0.5 rounded border-slate-300 text-rose-600"
+               onchange="toggleEnginePanels(); refreshReviewSummary();">
+        <div class="space-y-1 text-xs">
+          <div class="font-bold text-slate-900 flex items-center gap-2">
+            <span>Allowlisted Nmap NSE</span>
+            <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-100 text-emerald-800">READY</span>
+          </div>
+          <p class="text-[11px] text-slate-500">Executes safe, approved vulnerability &amp; security posture scripts.</p>
+        </div>
+      </label>
+
+      <!-- Tenable Nessus Engine -->
+      {% set nessus_avail = options_catalog.vulnerability.nessus.available %}
+      <label class="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex items-start space-x-3 {% if not nessus_avail %}opacity-70 cursor-not-allowed{% else %}cursor-pointer{% endif %}">
+        <input id="vEngineNessus" type="checkbox" value="nessus"
+               class="vuln-engine-check mt-0.5 rounded border-slate-300 text-rose-600"
+               {% if not nessus_avail %}disabled{% endif %}
+               onchange="toggleEnginePanels(); refreshReviewSummary();">
+        <div class="space-y-1 text-xs">
+          <div class="font-bold text-slate-900 flex items-center gap-2">
+            <span>Tenable Nessus</span>
+            <span class="px-1.5 py-0.2 rounded text-[9px] font-bold {% if nessus_avail %}bg-emerald-100 text-emerald-800{% else %}bg-amber-100 text-amber-800{% endif %}">
+              {{ options_catalog.vulnerability.nessus.status }}
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500">{{ options_catalog.vulnerability.nessus.reason or 'Live Nessus API vulnerability scanning ready.' }}</p>
+        </div>
+      </label>
+
+      <!-- ProjectDiscovery Nuclei Engine -->
+      {% set nuc = options_catalog.vulnerability.nuclei %}
+      {% set nuc_avail = nuc.available %}
+      <label class="p-4 rounded-xl border border-slate-200 bg-slate-50/70 flex items-start space-x-3 {% if not nuc_avail %}opacity-70 cursor-not-allowed{% else %}cursor-pointer{% endif %}">
+        <input id="vEngineNuclei" type="checkbox" value="nuclei"
+               class="vuln-engine-check mt-0.5 rounded border-slate-300 text-rose-600"
+               {% if not nuc_avail %}disabled{% endif %}
+               onchange="toggleEnginePanels(); refreshReviewSummary();">
+        <div class="space-y-1 text-xs">
+          <div class="font-bold text-slate-900 flex items-center gap-2">
+            <span>ProjectDiscovery Nuclei</span>
+            <span class="px-1.5 py-0.2 rounded text-[9px] font-bold {% if nuc_avail %}bg-emerald-100 text-emerald-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+              {{ nuc.status }}
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            {% if nuc_avail %}
+            Nuclei {{ nuc.version }} ready ({{ nuc.templates_count }} local templates, safe policy profiles).
+            {% else %}
+            {{ nuc.reason or 'Nuclei binary or templates unavailable.' }}
+            {% endif %}
+          </p>
+        </div>
+      </label>
+    </div>
+
+    <!-- Nessus / Nuclei Policy & Template Selectors (shown when selected) -->
+    <div id="externalEngineOptions" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+      {% if options_catalog.vulnerability.nessus.templates %}
+      <div id="nessusTplBox" class="hidden p-4 rounded-xl bg-slate-50 border border-slate-200">
+        <label class="block text-xs font-bold text-slate-800 mb-1.5">Tenable Nessus Scan Template</label>
+        <select id="nessusTemplateSelect" onchange="refreshReviewSummary()" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+          {% for t in options_catalog.vulnerability.nessus.templates %}
+          <option value="{{ t.uuid }}">{{ t.title or t.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+      {% if nuc.profiles %}
+      <div id="nucleiConfigBox" class="hidden p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 md:col-span-2">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">Nuclei Safe Scan Profile</label>
+            <select id="nucleiProfileSelect" onchange="refreshReviewSummary()" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+              {% for p in nuc.profiles %}
+              <option value="{{ p.id }}" title="{{ p.description }}">{{ p.label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">Optional Safe Tags (comma-separated)</label>
+            <input id="nucleiTagsInput" type="text" placeholder="e.g. cve,headers,ssl,panel"
+                   onchange="refreshReviewSummary()"
+                   class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1.5">Rate Limit (req/s, max 100)</label>
+            <input id="nucleiRateLimitInput" type="number" min="1" max="100" value="30"
+                   onchange="refreshReviewSummary()"
+                   class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div class="flex flex-wrap items-center gap-3 text-[11px]">
+            <span class="font-bold text-slate-700">Severities:</span>
+            {% for sev in ['critical', 'high', 'medium', 'low', 'info'] %}
+            <label class="inline-flex items-center space-x-1 cursor-pointer">
+              <input type="checkbox" value="{{ sev }}" checked class="nuclei-sev-check rounded border-slate-300 text-rose-600" onchange="refreshReviewSummary()">
+              <span class="uppercase font-semibold text-slate-700">{{ sev }}</span>
+            </label>
+            {% endfor %}
+          </div>
+          <span class="text-[10px] text-slate-500">Destructive tags (dos, fuzz, bruteforce, exploit, dast, sqli, code/headless) automatically blocked.</span>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- NSE Script Sub-Groups -->
+    <div id="nseScriptsBox" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider">Allowlisted Nmap NSE Script Groups</h4>
+        <div class="flex gap-2">
+          <button type="button" onclick="setAllNseScripts(true)" class="text-[11px] font-semibold text-blue-600 hover:underline">Select All Safe/Vuln</button>
+          <button type="button" onclick="setAllNseScripts(false)" class="text-[11px] font-semibold text-slate-500 hover:underline">Clear</button>
+        </div>
+      </div>
+
+      {% set nse_grp_titles = {
+        'safe_discovery': 'Safe Discovery & Banners',
+        'http': 'HTTP Security & Configuration',
+        'ssl_tls': 'SSL / TLS Posture',
+        'smb': 'SMB Signing & Dialect',
+        'dns': 'DNS Service Audit',
+        'ssh_ftp': 'SSH & FTP Protocol Checks',
+        'approved_vuln': 'Approved Vulnerability Checks (Non-Exploitative)'
+      } %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for gkey, gtitle in nse_grp_titles.items() %}
+        {% set scripts_in_grp = options_catalog.vulnerability.nse.groups.get(gkey, []) %}
+        {% if scripts_in_grp %}
+        <div class="p-3.5 rounded-xl bg-slate-50/70 border border-slate-200 space-y-2.5">
+          <div class="text-[11px] font-bold text-slate-800 uppercase">{{ gtitle }}</div>
+          <div class="space-y-2">
+            {% for sc in scripts_in_grp %}
+            <label class="flex items-start space-x-2 text-xs cursor-pointer">
+              <input type="checkbox"
+                     class="nse-script-check mt-0.5 rounded border-slate-300 text-rose-600"
+                     value="{{ sc.id }}"
+                     onchange="refreshReviewSummary()">
+              <span>
+                <span class="mono font-semibold text-slate-800">{{ sc.id }}</span>
+                {% if sc.cve %}
+                <span class="ml-1 px-1 py-0.2 rounded text-[9px] font-bold bg-rose-100 text-rose-800">{{ sc.cve }}</span>
+                {% endif %}
+                <span class="text-[11px] text-slate-500 block">{{ sc.description }}</span>
+              </span>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Vulnerability Assessment Privilege Consent & Authorization Checkbox -->
+    <div class="p-4 rounded-xl bg-rose-50/70 border border-rose-200">
+      <label class="flex items-start space-x-3 cursor-pointer">
+        <input id="vulnPrivilegeConsentCheck" type="checkbox"
+               class="psa-consent-check mt-0.5 rounded border-rose-400 text-rose-600 focus:ring-rose-500"
+               onchange="syncPrivilegeConsent(this); refreshReviewSummary();">
+        <div class="space-y-0.5">
+          <span class="text-xs font-bold text-rose-950 block">Privilege Consent &amp; Elevation (Optional)</span>
+          <span class="text-xs text-rose-900 block font-medium">
+            I authorize FootprintIQ to request elevated privileges for scan operations that require them.
+          </span>
+          <span class="text-[11px] text-rose-700 block">
+            Authorizes raw-packet vulnerability checks and packet-crafting NSE scripts. Standard unprivileged scripts and HTTP templates run without elevation.
+          </span>
+        </div>
+      </label>
+    </div>
+  </section>
+
+  <!-- ====================================================================== -->
+  <!-- STEP 4: PRE-SCAN REVIEW & EXECUTION LAUNCH                             -->
+  <!-- ====================================================================== -->
+  <section id="preScanReviewPanel" class="fiq-card p-6 space-y-5 border-2 border-slate-200 bg-white">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Pre-Scan Configuration Review</h2>
+        <p class="text-xs text-slate-500">Verify all selected categories, checks, scanner engines, ports, and target authorization before starting execution.</p>
+      </div>
+      <span id="reviewAuthBadge" class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        Authorization Ready
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="text-[10px] font-bold text-slate-400 uppercase">Recon ID &amp; Target</div>
+        <div class="mono font-bold text-slate-900 mt-1">{{ recon_id }}</div>
+        <div class="mono text-[11px] text-blue-700 font-semibold mt-0.5">{{ campaign.target_value }}</div>
+      </div>
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="text-[10px] font-bold text-slate-400 uppercase">Selected Categories</div>
+        <div id="revCategories" class="font-semibold text-slate-900 mt-1">None selected yet</div>
+      </div>
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="text-[10px] font-bold text-slate-400 uppercase">Checks &amp; Port Config</div>
+        <div id="revChecksPorts" class="text-[11px] text-slate-700 mt-1">Select at least one category above</div>
+      </div>
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+        <div class="text-[10px] font-bold text-slate-400 uppercase">Scanners &amp; Profile</div>
+        <div id="revScanners" class="text-[11px] text-slate-700 mt-1">No engines active</div>
+      </div>
+    </div>
+
+    <label class="flex items-center space-x-2.5 p-3 rounded-xl bg-blue-50/60 border border-blue-200 cursor-pointer text-xs">
+      <input id="wsAuthConfirmCheck" type="checkbox" checked onchange="refreshReviewSummary()"
+             class="rounded border-blue-400 text-blue-600 focus:ring-blue-500">
+      <span class="text-slate-800 font-medium">
+        I confirm explicit authorization for the selected assessment modules against <span class="mono font-bold">{{ campaign.target_value }}</span>.
+      </span>
+    </label>
+
+    <div id="revPrivilegeBanner" class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <i data-lucide="shield" class="w-4 h-4 text-slate-500"></i>
+        <span class="text-slate-700">Privilege Consent: <strong id="revPrivilegeStatus" class="text-slate-900">Unchecked (Safe Unprivileged Fallback)</strong></span>
+      </div>
+      <span id="revPrivilegeBadge" class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-200 text-slate-700">Standard Mode</span>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+      <button type="button" onclick="focusConfiguration()"
+              class="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-bold rounded-lg transition">
+        Edit Configuration
+      </button>
+
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button type="button" id="btnSaveConfigOnly" onclick="saveAndMaybeStart(false)"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold rounded-lg transition">
+          Save Configuration
+        </button>
+        <button type="button" id="btnStartScan" onclick="saveAndMaybeStart(true)"
+                class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg shadow-sm transition inline-flex items-center space-x-2">
+          <i data-lucide="play" class="w-3.5 h-3.5"></i>
+          <span>Start Scan</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PSA Identity Verification Modal -->
+  <div id="psaVerificationModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="fiq-card max-w-lg w-full p-6 space-y-5 bg-white border border-slate-200 shadow-2xl rounded-2xl animate-in fade-in zoom-in-95 duration-150">
+      <div class="flex items-start justify-between">
+        <div class="space-y-1">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900">Authorize Elevated Privileges</h3>
+          </div>
+          <p class="text-xs text-slate-500">
+            Selected scan operations require elevated packet privileges. Re-verify your identity to proceed.
+          </p>
+        </div>
+        <button type="button" onclick="closePsaModal()" class="text-slate-400 hover:text-slate-600 text-sm p-1 rounded-lg">
+          ✕
+        </button>
+      </div>
+
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+        <div class="font-bold text-slate-800 uppercase tracking-wider text-[10px]">Privileged Operations Detected</div>
+        <ul id="psaDetectedOpsList" class="list-disc list-inside space-y-1 text-slate-700 font-medium">
+          <!-- Populated dynamically via detect API -->
+        </ul>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <label for="psaPasswordInput" class="block font-bold text-slate-800">
+          Re-enter FootprintIQ Account Password:
+        </label>
+        <input id="psaPasswordInput" type="password" placeholder="Account password"
+               autocomplete="current-password"
+               class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+               onkeydown="if(event.key === 'Enter') confirmPsaAuthorization();">
+        <p class="text-[11px] text-slate-500 leading-normal">
+          <strong>Security Notice:</strong> Never enter system root or Kali passwords. Verification validates strictly against your FootprintIQ account password hash and issues a temporary single-use ticket (5-minute TTL).
+        </p>
+      </div>
+
+      <div id="psaModalError" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-medium"></div>
+
+      <div class="flex items-center justify-end space-x-3 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closePsaModal()"
+                class="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+          Cancel
+        </button>
+        <button type="button" id="psaConfirmBtn" onclick="confirmPsaAuthorization()"
+                class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg shadow-sm transition inline-flex items-center space-x-1.5">
+          <span>Authorize &amp; Launch Scan</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="fiqWorkspaceBootstrap"
+     class="hidden"
+     data-recon-id="{{ recon_id }}"
+     data-catalog="{{ options_catalog | tojson | forceescape }}"
+     data-existing-cfg="{{ (campaign.scan_config_json or '{}') | forceescape }}"></div>
+
+<script>
+const _wsBootEl = document.getElementById('fiqWorkspaceBootstrap');
+const WORKSPACE_RECON_ID = _wsBootEl ? (_wsBootEl.dataset.reconId || '') : '';
+let CATALOG = {};
+let EXISTING_CFG = {};
+try { CATALOG = JSON.parse((_wsBootEl && _wsBootEl.dataset.catalog) || '{}'); } catch (_) {}
+try { EXISTING_CFG = JSON.parse((_wsBootEl && _wsBootEl.dataset.existingCfg) || '{}'); } catch (_) {}
+
+const selectedCats = new Set();
+
+function toggleScopeDrawer() {
+  document.getElementById('scopeDrawer').classList.toggle('hidden');
+}
+
+function showWorkspaceFeedback(isError, msg) {
+  const el = document.getElementById('workspaceFeedback');
+  el.className = isError
+    ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-medium'
+    : 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium';
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function syncCategoryCardUI(cat, cardId, badgeId, panelId, activeCls) {
+  const on = selectedCats.has(cat);
+  const card = document.getElementById(cardId);
+  const badge = document.getElementById(badgeId);
+  const panel = document.getElementById(panelId);
+
+  card.setAttribute('aria-pressed', on ? 'true' : 'false');
+  card.classList.toggle('fiq-3d-selected', on);
+  badge.textContent = on ? 'Selected' : 'Not Selected';
+  badge.className = on
+    ? `px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full ${activeCls}`
+    : 'px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-full bg-slate-100 text-slate-600';
+  panel.classList.toggle('hidden', !on);
+}
+
+function toggleCategory(cat) {
+  if (selectedCats.has(cat)) {
+    selectedCats.delete(cat);
+  } else {
+    selectedCats.add(cat);
+  }
+  syncCategoryCardUI('passive', 'cardCatPassive', 'badgeCatPassive', 'panelPassive', 'bg-blue-100 text-blue-800');
+  syncCategoryCardUI('active', 'cardCatActive', 'badgeCatActive', 'panelActive', 'bg-indigo-100 text-indigo-800');
+  syncCategoryCardUI('vulnerability', 'cardCatVuln', 'badgeCatVuln', 'panelVuln', 'bg-rose-100 text-rose-800');
+  document.getElementById('selectedCatCount').textContent = selectedCats.size;
+  refreshReviewSummary();
+}
+
+function applyPassivePreset(presetId) {
+  const p = (CATALOG.passive?.presets || {})[presetId];
+  if (!p) return;
+  const set = new Set(p.checks || []);
+  document.querySelectorAll('.passive-check').forEach(cb => {
+    if (!cb.disabled) cb.checked = set.has(cb.value);
+  });
+  refreshReviewSummary();
+}
+
+function clearPassiveChecks() {
+  document.querySelectorAll('.passive-check').forEach(cb => { cb.checked = false; });
+  refreshReviewSummary();
+}
+
+function toggleTargetContactOptions() {
+  const allowed = document.getElementById('passiveTargetContactCheck').checked;
+  document.querySelectorAll('.passive-contact-opt').forEach(cb => {
+    cb.disabled = !allowed;
+    if (!allowed) cb.checked = false;
+  });
+  refreshReviewSummary();
+}
+
+function togglePortInputs() {
+  const mode = document.getElementById('activePortMode').value;
+  document.getElementById('customPortsBox').classList.toggle('hidden', mode !== 'custom');
+  document.getElementById('portRangeBox').classList.toggle('hidden', mode !== 'port_range');
+}
+
+function syncPortRange() {
+  const s = document.getElementById('activeRangeStart').value || '1';
+  const e = document.getElementById('activeRangeEnd').value || '1024';
+  document.getElementById('portRangePreview').textContent = `${s}-${e}`;
+}
+
+function toggleUdpInput() {
+  const uMode = document.getElementById('activeUdpMode').value;
+  document.getElementById('customUdpBox').classList.toggle('hidden', uMode !== 'udp_selected');
+}
+
+async function validatePortsInput(inputId, outId) {
+  const val = document.getElementById(inputId).value.trim();
+  const out = document.getElementById(outId);
+  try {
+    const res = await fetch('/api/v1/recon/validate-ports', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ports_spec: val })
+    });
+    const data = await res.json();
+    if (res.ok && data.valid) {
+      out.className = 'text-[11px] text-emerald-700 font-semibold';
+      out.textContent = `Validated: ${data.normalized}`;
+    } else {
+      out.className = 'text-[11px] text-rose-700 font-semibold';
+      out.textContent = data.detail || 'Invalid port syntax.';
+    }
+  } catch (e) {
+    out.textContent = e.message;
+  }
+}
+
+function applyActivePreset(presetId) {
+  const p = (CATALOG.active?.presets || {})[presetId];
+  if (!p) return;
+  const cfg = p.config || {};
+  if (cfg.host_discovery) document.getElementById('activeHostDiscovery').value = cfg.host_discovery;
+  if (cfg.tcp_scan_type) document.getElementById('activeTcpType').value = cfg.tcp_scan_type;
+  if (cfg.port_mode) document.getElementById('activePortMode').value = cfg.port_mode;
+  if (cfg.custom_ports) document.getElementById('activeCustomPorts').value = cfg.custom_ports;
+  if (cfg.port_range && String(cfg.port_range).includes('-')) {
+    const parts = String(cfg.port_range).split('-');
+    if (parts.length === 2) {
+      document.getElementById('activeRangeStart').value = parts[0].trim();
+      document.getElementById('activeRangeEnd').value = parts[1].trim();
+      syncPortRange();
+    }
+  }
+  if (cfg.timing) document.getElementById('activeTiming').value = cfg.timing;
+  const udpSel = document.getElementById('activeUdpMode');
+  if (cfg.udp_port_mode) {
+    udpSel.value = cfg.udp_port_mode;
+  } else {
+    udpSel.value = cfg.udp_scan ? 'udp_common' : 'none';
+  }
+  ['service_version', 'banner_grab', 'default_scripts', 'os_detection'].forEach(optId => {
+    const el = document.getElementById(`activeOpt_${optId}`);
+    if (el && !el.disabled) el.checked = !!cfg[optId];
+  });
+  const svcs = new Set(p.service_checks || []);
+  document.querySelectorAll('.active-svc-check').forEach(cb => { cb.checked = svcs.has(cb.value); });
+  togglePortInputs();
+  toggleUdpInput();
+  refreshReviewSummary();
+}
+
+function toggleEnginePanels() {
+  const nseOn = document.getElementById('vEngineNse').checked;
+  const nesOn = document.getElementById('vEngineNessus').checked;
+  const nucOn = document.getElementById('vEngineNuclei').checked;
+  document.getElementById('nseScriptsBox').classList.toggle('hidden', !nseOn);
+  const extBox = document.getElementById('externalEngineOptions');
+  if (extBox) extBox.classList.toggle('hidden', !(nesOn || nucOn));
+  const nTpl = document.getElementById('nessusTplBox');
+  if (nTpl) nTpl.classList.toggle('hidden', !nesOn);
+  const nucBox = document.getElementById('nucleiConfigBox');
+  if (nucBox) nucBox.classList.toggle('hidden', !nucOn);
+}
+
+function setAllNseScripts(checked) {
+  document.querySelectorAll('.nse-script-check').forEach(cb => { cb.checked = checked; });
+  refreshReviewSummary();
+}
+
+function applyVulnPreset(presetId) {
+  const p = (CATALOG.vulnerability?.presets || {})[presetId];
+  if (!p) return;
+  const engList = p.engines || (p.engine ? [p.engine] : ['nse']);
+  const engSet = new Set(engList);
+  ['nse', 'nessus', 'nuclei'].forEach(en => {
+    const el = document.getElementById('vEngine' + en.charAt(0).toUpperCase() + en.slice(1));
+    if (el && !el.disabled) el.checked = engSet.has(en) || p.engine === 'combined';
+  });
+  if (p.scripts) {
+    const sSet = new Set(p.scripts);
+    document.querySelectorAll('.nse-script-check').forEach(cb => { cb.checked = sSet.has(cb.value); });
+  }
+  if (p.nuclei_profile) {
+    const np = document.getElementById('nucleiProfileSelect');
+    if (np) np.value = p.nuclei_profile;
+  }
+  toggleEnginePanels();
+  refreshReviewSummary();
+}
+
+function buildConfigPayload() {
+  const cats = Array.from(selectedCats);
+  const cfg = { selected_categories: cats };
+
+  if (selectedCats.has('passive')) {
+    const checks = Array.from(document.querySelectorAll('.passive-check:checked')).map(c => c.value);
+    cfg.passive = {
+      selected_checks: checks,
+      allow_target_contact: document.getElementById('passiveTargetContactCheck').checked
+    };
+  }
+
+  if (selectedCats.has('active')) {
+    const portMode = document.getElementById('activePortMode').value;
+    const udpMode = document.getElementById('activeUdpMode').value;
+    const prof = document.getElementById('activeApprovedProfile').value;
+    const activeObj = {
+      host_discovery: document.getElementById('activeHostDiscovery').value,
+      tcp_scan_type: document.getElementById('activeTcpType').value,
+      port_mode: portMode,
+      timing: document.getElementById('activeTiming').value,
+      service_checks: Array.from(document.querySelectorAll('.active-svc-check:checked')).map(c => c.value)
+    };
+    if (prof) activeObj.profile = prof;
+    if (portMode === 'custom') activeObj.custom_ports = document.getElementById('activeCustomPorts').value.trim();
+    if (portMode === 'port_range') {
+      const s = document.getElementById('activeRangeStart').value.trim();
+      const e = document.getElementById('activeRangeEnd').value.trim();
+      activeObj.port_range = `${s}-${e}`;
+    }
+    if (udpMode !== 'none') {
+      activeObj.udp_scan = true;
+      activeObj.udp_port_mode = udpMode;
+      if (udpMode === 'udp_selected') {
+        activeObj.udp_ports = document.getElementById('activeUdpPorts').value.trim();
+      }
+    }
+    const exclP = document.getElementById('activeExcludePorts').value.trim();
+    if (exclP) activeObj.exclude_ports = exclP;
+
+    ['service_version', 'banner_grab', 'default_scripts', 'os_detection'].forEach(optId => {
+      const el = document.getElementById(`activeOpt_${optId}`);
+      activeObj[optId] = !!(el && el.checked);
+    });
+    cfg.active = activeObj;
+  }
+
+  if (selectedCats.has('vulnerability')) {
+    const engines = [];
+    if (document.getElementById('vEngineNse').checked) engines.push('nse');
+    if (document.getElementById('vEngineNessus').checked) engines.push('nessus');
+    if (document.getElementById('vEngineNuclei').checked) engines.push('nuclei');
+    const vulnObj = {
+      engines,
+      engine: engines.length > 1 ? 'combined' : (engines[0] || 'nse')
+    };
+    if (engines.includes('nse')) {
+      vulnObj.nse_scripts = Array.from(document.querySelectorAll('.nse-script-check:checked')).map(c => c.value);
+    }
+    const nTpl = document.getElementById('nessusTemplateSelect');
+    if (nTpl && engines.includes('nessus')) vulnObj.nessus_template_uuid = nTpl.value;
+    if (engines.includes('nuclei')) {
+      const np = document.getElementById('nucleiProfileSelect');
+      if (np) vulnObj.nuclei_profile = np.value;
+      const sevs = Array.from(document.querySelectorAll('.nuclei-sev-check:checked')).map(c => c.value);
+      if (sevs.length) vulnObj.nuclei_severities = sevs;
+      const tagsRaw = (document.getElementById('nucleiTagsInput')?.value || '').trim();
+      if (tagsRaw) vulnObj.nuclei_tags = tagsRaw.split(',').map(s => s.trim()).filter(Boolean);
+      const rl = parseInt(document.getElementById('nucleiRateLimitInput')?.value || '30', 10);
+      vulnObj.nuclei_rate_limit = (!isNaN(rl) && rl > 0) ? Math.min(100, rl) : 30;
+    }
+    cfg.vulnerability = vulnObj;
+  }
+
+  const isPrivConsent = !!(
+    document.getElementById('activePrivilegeConsentCheck')?.checked ||
+    document.getElementById('vulnPrivilegeConsentCheck')?.checked
+  );
+  cfg.privilege_consent = isPrivConsent;
+
+  return cfg;
+}
+
+function syncPrivilegeConsent(sourceEl) {
+  const isChecked = !!(sourceEl && sourceEl.checked);
+  const a = document.getElementById('activePrivilegeConsentCheck');
+  const v = document.getElementById('vulnPrivilegeConsentCheck');
+  if (a) a.checked = isChecked;
+  if (v) v.checked = isChecked;
+  refreshReviewSummary();
+}
+
+function refreshReviewSummary() {
+  const cfg = buildConfigPayload();
+  const cats = cfg.selected_categories || [];
+  document.getElementById('revCategories').textContent = cats.length
+    ? cats.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(' + ')
+    : 'None selected yet';
+
+  const parts = [];
+  if (cfg.passive) parts.push(`Passive: ${(cfg.passive.selected_checks || []).length} checks`);
+  if (cfg.active) {
+    const pm = cfg.active.port_mode === 'custom' ? `Custom (${cfg.active.custom_ports || 'empty'})`
+      : cfg.active.port_mode === 'port_range' ? `Range (${cfg.active.port_range})`
+      : cfg.active.port_mode;
+    parts.push(`Active: ${pm}`);
+  }
+  document.getElementById('revChecksPorts').textContent = parts.length ? parts.join(' | ') : 'Select checks/ports above';
+
+  const sc = [];
+  if (cfg.active) sc.push(`Nmap (${cfg.active.timing}${cfg.active.profile ? ', ' + cfg.active.profile : ''})`);
+  if (cfg.vulnerability) sc.push(`Vuln: ${(cfg.vulnerability.engines || []).map(e => e.toUpperCase()).join(' + ') || 'None'}`);
+  document.getElementById('revScanners').textContent = sc.length ? sc.join(' | ') : (cfg.passive ? 'OSINT / DNS Collectors' : 'No engines active');
+
+  const authOk = document.getElementById('wsAuthConfirmCheck').checked;
+  const b = document.getElementById('reviewAuthBadge');
+  b.textContent = authOk ? 'Authorization Confirmed' : 'Confirmation Required';
+  b.className = authOk
+    ? 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200'
+    : 'px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200';
+
+  const isPrivConsent = !!cfg.privilege_consent;
+  const pStat = document.getElementById('revPrivilegeStatus');
+  const pBadge = document.getElementById('revPrivilegeBadge');
+  if (pStat && pBadge) {
+    if (isPrivConsent) {
+      pStat.textContent = 'Authorized (Elevated Privileges Permitted)';
+      pStat.className = 'text-indigo-700 font-bold';
+      pBadge.textContent = 'Elevated Authorized';
+      pBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-100 text-indigo-800';
+    } else {
+      pStat.textContent = 'Unchecked (Safe Unprivileged Fallback)';
+      pStat.className = 'text-slate-700 font-semibold';
+      pBadge.textContent = 'Standard Mode';
+      pBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-200 text-slate-700';
+    }
+  }
+}
+
+function focusConfiguration() {
+  document.getElementById('categorySelectionSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+let pendingScanConfig = null;
+
+function openPsaModal(detectedReasons) {
+  const modal = document.getElementById('psaVerificationModal');
+  const list = document.getElementById('psaDetectedOpsList');
+  const errBox = document.getElementById('psaModalError');
+  const pwInput = document.getElementById('psaPasswordInput');
+  list.innerHTML = '';
+  (detectedReasons || []).forEach(r => {
+    const li = document.createElement('li');
+    li.textContent = r;
+    list.appendChild(li);
+  });
+  errBox.classList.add('hidden');
+  errBox.textContent = '';
+  pwInput.value = '';
+  modal.classList.remove('hidden');
+  setTimeout(() => pwInput.focus(), 100);
+}
+
+function closePsaModal() {
+  const modal = document.getElementById('psaVerificationModal');
+  modal.classList.add('hidden');
+  document.getElementById('psaPasswordInput').value = '';
+  document.getElementById('btnStartScan').disabled = false;
+  document.getElementById('btnSaveConfigOnly').disabled = false;
+}
+
+async function confirmPsaAuthorization() {
+  const pwInput = document.getElementById('psaPasswordInput');
+  const password = pwInput.value.trim();
+  const errBox = document.getElementById('psaModalError');
+  const confirmBtn = document.getElementById('psaConfirmBtn');
+  if (!password) {
+    errBox.textContent = 'Password is required to authorize elevated privileges.';
+    errBox.classList.remove('hidden');
+    pwInput.focus();
+    return;
+  }
+  confirmBtn.disabled = true;
+  confirmBtn.innerHTML = 'Verifying...';
+
+  try {
+    const verifyRes = await fetch(`/api/v1/recon/${encodeURIComponent(WORKSPACE_RECON_ID)}/psa/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        password: password,
+        scan_config: pendingScanConfig
+      })
+    });
+    const verifyData = await verifyRes.json();
+    if (!verifyRes.ok) {
+      errBox.textContent = verifyData.detail || 'Identity verification failed. Invalid password.';
+      errBox.classList.remove('hidden');
+      pwInput.value = '';
+      pwInput.focus();
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = 'Authorize & Launch Scan';
+      return;
+    }
+
+    const ticketToken = verifyData.ticket_token;
+    closePsaModal();
+    await executeScanStart(true, ticketToken);
+  } catch (err) {
+    errBox.textContent = 'Verification error: ' + err.message;
+    errBox.classList.remove('hidden');
+    confirmBtn.disabled = false;
+    confirmBtn.innerHTML = 'Authorize & Launch Scan';
+  }
+}
+
+async function executeScanStart(privilegeConsent, psaTicket) {
+  const startBtn = document.getElementById('btnStartScan');
+  const saveBtn = document.getElementById('btnSaveConfigOnly');
+  startBtn.disabled = true;
+  saveBtn.disabled = true;
+  try {
+    const startRes = await fetch(`/api/v1/recon/${encodeURIComponent(WORKSPACE_RECON_ID)}/start`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        privilege_consent: !!privilegeConsent,
+        psa_ticket: psaTicket || null,
+        scan_config: pendingScanConfig
+      })
+    });
+    const startData = await startRes.json();
+    if (!startRes.ok) {
+      showWorkspaceFeedback(true, startData.detail || 'Unable to start scan.');
+      return;
+    }
+    const sidParam = startData.scan_id ? `?scan_id=${encodeURIComponent(startData.scan_id)}` : '';
+    window.location.href = `/recon/${encodeURIComponent(WORKSPACE_RECON_ID)}/live${sidParam}`;
+  } catch (err) {
+    showWorkspaceFeedback(true, 'Scan launch error: ' + err.message);
+  } finally {
+    startBtn.disabled = false;
+    saveBtn.disabled = false;
+  }
+}
+
+async function saveAndMaybeStart(shouldStart) {
+  const cfg = buildConfigPayload();
+  if (!(cfg.selected_categories || []).length) {
+    showWorkspaceFeedback(true, 'Please select at least one category (Passive, Active, or Vulnerability) before saving or starting.');
+    return;
+  }
+  if (cfg.passive && !(cfg.passive.selected_checks || []).length) {
+    showWorkspaceFeedback(true, 'Passive Reconnaissance is selected, but no passive checks are chosen.');
+    return;
+  }
+  if (cfg.vulnerability && !(cfg.vulnerability.engines || []).length) {
+    showWorkspaceFeedback(true, 'Vulnerability Assessment is selected, but no engine is checked.');
+    return;
+  }
+
+  const startBtn = document.getElementById('btnStartScan');
+  const saveBtn = document.getElementById('btnSaveConfigOnly');
+  startBtn.disabled = true;
+  saveBtn.disabled = true;
+
+  try {
+    const putBody = {
+      name: document.getElementById('wsNameInput').value.trim(),
+      purpose: document.getElementById('wsPurposeInput').value.trim(),
+      scope_description: document.getElementById('wsScopeInput').value.trim(),
+      excluded_targets: document.getElementById('wsExcludedInput').value.trim(),
+      excluded_ports: (document.getElementById('activeExcludePorts')?.value || '').trim(),
+      selected_scan_types: cfg.selected_categories.join(','),
+      scan_config_json: JSON.stringify(cfg),
+      authorization_confirmed: document.getElementById('wsAuthConfirmCheck').checked
+    };
+    const putRes = await fetch(`/api/v1/recon/${encodeURIComponent(WORKSPACE_RECON_ID)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(putBody)
+    });
+    const putData = await putRes.json();
+    if (!putRes.ok) {
+      showWorkspaceFeedback(true, putData.detail || 'Failed to save configuration.');
+      return;
+    }
+
+    if (!shouldStart) {
+      showWorkspaceFeedback(false, `Configuration saved for ${WORKSPACE_RECON_ID}. Review settings below or click Start Scan when ready.`);
+      return;
+    }
+
+    pendingScanConfig = cfg;
+    const isConsentChecked = !!cfg.privilege_consent;
+
+    // Detect if elevated privileges are needed
+    try {
+      const detectRes = await fetch(`/api/v1/recon/${encodeURIComponent(WORKSPACE_RECON_ID)}/psa/detect`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scan_config: cfg })
+      });
+      const detectData = await detectRes.json();
+
+      if (detectRes.ok && detectData.requires_privilege && isConsentChecked) {
+        // Prompt for investigator identity verification
+        openPsaModal(detectData.privileged_reasons || detectData.privileged_operations);
+        return;
+      }
+    } catch (_) {
+      // If detection request fails, proceed to start with standard fallback handling
+    }
+
+    // Direct start (either no elevation required or consent unchecked -> fallback)
+    await executeScanStart(isConsentChecked, null);
+  } catch (err) {
+    showWorkspaceFeedback(true, 'Request error: ' + err.message);
+  } finally {
+    startBtn.disabled = false;
+    saveBtn.disabled = false;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Hydrate previously saved workspace state if editing
+  const cats = EXISTING_CFG.selected_categories || [];
+  cats.forEach(c => {
+    const k = String(c).toLowerCase();
+    if (['passive', 'active', 'vulnerability'].includes(k)) toggleCategory(k);
+  });
+
+  if (EXISTING_CFG.passive) {
+    if (EXISTING_CFG.passive.allow_target_contact) {
+      document.getElementById('passiveTargetContactCheck').checked = true;
+      toggleTargetContactOptions();
+    }
+    const pSet = new Set(EXISTING_CFG.passive.selected_checks || []);
+    document.querySelectorAll('.passive-check').forEach(cb => {
+      if (!cb.disabled && pSet.size) cb.checked = pSet.has(cb.value);
+    });
+  }
+  if (EXISTING_CFG.active) {
+    const a = EXISTING_CFG.active;
+    if (a.host_discovery) document.getElementById('activeHostDiscovery').value = a.host_discovery;
+    if (a.tcp_scan_type) document.getElementById('activeTcpType').value = a.tcp_scan_type;
+    if (a.port_mode) document.getElementById('activePortMode').value = a.port_mode;
+    if (a.custom_ports) document.getElementById('activeCustomPorts').value = a.custom_ports;
+    if (a.port_range && a.port_range.includes('-')) {
+      const [rs, re] = a.port_range.split('-');
+      document.getElementById('activeRangeStart').value = rs;
+      document.getElementById('activeRangeEnd').value = re;
+      syncPortRange();
+    }
+    if (a.udp_port_mode) document.getElementById('activeUdpMode').value = a.udp_port_mode;
+    if (a.udp_ports) document.getElementById('activeUdpPorts').value = a.udp_ports;
+    if (a.exclude_ports) document.getElementById('activeExcludePorts').value = a.exclude_ports;
+    if (a.timing) document.getElementById('activeTiming').value = a.timing;
+    if (a.profile) document.getElementById('activeApprovedProfile').value = a.profile;
+    ['service_version', 'banner_grab', 'default_scripts', 'os_detection'].forEach(optId => {
+      const el = document.getElementById(`activeOpt_${optId}`);
+      if (el && !el.disabled && optId in a) el.checked = !!a[optId];
+    });
+    const sSet = new Set(a.service_checks || []);
+    document.querySelectorAll('.active-svc-check').forEach(cb => { cb.checked = sSet.has(cb.value); });
+    togglePortInputs();
+    toggleUdpInput();
+  }
+  if (EXISTING_CFG.vulnerability) {
+    const v = EXISTING_CFG.vulnerability;
+    const engSet = new Set(v.engines || (v.engine ? [v.engine] : ['nse']));
+    ['nse', 'nessus', 'nuclei'].forEach(en => {
+      const el = document.getElementById('vEngine' + en.charAt(0).toUpperCase() + en.slice(1));
+      if (el && !el.disabled) el.checked = engSet.has(en) || v.engine === 'combined';
+    });
+    if (v.nse_scripts) {
+      const nSet = new Set(v.nse_scripts);
+      document.querySelectorAll('.nse-script-check').forEach(cb => { cb.checked = nSet.has(cb.value); });
+    }
+    if (v.nuclei_profile) {
+      const np = document.getElementById('nucleiProfileSelect');
+      if (np) np.value = v.nuclei_profile;
+    }
+    if (Array.isArray(v.nuclei_tags)) {
+      const nt = document.getElementById('nucleiTagsInput');
+      if (nt) nt.value = v.nuclei_tags.join(',');
+    }
+    if (v.nuclei_rate_limit) {
+      const nrl = document.getElementById('nucleiRateLimitInput');
+      if (nrl) nrl.value = v.nuclei_rate_limit;
+    }
+    if (Array.isArray(v.nuclei_severities)) {
+      const sSet = new Set(v.nuclei_severities);
+      document.querySelectorAll('.nuclei-sev-check').forEach(cb => { cb.checked = sSet.has(cb.value); });
+    }
+    toggleEnginePanels();
+  }
+  if (EXISTING_CFG.privilege_consent) {
+    const a = document.getElementById('activePrivilegeConsentCheck');
+    const v = document.getElementById('vulnPrivilegeConsentCheck');
+    if (a) a.checked = true;
+    if (v) v.checked = true;
+  }
+  refreshReviewSummary();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+});
+</script>
+{% endblock %}
+

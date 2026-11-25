@@ -1,0 +1,77 @@
+{
+  "investigation_id": "FIQ-REC-20261112-0006",
+  "campaign_name": "Vulnerability test",
+  "target": "testphp.vulnweb.com",
+  "generated_at": "2026-11-12T04:05:12.282734+00:00",
+  "metrics": {
+    "node_count": 1,
+    "edge_count": 0,
+    "isolated_node_count": 1,
+    "connected_component_count": 1,
+    "graph_density": 0.0,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "domain": 1
+  },
+  "source_breakdown": {
+    "campaign_scope": 1
+  },
+  "nodes": [
+    {
+      "id": "ENT:DOMAIN:c426c3e3c3da",
+      "type": "domain",
+      "label": "testphp.vulnweb.com",
+      "canonical_value": "testphp.vulnweb.com",
+      "tags": [],
+      "sources": [
+        "campaign_scope"
+      ],
+      "risk_level": "info",
+      "confidence": 1.0,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "Vulnerability test",
+        "value": "testphp.vulnweb.com",
+        "source_tool": "campaign_scope",
+        "evidence_ref": "campaign:FIQ-REC-20261112-0006",
+        "risk_level": "info",
+        "confidence": 1.0,
+        "maltego_type": "maltego.Domain"
+      },
+      "first_seen": "2026-11-12T04:05:12.282642+00:00",
+      "last_seen": "2026-11-12T04:05:12.282642+00:00",
+      "entity_type": "domain",
+      "maltego_type": "maltego.Domain",
+      "source_tool": "campaign_scope",
+      "evidence_ref": "campaign:FIQ-REC-20261112-0006",
+      "value": "testphp.vulnweb.com"
+    }
+  ],
+  "edges": [],
+  "components": [
+    [
+      "ENT:DOMAIN:c426c3e3c3da"
+    ]
+  ],
+  "isolated_nodes": [
+    "ENT:DOMAIN:c426c3e3c3da"
+  ],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

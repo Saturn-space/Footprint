@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+{% block title %}Investigator Settings &amp; Activity — FootprintIQ{% endblock %}
+
+{% block content %}
+{% set p = user_profile or current_user or {} %}
+<div class="space-y-6 max-w-6xl mx-auto pb-14">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-slate-900">Account Settings &amp; Activity</h1>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Manage your operator profile, password credentials, theme preference, timezone configuration, and personal security activity log.
+      </p>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase
+        {% if is_admin %}bg-indigo-50 text-indigo-700 border border-indigo-200{% else %}bg-emerald-50 text-emerald-700 border border-emerald-200{% endif %}">
+        {{ 'Administrator' if is_admin else 'Investigator' }}
+      </span>
+      <span class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-700">
+        IST &bull; {{ p.timezone_preference or 'Asia/Kolkata' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- 1. Profile Information & Permitted Edit Form -->
+    <div class="fiq-card p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-sm font-bold text-slate-900">Profile Information</h2>
+          <p class="text-[11px] text-slate-500">Username and assigned RBAC role are managed exclusively by administrators.</p>
+        </div>
+        <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold uppercase">
+          {{ 'Approved & Active' if p.is_active else 'Inactive' }}
+        </span>
+      </div>
+
+      <div id="profileFeedback" class="hidden"></div>
+
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Username</div>
+          <div class="mono font-bold text-slate-900 mt-0.5">{{ p.username }}</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Assigned Role</div>
+          <div class="font-bold text-slate-900 uppercase mt-0.5">{{ p.role or 'investigator' }}</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Account Created (IST)</div>
+          <div class="text-[11px] font-medium text-slate-700 mt-0.5">{{ p.created_at_ist or '—' }}</div>
+        </div>
+        <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Last Sign-In (IST)</div>
+          <div class="text-[11px] font-medium text-slate-700 mt-0.5">{{ p.last_login_ist or 'Current Session' }}</div>
+        </div>
+      </div>
+
+      <form onsubmit="saveProfile(event)" class="space-y-3 text-xs pt-1">
+        <div>
+          <label for="profFullName" class="block font-semibold text-slate-700 mb-1">Display / Full Name</label>
+          <input id="profFullName" type="text" value="{{ p.full_name or p.username or '' }}" maxlength="120"
+                 class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white">
+        </div>
+        <div>
+          <label for="profEmail" class="block font-semibold text-slate-700 mb-1">Email Address</label>
+          <input id="profEmail" type="email" value="{{ p.email or '' }}" required
+                 class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white">
+        </div>
+        <div class="flex items-center justify-between pt-1">
+          <span class="text-[11px] text-slate-500">
+            Scoped Work: <strong>{{ p.investigations_count or 0 }}</strong> investigation(s) &bull; <strong>{{ p.reports_count or 0 }}</strong> PDF(s)
+          </span>
+          <button type="submit" id="btnSaveProfile"
+                  class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg shadow-sm transition">
+            Save Profile
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 2. Change Password -->
+    <div class="fiq-card p-6 space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <h2 class="text-sm font-bold text-slate-900">Change Password</h2>
+        <p class="text-[11px] text-slate-500">
+          Requires current password verification. Updating your password invalidates all existing active sessions immediately.
+        </p>
+      </div>
+
+      <div id="pwdFeedback" class="hidden"></div>
+
+      <form onsubmit="updatePassword(event)" class="space-y-3 text-xs">
+        <div>
+          <label for="pwdCurrent" class="block font-semibold text-slate-700 mb-1">Current Password</label>
+          <input id="pwdCurrent" type="password" autocomplete="current-password" required
+                 class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white">
+        </div>
+        <div>
+          <label for="pwdNew" class="block font-semibold text-slate-700 mb-1">New Password (minimum 8 characters)</label>
+          <input id="pwdNew" type="password" autocomplete="new-password" minlength="8" required
+                 class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white">
+        </div>
+        <div>
+          <label for="pwdConfirm" class="block font-semibold text-slate-700 mb-1">Confirm New Password</label>
+          <input id="pwdConfirm" type="password" autocomplete="new-password" minlength="8" required
+                 class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-white">
+        </div>
+        <div class="flex items-center justify-end pt-2">
+          <button type="submit" id="btnChangePwd"
+                  class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg transition">
+            Update Password &amp; Rotate Sessions
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Appearance & Essential Preferences + Authorization Scope -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="fiq-card p-6 space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <h2 class="text-sm font-bold text-slate-900">Appearance &amp; Display Preferences</h2>
+        <p class="text-[11px] text-slate-500">Theme preference persists across sessions in SQL Server and applies instantly across charts, tables, and workspaces.</p>
+      </div>
+
+      <div id="prefFeedback" class="hidden"></div>
+
+      <div class="grid grid-cols-3 gap-3 text-xs">
+        <button type="button" data-theme-choice="light" onclick="selectUserTheme('light')"
+                class="p-3.5 rounded-xl border border-slate-200 bg-white text-left hover:border-blue-400 transition">
+          <div class="font-bold text-slate-900">Light (Default)</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Default crisp slate workspace</div>
+        </button>
+        <button type="button" data-theme-choice="dark" onclick="selectUserTheme('dark')"
+                class="p-3.5 rounded-xl border border-slate-200 bg-white text-left hover:border-blue-400 transition">
+          <div class="font-bold text-slate-900">Dark</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Enterprise charcoal low-glare</div>
+        </button>
+        <button type="button" data-theme-choice="system" onclick="selectUserTheme('system')"
+                class="p-3.5 rounded-xl border border-slate-200 bg-white text-left hover:border-blue-400 transition">
+          <div class="font-bold text-slate-900">Match OS (System)</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Follows browser OS color mode</div>
+        </button>
+      </div>
+
+      <div class="pt-2 space-y-2.5 text-xs border-t border-slate-100">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="font-semibold text-slate-800">Display Timezone</div>
+            <div class="text-[11px] text-slate-500">Database persists UTC; all UI &amp; PDF timestamps format cleanly in IST.</div>
+          </div>
+          <span class="mono px-2.5 py-1 rounded bg-blue-50 text-blue-700 border border-blue-200 font-bold text-[11px]">Asia/Kolkata (IST)</span>
+        </div>
+        {% set n_prefs = p.notification_preferences or {} %}
+        <label class="flex items-center justify-between py-1 cursor-pointer">
+          <span class="text-slate-700">Show completion notices for multi-stage recon scans</span>
+          <input type="checkbox" id="prefAlertComplete" {% if n_prefs.get('scan_completion', true) %}checked{% endif %}
+                 onchange="saveNotificationPrefs()" class="rounded border-slate-300 text-blue-600">
+        </label>
+        <label class="flex items-center justify-between py-1 cursor-pointer">
+          <span class="text-slate-700">Highlight incomplete / skipped scanner coverage warnings in reports</span>
+          <input type="checkbox" id="prefAlertGaps" {% if n_prefs.get('coverage_warnings', true) %}checked{% endif %}
+                 onchange="saveNotificationPrefs()" class="rounded border-slate-300 text-blue-600">
+        </label>
+      </div>
+    </div>
+
+    <div class="fiq-card p-6 space-y-4">
+      <div class="border-b border-slate-100 pb-3">
+        <h2 class="text-sm font-bold text-slate-900">Authorization Policy &amp; Fail-Closed Scope</h2>
+        <p class="text-[11px] text-slate-500">All reconnaissance and vulnerability scans enforce verified scope before execution.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Enforcement Mode</div>
+          <div class="font-bold text-emerald-700 mt-0.5">{{ scope_summary.policy_mode if scope_summary else 'Fail-Closed Scope Enforcement' }}</div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Public IP Restriction</div>
+          <div class="font-bold text-slate-900 mt-0.5">{{ 'Protected (Strict Lab Policy)' if (scope_summary and scope_summary.public_ips_restricted) else 'Authorized Targets Only' }}</div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Authorized Lab Targets</div>
+          <div class="text-lg font-bold text-slate-900 mt-0.5">{{ scope_summary.authorized_targets_count if scope_summary else 0 }}</div>
+        </div>
+        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200/80">
+          <div class="text-[10px] font-bold uppercase text-slate-400">Approved Domains / Ranges</div>
+          <div class="text-lg font-bold text-slate-900 mt-0.5">{{ (scope_summary.authorized_domains_count or 0) + (scope_summary.approved_ranges_count or 0) if scope_summary else 0 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. My Activity / Security Audit History -->
+  <div class="fiq-card p-6 space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">My Activity &amp; Security History</h2>
+        <p class="text-[11px] text-slate-500">Persisted operator audit trail scoped strictly to your account, displayed in Indian Standard Time (IST).</p>
+      </div>
+      <div class="flex items-center space-x-2 text-xs">
+        <select id="activityFilterAction" onchange="loadMyActivity()" class="px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Actions</option>
+          <option value="LOGIN_SUCCESS">LOGIN_SUCCESS</option>
+          <option value="RECON_CREATED">RECON_CREATED</option>
+          <option value="SCAN_STARTED">SCAN_STARTED</option>
+          <option value="REPORT_GENERATED">REPORT_GENERATED</option>
+          <option value="REPORT_ANALYZED">REPORT_ANALYZED</option>
+          <option value="REPORT_DOWNLOADED">REPORT_DOWNLOADED</option>
+          <option value="EVIDENCE_DOWNLOADED">EVIDENCE_DOWNLOADED</option>
+          <option value="PROFILE_UPDATED">PROFILE_UPDATED</option>
+          <option value="PREFERENCES_UPDATED">PREFERENCES_UPDATED</option>
+          <option value="PASSWORD_CHANGED">PASSWORD_CHANGED</option>
+        </select>
+        <button type="button" onclick="loadMyActivity()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="fiq-table">
+        <thead>
+          <tr>
+            <th>Timestamp (IST)</th>
+            <th>Action</th>
+            <th>Target Resource</th>
+            <th>Outcome</th>
+            <th>IP / Details</th>
+          </tr>
+        </thead>
+        <tbody id="myActivityBody">
+          {% for log in activity_logs or [] %}
+          <tr>
+            <td class="mono text-[11px] text-slate-600">{{ log.timestamp_ist or log.created_at_ist or ((log.timestamp or log.created_at)|ist) }}</td>
+            <td><span class="mono px-2 py-0.5 rounded bg-slate-100 text-[10px] font-bold text-slate-800">{{ log.action }}</span></td>
+            <td class="mono text-xs text-slate-800">{{ log.target_resource or '—' }}</td>
+            <td>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                {% if log.outcome == 'SUCCESS' %}bg-emerald-50 text-emerald-700
+                {% elif log.outcome == 'DENIED' %}bg-rose-50 text-rose-700
+                {% else %}bg-amber-50 text-amber-800{% endif %}">
+                {{ log.outcome }}
+              </span>
+            </td>
+            <td class="text-[11px] text-slate-500">
+              {{ log.ip_address or 'local' }}
+              {% if log.details_json %} &bull; {{ log.details_json|truncate(90) }}{% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="py-8 text-center text-xs text-slate-400">No personal activity events recorded yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+async function saveProfile(ev) {
+  ev.preventDefault();
+  const fullName = document.getElementById('profFullName').value;
+  const email = document.getElementById('profEmail').value;
+  const btn = document.getElementById('btnSaveProfile');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/v1/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ full_name: fullName, email: email }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Profile update failed');
+    FIQ_Alert('profileFeedback', data.message || 'Profile updated.', 'success');
+    loadMyActivity();
+  } catch (err) {
+    FIQ_Alert('profileFeedback', err.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function selectUserTheme(pref) {
+  await FIQ_ApplyTheme(pref, true);
+  FIQ_Alert('prefFeedback', `Theme updated to "${pref}" and saved to your account.`, 'success');
+}
+
+async function saveNotificationPrefs() {
+  const c1 = document.getElementById('prefAlertComplete').checked;
+  const c2 = document.getElementById('prefAlertGaps').checked;
+  try {
+    const res = await fetch('/api/v1/auth/me/preferences', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        notification_preferences: { scan_completion: c1, coverage_warnings: c2 },
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Could not save notification settings');
+    FIQ_Alert('prefFeedback', 'Notification preferences saved.', 'success');
+  } catch (err) {
+    FIQ_Alert('prefFeedback', err.message, 'error');
+  }
+}
+
+async function updatePassword(ev) {
+  ev.preventDefault();
+  const cur = document.getElementById('pwdCurrent').value;
+  const nw = document.getElementById('pwdNew').value;
+  const cnf = document.getElementById('pwdConfirm').value;
+  if (nw !== cnf) {
+    FIQ_Alert('pwdFeedback', 'New password and confirmation do not match.', 'error');
+    return;
+  }
+  const btn = document.getElementById('btnChangePwd');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/v1/auth/change-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ current_password: cur, new_password: nw, confirm_password: cnf }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Password update failed');
+    FIQ_Alert('pwdFeedback', data.message || 'Password updated. Redirecting to login...', 'success');
+    setTimeout(() => { window.location.href = '/login'; }, 1200);
+  } catch (err) {
+    FIQ_Alert('pwdFeedback', err.message, 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function loadMyActivity() {
+  const action = document.getElementById('activityFilterAction')?.value || '';
+  const tbody = document.getElementById('myActivityBody');
+  if (!tbody) return;
+  try {
+    const q = action ? `?action=${encodeURIComponent(action)}&limit=50` : '?limit=50';
+    const res = await fetch('/api/v1/auth/me/activity' + q);
+    const data = await res.json();
+    if (!res.ok) return;
+    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+    const items = data.items || [];
+    if (items.length === 0) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 5;
+      td.className = 'py-6 text-center text-xs text-slate-400';
+      td.textContent = 'No matching activity records found.';
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+    items.forEach(function (log) {
+      const tr = document.createElement('tr');
+
+      const tdTs = document.createElement('td');
+      tdTs.className = 'mono text-[11px] text-slate-600';
+      tdTs.textContent = log.timestamp_ist || log.created_at_ist || FIQ_FormatIST(log.timestamp || log.created_at);
+      tr.appendChild(tdTs);
+
+      const tdAct = document.createElement('td');
+      const sp = document.createElement('span');
+      sp.className = 'mono px-2 py-0.5 rounded bg-slate-100 text-[10px] font-bold text-slate-800';
+      sp.textContent = log.action || 'EVENT';
+      tdAct.appendChild(sp);
+      tr.appendChild(tdAct);
+
+      const tdTgt = document.createElement('td');
+      tdTgt.className = 'mono text-xs text-slate-800';
+      tdTgt.textContent = log.target_resource || '—';
+      tr.appendChild(tdTgt);
+
+      const tdOut = document.createElement('td');
+      const oSp = document.createElement('span');
+      oSp.className = 'px-2 py-0.5 rounded text-[10px] font-bold uppercase ' + (
+        log.outcome === 'SUCCESS' ? 'bg-emerald-50 text-emerald-700' :
+        log.outcome === 'DENIED' ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-800'
+      );
+      oSp.textContent = log.outcome || 'OK';
+      tdOut.appendChild(oSp);
+      tr.appendChild(tdOut);
+
+      const tdDet = document.createElement('td');
+      tdDet.className = 'text-[11px] text-slate-500';
+      const detStr = log.details_json || log.details || '';
+      tdDet.textContent = `${log.ip_address || 'local'}${detStr ? ' • ' + String(detStr).slice(0, 90) : ''}`;
+      tr.appendChild(tdDet);
+
+      tbody.appendChild(tr);
+    });
+  } catch (_) {}
+}
+</script>
+{% endblock %}

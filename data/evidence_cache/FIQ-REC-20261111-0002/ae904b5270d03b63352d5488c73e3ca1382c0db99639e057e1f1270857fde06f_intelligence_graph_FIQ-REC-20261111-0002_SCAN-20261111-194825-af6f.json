@@ -1,0 +1,228 @@
+{
+  "investigation_id": "FIQ-REC-20261111-0002",
+  "campaign_name": "test 2",
+  "target": "192.168.56.112",
+  "generated_at": "2026-11-11T19:48:59.735923+00:00",
+  "metrics": {
+    "node_count": 4,
+    "edge_count": 4,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.3333,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "email": 1,
+    "ip": 1,
+    "organization": 2
+  },
+  "source_breakdown": {
+    "theharvester": 1,
+    "dns_osint": 1,
+    "whois_rdap": 2
+  },
+  "nodes": [
+    {
+      "id": "ENT:EMAIL:73c70aae6053",
+      "type": "email",
+      "label": "abuse@iana.org",
+      "canonical_value": "abuse@iana.org",
+      "tags": [],
+      "sources": [
+        "theharvester"
+      ],
+      "risk_level": "info",
+      "confidence": 0.8,
+      "attributes": {
+        "value": "abuse@iana.org",
+        "source_tool": "theharvester",
+        "evidence_ref": "theharvester:192.168.56.112",
+        "risk_level": "info",
+        "confidence": 0.8,
+        "maltego_type": "maltego.EmailAddress"
+      },
+      "first_seen": "2026-11-11T19:48:59.735689+00:00",
+      "last_seen": "2026-11-11T19:48:59.735821+00:00",
+      "entity_type": "email",
+      "maltego_type": "maltego.EmailAddress",
+      "source_tool": "theharvester",
+      "evidence_ref": "theharvester:192.168.56.112",
+      "value": "abuse@iana.org"
+    },
+    {
+      "id": "ENT:IP:9b35b20febaa",
+      "type": "ip",
+      "label": "192.168.56.112",
+      "canonical_value": "192.168.56.112",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "passive_recon",
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "test 2",
+        "value": "192.168.56.112",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:192.168.56.112",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv4Address"
+      },
+      "first_seen": "2026-11-11T19:48:59.735474+00:00",
+      "last_seen": "2026-11-11T19:48:59.735797+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:192.168.56.112",
+      "value": "192.168.56.112"
+    },
+    {
+      "id": "ENT:ORGANIZATION:98adc717e716",
+      "type": "organization",
+      "label": "Internet Assigned Numbers Authority",
+      "canonical_value": "Internet Assigned Numbers Authority",
+      "tags": [],
+      "sources": [
+        "whois_rdap"
+      ],
+      "risk_level": "info",
+      "confidence": 0.85,
+      "attributes": {
+        "registrar": "Regional Internet Registry",
+        "value": "Internet Assigned Numbers Authority",
+        "source_tool": "whois_rdap",
+        "evidence_ref": "whois:192.168.56.112",
+        "risk_level": "info",
+        "confidence": 0.85,
+        "maltego_type": "maltego.Company"
+      },
+      "first_seen": "2026-11-11T19:48:59.735549+00:00",
+      "last_seen": "2026-11-11T19:48:59.735745+00:00",
+      "entity_type": "organization",
+      "maltego_type": "maltego.Company",
+      "source_tool": "whois_rdap",
+      "evidence_ref": "whois:192.168.56.112",
+      "value": "Internet Assigned Numbers Authority"
+    },
+    {
+      "id": "ENT:ORGANIZATION:9ba0a6b51a51",
+      "type": "organization",
+      "label": "Regional Internet Registry",
+      "canonical_value": "Registrar: Regional Internet Registry",
+      "tags": [],
+      "sources": [
+        "whois_rdap"
+      ],
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "role": "registrar",
+        "value": "Registrar: Regional Internet Registry",
+        "source_tool": "whois_rdap",
+        "evidence_ref": "whois:192.168.56.112",
+        "risk_level": "info",
+        "confidence": 0.9,
+        "maltego_type": "maltego.Company"
+      },
+      "first_seen": "2026-11-11T19:48:59.735579+00:00",
+      "last_seen": "2026-11-11T19:48:59.735769+00:00",
+      "entity_type": "organization",
+      "maltego_type": "maltego.Company",
+      "source_tool": "whois_rdap",
+      "evidence_ref": "whois:192.168.56.112",
+      "value": "Registrar: Regional Internet Registry"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:fadfa565ff0d",
+      "source": "ENT:IP:9b35b20febaa",
+      "target": "ENT:EMAIL:73c70aae6053",
+      "relationship_type": "ASSOCIATED_EMAIL",
+      "relationship": "ASSOCIATED_EMAIL",
+      "weight": 0.8,
+      "confidence": 0.8,
+      "confidence_score": 0.8,
+      "evidence_ids": [
+        "theharvester:192.168.56.112"
+      ],
+      "first_observed": "2026-11-11T19:48:59.735829+00:00",
+      "last_observed": "2026-11-11T19:48:59.735829+00:00"
+    },
+    {
+      "id": "REL:15115734d545",
+      "source": "ENT:IP:9b35b20febaa",
+      "target": "ENT:IP:9b35b20febaa",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:192.168.56.112"
+      ],
+      "first_observed": "2026-11-11T19:48:59.735806+00:00",
+      "last_observed": "2026-11-11T19:48:59.735806+00:00"
+    },
+    {
+      "id": "REL:2b75208e8b86",
+      "source": "ENT:IP:9b35b20febaa",
+      "target": "ENT:ORGANIZATION:98adc717e716",
+      "relationship_type": "OWNED_BY",
+      "relationship": "OWNED_BY",
+      "weight": 0.9,
+      "confidence": 0.85,
+      "confidence_score": 0.85,
+      "evidence_ids": [
+        "whois:192.168.56.112"
+      ],
+      "first_observed": "2026-11-11T19:48:59.735755+00:00",
+      "last_observed": "2026-11-11T19:48:59.735755+00:00"
+    },
+    {
+      "id": "REL:e6f5dd8806bc",
+      "source": "ENT:IP:9b35b20febaa",
+      "target": "ENT:ORGANIZATION:9ba0a6b51a51",
+      "relationship_type": "REGISTERED_WITH",
+      "relationship": "REGISTERED_WITH",
+      "weight": 0.85,
+      "confidence": 0.9,
+      "confidence_score": 0.9,
+      "evidence_ids": [
+        "whois:192.168.56.112"
+      ],
+      "first_observed": "2026-11-11T19:48:59.735779+00:00",
+      "last_observed": "2026-11-11T19:48:59.735779+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:EMAIL:73c70aae6053",
+      "ENT:IP:9b35b20febaa",
+      "ENT:ORGANIZATION:98adc717e716",
+      "ENT:ORGANIZATION:9ba0a6b51a51"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "project": {
+    "name": "OSINT-RECON",
+    "title": "OSINT-RECON: Digital Footprint",
+    "version": "1.0.0-w1",
+    "team_members": [
+      "Asip Ali",
+      "Mohan Prasad"
+    ],
+    "environment": "kali-rolling-lab"
+  },
+  "targets": [
+    {
+      "id": "target-01",
+      "name": "Metasploitable2 (Local VirtualBox Lab VM)",
+      "target": "192.168.56.111",
+      "category": "intentionally_vulnerable_lab",
+      "authorization_status": "AUTHORIZED_LOCAL_LAB",
+      "scope": "192.168.56.111 (Host-Only Network 192.168.56.0/24)",
+      "permitted_scan_types": [
+        "tcp_connect",
+        "service_detection",
+        "script_scan",
+        "full_port_scan"
+      ],
+      "configuration_status": "CONFIGURED_AND_VERIFIED",
+      "notes": "Deliberately vulnerable local VM running on VirtualBox host-only adapter. Authorized for active scanning, port enumeration, and baseline testing."
+    },
+    {
+      "id": "target-02",
+      "name": "Scanme (Official Nmap Practice Target)",
+      "target": "scanme.nmap.org",
+      "category": "nmap_practice_target",
+      "authorization_status": "CONDITIONAL_AUTHORIZED_BENCHMARK",
+      "scope": "scanme.nmap.org (45.33.32.156 only)",
+      "permitted_scan_types": [
+        "ping_sweep",
+        "top_ports",
+        "version_detection"
+      ],
+      "configuration_status": "CONFIGURED_PENDING_EXPLICIT_RUN",
+      "notes": "Provided by Gordon Lyon / Nmap project specifically for learning and tool verification. Strictly low-frequency, non-aggressive scans only."
+    },
+    {
+      "id": "target-03",
+      "name": "Example.com (RFC 2606 / RFC 6761 Benchmark)",
+      "target": "example.com",
+      "category": "normal_benchmark_domain",
+      "authorization_status": "AUTHORIZED_PASSIVE_ONLY",
+      "scope": "example.com (Passive queries only)",
+      "permitted_scan_types": [
+        "dns_lookup",
+        "whois_query"
+      ],
+      "configuration_status": "CONFIGURED_PASSIVE_RECON",
+      "notes": "IANA reserved benchmark domain for passive OSINT evaluation. Active scanning, port probing, and intrusion testing are strictly prohibited."
+    }
+  ],
+  "scanning_rules": {
+    "require_explicit_authorization": true,
+    "allow_unrestricted_third_party_scans": false,
+    "default_timeout_seconds": 15,
+    "max_concurrent_tasks": 4,
+    "rate_limit_delay_seconds": 1.0
+  }
+}
+

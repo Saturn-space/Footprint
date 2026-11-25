@@ -1,0 +1,1331 @@
+{% extends "base.html" %}
+{% block title %}Results Dashboard — {{ campaign.name }} — FootprintIQ{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-7xl mx-auto pb-12">
+
+  <!-- Header Banner -->
+  <div class="fiq-card p-6 border-l-4 border-l-blue-600 bg-white">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+            Results Dashboard
+          </span>
+          <span class="mono px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-slate-100 text-slate-800 border border-slate-200">
+            {{ recon_id }}
+          </span>
+          <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase rounded-full
+            {% if campaign.status == 'Completed' %}bg-emerald-100 text-emerald-800
+            {% elif campaign.status == 'Failed' %}bg-rose-100 text-rose-800
+            {% elif campaign.status in ['Partially Completed', 'Cancelled', 'Interrupted'] %}bg-amber-100 text-amber-800
+            {% else %}bg-blue-100 text-blue-800{% endif %}">
+            {{ campaign.status }}
+          </span>
+        </div>
+        <h1 class="text-xl font-bold text-slate-900 mt-1.5">{{ campaign.name }}</h1>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Target(s): <span class="mono font-bold text-slate-800">{{ campaign.target_value }}</span>
+          {% if campaign.purpose %} &bull; Purpose: {{ campaign.purpose }}{% endif %}
+          {% if campaign.excluded_targets %} &bull; Excluded Hosts: <span class="mono">{{ campaign.excluded_targets }}</span>{% endif %}
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        {% if not is_admin %}
+        <a href="/recon/new?edit={{ recon_id }}" class="px-3 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold transition">
+          Reconfigure Campaign
+        </a>
+        {% endif %}
+        <a href="/recon/{{ recon_id }}/live" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition">
+          Live Monitor
+        </a>
+        {% if not is_admin %}
+        <button type="button" onclick="generateAndDownloadPdf('executive')" id="btnGenExecPdf"
+                class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-bold transition">
+          Executive PDF
+        </button>
+        <button type="button" onclick="generateAndDownloadPdf('technical')" id="btnGenTechPdf"
+                class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold shadow-sm transition">
+          Technical PDF
+        </button>
+        {% else %}
+        <a href="/reports" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition">
+          View Reports
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div id="resultsActionFeedback" class="hidden"></div>
+
+  <!-- Phase 3: Scan History / Repeatable Scan Runs Panel -->
+  <div class="fiq-card p-5 space-y-3">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <h2 class="text-sm font-bold text-slate-900">Scan History &amp; Execution Runs</h2>
+          {% if selected_scan %}
+          <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">
+            Viewing {{ selected_scan.run_label or ('Run ' ~ '%03d'|format(selected_scan.run_number or 1)) }}
+          </span>
+          {% else %}
+          <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-bold">
+            Viewing All Runs ({{ scans|length }})
+          </span>
+          {% endif %}
+        </div>
+        <p class="text-[11px] text-slate-500">
+          Each scan execution creates an independent run under {{ campaign.name }}. Inspect any single run cleanly or launch another run without overwriting history.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        {% if selected_scan %}
+        <a href="/recon/{{ recon_id }}/results?scan_id=all"
+           class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition">
+          Show All Runs
+        </a>
+        {% endif %}
+        {% if not is_admin %}
+        <a href="/recon/{{ recon_id }}/workspace?run_new=1"
+           class="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-sm transition">
+          + Launch New Scan Run
+        </a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if scans %}
+    <div class="overflow-x-auto">
+      <table class="fiq-table">
+        <thead>
+          <tr>
+            <th>Run</th>
+            <th>Scan ID &amp; Modules</th>
+            <th>Started (IST) &amp; Duration</th>
+            <th>Initiator</th>
+            <th>Status</th>
+            <th>Results</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in scans %}
+          {% set is_sel = selected_scan and selected_scan.scan_id == s.scan_id %}
+          <tr class="{% if is_sel %}bg-blue-50/50{% endif %}">
+            <td>
+              <span class="px-2 py-0.5 rounded font-bold text-[11px] {% if is_sel %}bg-blue-600 text-white{% else %}bg-slate-100 text-slate-800 border border-slate-200{% endif %}">
+                {{ s.run_label or ('Run ' ~ '%03d'|format(s.run_number or 1)) }}
+              </span>
+            </td>
+            <td>
+              <div class="mono text-[11px] font-bold text-slate-800">{{ s.scan_id }}</div>
+              <div class="text-[10px] text-slate-500">{{ (s.selected_scanners or [])|join(', ') or s.scan_type }}</div>
+            </td>
+            <td>
+              <div class="text-[11px] text-slate-700">{{ s.started_at_ist or (s.started_at|ist) }}</div>
+              <div class="mono text-[10px] text-slate-400">Duration: {{ s.duration_display or '—' }}</div>
+            </td>
+            <td class="text-xs text-slate-700">{{ s.initiator_username or 'investigator' }}</td>
+            <td>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                {% if s.status == 'Completed' %}bg-emerald-50 text-emerald-700
+                {% elif s.status == 'Failed' %}bg-rose-50 text-rose-700
+                {% elif s.status in ['Partially Completed', 'Cancelled', 'Interrupted'] %}bg-amber-50 text-amber-800
+                {% else %}bg-blue-50 text-blue-700{% endif %}">
+                {{ s.status }}
+              </span>
+            </td>
+            <td class="mono text-[11px] text-slate-700">
+              {{ s.findings_count or 0 }} finding(s) &bull; {{ s.evidence_count or 0 }} ev
+            </td>
+            <td class="text-right">
+              <div class="inline-flex items-center gap-1.5">
+                <a href="/recon/{{ recon_id }}/results?scan_id={{ s.scan_id }}"
+                   class="px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold transition">
+                  {% if is_sel %}Viewing{% else %}View Run{% endif %}
+                </a>
+                {% if not is_admin %}
+                <a href="/reports?investigation_id={{ recon_id }}&scan_id={{ s.scan_id }}"
+                   class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-semibold transition">
+                  Report
+                </a>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-xs text-slate-400 py-2">No individual scan run history entries recorded yet.</div>
+    {% endif %}
+  </div>
+
+  <!-- Honest Warning Banner on Failed / Partial / Cancelled Campaigns -->
+  {% if campaign.status in ['Failed', 'Partially Completed', 'Cancelled', 'Interrupted'] or failed_stages %}
+  <div class="p-4 rounded-xl border {% if campaign.status == 'Failed' %}bg-rose-50 border-rose-200 text-rose-900{% else %}bg-amber-50 border-amber-200 text-amber-900{% endif %} text-xs space-y-1">
+    <div class="font-bold uppercase tracking-wider">
+      Assessment Outcome Notice — {{ campaign.status }}
+    </div>
+    <p>
+      {% if campaign.status == 'Failed' %}
+      One or more core scanner stages failed to complete. Zero or low findings below do NOT indicate target security where required stages failed.
+      {% elif campaign.status == 'Cancelled' %}
+      Scan execution was cancelled before completion. Only partial discoveries captured prior to cancellation are shown below.
+      {% else %}
+      This campaign finished with partial results because one or more scanner engines or stages failed or were unavailable.
+      {% endif %}
+      {% if failed_stages %}
+      Affected stages: <span class="font-semibold">{{ failed_stages|join(', ') }}</span>.
+      {% endif %}
+    </p>
+  </div>
+  {% endif %}
+
+  <!-- KPI Summary Strip -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="fiq-card p-5">
+      <div class="flex items-center justify-between">
+        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Exposure Score</span>
+        <span class="px-2 py-0.5 text-[10px] font-bold rounded {% if exposure.exposure_score >= 80 %}badge-critical{% elif exposure.exposure_score >= 50 %}badge-high{% elif exposure.exposure_score >= 25 %}badge-medium{% else %}badge-low{% endif %}">
+          {{ exposure.exposure_level }}
+        </span>
+      </div>
+      <div class="mt-2 flex items-baseline space-x-1.5">
+        <span class="text-3xl font-extrabold text-slate-900">{{ exposure.exposure_score }}</span>
+        <span class="text-xs text-slate-400">/ 100</span>
+      </div>
+      <div class="text-[11px] text-slate-500 mt-1">Weighted risk across confirmed findings</div>
+    </div>
+
+    <div class="fiq-card p-5">
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Findings Breakdown</div>
+      <div class="mt-2 flex flex-wrap gap-2 text-xs font-bold">
+        <span class="px-2 py-0.5 rounded badge-critical">Crit: {{ exposure.severity_counts.Critical }}</span>
+        <span class="px-2 py-0.5 rounded badge-high">High: {{ exposure.severity_counts.High }}</span>
+        <span class="px-2 py-0.5 rounded badge-medium">Med: {{ exposure.severity_counts.Medium }}</span>
+      </div>
+      <div class="text-[11px] text-slate-500 mt-2">Total recorded: {{ explained_findings|length }}</div>
+    </div>
+
+    <div class="fiq-card p-5">
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Network Exposure</div>
+      <div class="mt-2 text-3xl font-extrabold text-slate-900">
+        {{ discovered_ports|length }}
+        <span class="text-xs font-medium text-slate-500">open port(s)</span>
+      </div>
+      <div class="text-[11px] text-slate-500 mt-1">Across {{ active_hosts|length }} verified live host(s)</div>
+    </div>
+
+    <div class="fiq-card p-5">
+      <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">OSINT &amp; Scanners</div>
+      <div class="mt-2 text-3xl font-extrabold text-blue-700">
+        {{ passive_results|length }}
+        <span class="text-xs font-medium text-slate-500">passive target(s)</span>
+      </div>
+      <div class="text-[11px] text-slate-500 mt-1">{{ scanner_statuses|length }} scanner execution stage(s)</div>
+    </div>
+  </div>
+
+  <!-- Mode Switch Tabs -->
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+    <div class="flex space-x-2">
+      <button type="button" id="btnModeExec" onclick="switchResultsMode('exec')"
+              class="px-4 py-2 rounded-lg text-xs font-bold bg-slate-900 text-white transition">
+        Executive View
+      </button>
+      <button type="button" id="btnModeTech" onclick="switchResultsMode('tech')"
+              class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">
+        Technical &amp; Remediation
+      </button>
+      <button type="button" id="btnModeGraph" onclick="switchResultsMode('graph')"
+              class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition">
+        Entity Graph &amp; Maltego
+      </button>
+    </div>
+    <div class="text-xs text-slate-500">
+      Reports generated: <span class="font-bold text-slate-800">{{ reports|length }}</span> scoped deliverable(s)
+    </div>
+  </div>
+
+  <!-- ===================== TAB 1: SIMPLE / EXECUTIVE VIEW ===================== -->
+  <section id="viewExecSection" class="space-y-6">
+
+    <!-- High-Level Surface Overview -->
+    <div class="fiq-card p-6 space-y-3">
+      <h2 class="text-sm font-bold text-slate-900">Assessment Summary at a Glance</h2>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Campaign <strong>{{ campaign.name }}</strong> assessed <strong>{{ campaign.target_value }}</strong>.
+        {% if passive_results %}
+        Passive intelligence gathered ownership, DNS, and infrastructure context across {{ passive_results|length }} target(s).
+        {% endif %}
+        {% if discovered_ports %}
+        Active probing identified {{ discovered_ports|length }} open service port(s) on {{ active_hosts|length }} reachable host(s).
+        {% endif %}
+        {% if explained_findings %}
+        Security checks recorded {{ explained_findings|length }} item(s), rated overall as <strong>{{ exposure.exposure_level }}</strong> exposure ({{ exposure.exposure_score }}/100).
+        {% else %}
+        No vulnerabilities were recorded in completed assessment stages.
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Plain-Language 5-Question Finding Cards -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Plain-Language Security Findings</h2>
+        <span class="text-xs text-slate-500">Organized by severity and actionable impact</span>
+      </div>
+
+      {% for f in explained_findings %}
+      {% set pl = f.plain_language %}
+      <div class="fiq-card p-5 space-y-4 border-l-4
+        {% if f.severity == 'Critical' %}border-l-rose-600
+        {% elif f.severity == 'High' %}border-l-orange-500
+        {% elif f.severity == 'Medium' %}border-l-amber-500
+        {% else %}border-l-blue-500{% endif %}">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+              {% if f.severity == 'Critical' %}badge-critical
+              {% elif f.severity == 'High' %}badge-high
+              {% elif f.severity == 'Medium' %}badge-medium
+              {% else %}badge-info{% endif %}">
+              {{ pl.seriousness }}
+            </span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+              {{ pl.confidence_label }}
+            </span>
+            <h3 class="text-sm font-bold text-slate-900">{{ f.title }}</h3>
+          </div>
+          <div class="mono text-xs text-slate-500">
+            {{ f.target_ip }}{% if f.port %}:{{ f.port }}{% endif %}
+            {% if f.cve_identifiers %} &bull; {{ f.cve_identifiers }}{% endif %}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">1. What Was Discovered</div>
+            <p class="text-slate-700 leading-relaxed">{{ pl.what_discovered }}</p>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">2. Why It Is Important</div>
+            <p class="text-slate-700 leading-relaxed">{{ pl.why_important }}</p>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">3. Potential Impact</div>
+            <p class="text-slate-700 leading-relaxed">{{ pl.potential_impact }}</p>
+          </div>
+          <div class="p-3 rounded-lg bg-emerald-50/70 border border-emerald-100 space-y-1">
+            <div class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">4. Recommended Action</div>
+            <p class="text-emerald-950 font-medium leading-relaxed">{{ pl.recommended_action }}</p>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="fiq-card p-8 text-center text-xs text-slate-500">
+        No vulnerability findings were recorded for this campaign. Review the Technical &amp; Remediation tab for open ports, passive intelligence, and scanner statuses.
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ===================== TAB 2: TECHNICAL & REMEDIATION VIEW ===================== -->
+  <section id="viewTechSection" class="hidden space-y-6">
+
+    <!-- Scanner Coverage & Audit Status -->
+    <div class="fiq-card p-6 space-y-3">
+      <h2 class="text-sm font-bold text-slate-900">Scanner Execution Coverage &amp; Integrity</h2>
+      <div class="overflow-x-auto">
+        <table class="fiq-table">
+          <thead>
+            <tr>
+              <th>Scanner / Stage</th>
+              <th>Target</th>
+              <th>Status</th>
+              <th>Outcome Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sc in scanner_statuses %}
+            <tr>
+              <td class="text-xs font-bold text-slate-900">{{ sc.scanner }}</td>
+              <td class="mono text-xs text-slate-700">{{ sc.target or campaign.target_value }}</td>
+              <td>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                  {% if sc.status == 'COMPLETED' %}bg-emerald-100 text-emerald-800
+                  {% elif sc.status == 'FAILED' %}bg-rose-100 text-rose-800
+                  {% else %}bg-amber-100 text-amber-800{% endif %}">
+                  {{ sc.status }}
+                </span>
+              </td>
+              <td class="text-xs text-slate-600">{{ sc.detail or 'Completed' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="py-4 text-center text-xs text-slate-400">No scanner stage records recorded yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tenable Nessus Read-Only Inspection & Import -->
+    <div id="nessusInspectionCard" class="fiq-card p-6 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 class="text-sm font-bold text-slate-900">Tenable Nessus Read-Only Scan Inspection &amp; Import</h2>
+          <p class="text-[11px] text-slate-500">Inspect existing Nessus scans, preview results, export reports, or import completed scan findings into this campaign. License launch limits are reported honestly.</p>
+        </div>
+        <button type="button" onclick="loadNessusScansPanel(true)"
+                class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold transition">
+          Load Nessus Scans
+        </button>
+      </div>
+      <div id="nessusCapsSummary" class="text-[11px] text-slate-500">Click "Load Nessus Scans" to query live Nessus capabilities and existing scans.</div>
+      <div id="nessusScansContainer" class="hidden space-y-2"></div>
+    </div>
+
+    <!-- Passive Intelligence Results -->
+    {% if passive_results %}
+    <div class="fiq-card p-6 space-y-4">
+      <h2 class="text-sm font-bold text-slate-900">Passive OSINT, Domain &amp; Infrastructure Intelligence</h2>
+      <div class="space-y-4">
+        {% for pr in passive_results %}
+        {% set dom = pr.get('domain_intel', {}) %}
+        {% set osint = pr.get('osint_intel', {}) %}
+        {% set infra = pr.get('infrastructure_intel', {}) %}
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
+            <span class="mono font-bold text-slate-900 text-sm">{{ pr.get('target') }} ({{ pr.get('target_kind', 'target') }})</span>
+            <span class="text-[11px] text-slate-500">{{ (pr.get('checks_executed') or [])|length }} lookup(s) performed</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="space-y-1">
+              <div class="font-bold text-slate-700 uppercase text-[10px]">Domain &amp; Registration</div>
+              {% set w = dom.get('whois') or {} %}
+              <div>Registrar: <span class="font-medium">{{ w.get('registrar') or '—' }}</span></div>
+              <div>Organization: <span class="font-medium">{{ w.get('organization') or '—' }}</span></div>
+              {% if dom.get('dns_security') %}
+              <div>SPF/DMARC/DNSSEC:
+                <span class="mono text-[11px]">
+                  SPF: {{ 'Present' if dom.dns_security.get('spf_present') else 'Missing' }},
+                  DMARC: {{ 'Present' if dom.dns_security.get('dmarc_present') else 'Missing' }},
+                  DNSSEC: {{ 'Enabled' if dom.dns_security.get('dnssec_enabled') else 'Unverified' }}
+                </span>
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="space-y-1">
+              <div class="font-bold text-slate-700 uppercase text-[10px]">DNS &amp; Subdomains</div>
+              {% for rt, rvals in (dom.get('dns_records') or {}).items() %}
+              <div><strong>{{ rt }}:</strong> <span class="mono">{{ rvals[:5]|join(', ') }}</span></div>
+              {% endfor %}
+              {% if dom.get('subdomains') %}
+              <div><strong>Subdomains ({{ dom.subdomains|length }}):</strong> <span class="mono">{{ dom.subdomains[:10]|join(', ') }}{% if dom.subdomains|length > 10 %} ...{% endif %}</span></div>
+              {% endif %}
+            </div>
+
+            <div class="space-y-1">
+              <div class="font-bold text-slate-700 uppercase text-[10px]">OSINT &amp; Hosting Network</div>
+              {% if osint.get('emails') %}
+              <div><strong>Emails:</strong> <span class="mono">{{ osint.emails[:8]|join(', ') }}</span></div>
+              {% endif %}
+              {% set asn = infra.get('asn_hosting') or {} %}
+              {% if asn.get('org') or asn.get('cidr') %}
+              <div><strong>Hosting/Netblock:</strong> {{ asn.get('org') or asn.get('name') or '—' }} <span class="mono">{{ asn.get('cidr') or '' }}</span></div>
+              {% endif %}
+              {% if infra.get('reverse_dns') %}
+              <div><strong>Reverse DNS (PTR):</strong>
+                <span class="mono">{% for ptr in infra.reverse_dns[:5] %}{{ ptr.get('ip') }}&rarr;{{ ptr.get('ptr') or 'none' }} {% endfor %}</span>
+              </div>
+              {% endif %}
+              {% if pr.get('unavailable_checks') %}
+              <div class="mt-1 p-2 rounded bg-amber-50 border border-amber-200 text-amber-900 text-[11px]">
+                Unavailable checks: {% for u in pr.unavailable_checks %}{{ u.get('id') }} ({{ u.get('reason') }}){% if not loop.last %}; {% endif %}{% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Discovered Open Ports & Services -->
+    <div class="fiq-card p-6 space-y-3">
+      <h2 class="text-sm font-bold text-slate-900">Discovered Live Hosts, Open Ports &amp; Service Versions</h2>
+      <div class="overflow-x-auto">
+        <table class="fiq-table">
+          <thead>
+            <tr>
+              <th>Target Host</th>
+              <th>Port / Protocol</th>
+              <th>State</th>
+              <th>Service</th>
+              <th>Version / Software</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in discovered_ports %}
+            <tr>
+              <td class="mono font-semibold text-xs text-slate-900">{{ p.get('target_ip') or campaign.target_value }}</td>
+              <td class="mono font-bold text-xs text-blue-700">{{ p.get('port') }}/{{ p.get('protocol', 'tcp') }}</td>
+              <td><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">{{ p.get('state', 'open') }}</span></td>
+              <td class="text-xs font-semibold text-slate-800">{{ p.get('service') or 'unknown' }}</td>
+              <td class="text-xs text-slate-600">{{ [p.get('product'), p.get('version'), p.get('extrainfo')]|select|join(' ') or '—' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="py-6 text-center text-xs text-slate-400">No active open ports discovered in this campaign.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Filterable Technical Findings & Remediation Table -->
+    <div class="fiq-card p-6 space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm font-bold text-slate-900">Detailed Findings &amp; Remediation Workflow</h2>
+          <p class="text-xs text-slate-500">Filter by severity, source engine, confidence, or remediation status</p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <input id="techSearchInput" type="text" placeholder="Search title, CVE, host, port..."
+                 oninput="filterTechFindings()"
+                 class="text-xs px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <select id="techSeverityFilter" onchange="filterTechFindings()" class="text-xs px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white">
+            <option value="">All Severities</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+            <option value="Informational">Informational</option>
+          </select>
+          <select id="techRemFilter" onchange="filterTechFindings()" class="text-xs px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white">
+            <option value="">All Remediation States</option>
+            <option value="open">Open</option>
+            <option value="in_progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+            <option value="mitigated">Mitigated</option>
+            <option value="accepted_risk">Accepted Risk</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="fiq-table" id="techFindingsTable">
+          <thead>
+            <tr>
+              <th>Target:Port</th>
+              <th>Severity / CVSS</th>
+              <th>Finding &amp; CVE</th>
+              <th>Confidence / Source</th>
+              <th>Remediation</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for f in explained_findings %}
+            {% set rem_st = f.get('remediation_status') or 'open' %}
+            <tr class="tech-finding-row"
+                data-search="{{ (f.title ~ ' ' ~ (f.cve_identifiers or '') ~ ' ' ~ f.target_ip ~ ' ' ~ (f.port or '') ~ ' ' ~ (f.service or ''))|lower }}"
+                data-severity="{{ f.severity }}"
+                data-remediation="{{ rem_st }}">
+              <td class="mono text-xs font-bold text-slate-900">{{ f.target_ip }}:{{ f.port or 'all' }}</td>
+              <td>
+                <div class="flex items-center space-x-1.5">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                    {% if f.severity == 'Critical' %}badge-critical
+                    {% elif f.severity == 'High' %}badge-high
+                    {% elif f.severity == 'Medium' %}badge-medium
+                    {% else %}badge-info{% endif %}">
+                    {{ f.severity }}
+                  </span>
+                  {% if f.cvss_score %}
+                  <span class="mono text-xs font-bold text-slate-700">{{ f.cvss_score }}</span>
+                  {% endif %}
+                </div>
+              </td>
+              <td>
+                <div class="text-xs font-bold text-slate-900">{{ f.title }}</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">{{ (f.description or '')[:140] }}</div>
+                {% if f.cve_identifiers %}
+                <span class="inline-block mt-1 px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 mono text-[10px] font-semibold">{{ f.cve_identifiers }}</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="text-[11px] font-semibold text-slate-800">{{ f.plain_language.confidence_label }}</div>
+                <div class="text-[10px] text-slate-500 uppercase">{{ f.detection_source }}</div>
+              </td>
+              <td>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                  {% if rem_st in ['resolved', 'mitigated'] %}bg-emerald-100 text-emerald-800
+                  {% elif rem_st == 'in_progress' %}bg-blue-100 text-blue-800
+                  {% else %}bg-amber-100 text-amber-800{% endif %}">
+                  {{ rem_st.replace('_', ' ') }}
+                </span>
+              </td>
+              <td>
+                {% if not is_admin %}
+                <button type="button"
+                        data-finding-id="{{ f.finding_id }}"
+                        data-finding-title="{{ f.title }}"
+                        data-rem-status="{{ rem_st }}"
+                        data-version-id="{{ f.get('version_id', 1) }}"
+                        onclick="openRemediationModal(this)"
+                        class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-semibold">
+                  Update
+                </button>
+                {% else %}
+                <span class="text-[11px] text-slate-400">Read-Only</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">No findings recorded for this campaign.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Campaign Delta Comparison + Scoped Generated Reports -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Compare Campaigns -->
+      <div class="fiq-card p-6 space-y-3">
+        <h2 class="text-sm font-bold text-slate-900">Compare Against Baseline Campaign</h2>
+        <div class="flex gap-2">
+          <select id="compareSelect" class="flex-1 text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+            <option value="">Select another campaign to compare...</option>
+            {% for other in all_campaigns %}
+            {% if other.recon_id != recon_id %}
+            <option value="{{ other.recon_id }}">{{ other.name }} ({{ other.recon_id }})</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+          <button type="button" onclick="runComparison()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg">
+            Compare
+          </button>
+        </div>
+        <div id="compareResultBox" class="hidden p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5"></div>
+      </div>
+
+      <!-- Campaign-Scoped Generated PDF Reports -->
+      <div class="fiq-card p-6 space-y-3">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-bold text-slate-900">Generated PDF Deliverables ({{ recon_id }})</h2>
+          {% if not is_admin %}
+          <div class="flex gap-1.5">
+            <button type="button" onclick="generateAndDownloadPdf('executive')" class="px-2.5 py-1 bg-blue-50 text-blue-700 rounded text-[11px] font-bold hover:bg-blue-100">+ Executive</button>
+            <button type="button" onclick="generateAndDownloadPdf('technical')" class="px-2.5 py-1 bg-blue-600 text-white rounded text-[11px] font-bold hover:bg-blue-500">+ Technical</button>
+          </div>
+          {% endif %}
+        </div>
+        <div class="space-y-2 max-h-48 overflow-y-auto">
+          {% for r in reports %}
+          <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs">
+            <div>
+              <div class="mono font-bold text-slate-800">{{ r.file_name }}</div>
+              <div class="text-[10px] text-slate-500">{{ r.created_at_ist or (r.created_at|ist) }} &bull; {{ (r.file_size / 1024)|round(1) }} KB</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <a href="{{ r.analysis_url or ('/reports/' ~ (r.report_key or r.file_name)) }}" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded">
+                Analyse
+              </a>
+              <a href="{{ r.download_url }}" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-semibold rounded">
+                Download &darr;
+              </a>
+            </div>
+          </div>
+          {% else %}
+          <div class="text-xs text-slate-400 py-4 text-center">No PDF reports generated for this campaign yet.</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================== -->
+  <!-- SECTION 3: ENTITY GRAPH & MALTEGO INTERCHANGE                        -->
+  <!-- =================================================================== -->
+  <section id="viewGraphSection" class="hidden space-y-6">
+    <div class="fiq-card p-6 space-y-4">
+      <div class="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-sm font-bold text-slate-900">Investigation Entity &amp; Relationship Graph</h2>
+            <span id="graphRuntimeBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">Loading...</span>
+          </div>
+          <p id="graphRuntimeNote" class="text-[11px] text-slate-500 mt-0.5">Correlates passive OSINT, active Nmap services, vulnerability findings, and Maltego-compatible entities.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          {% if not is_admin %}
+          <button type="button" onclick="rebuildInvestigationGraph()"
+                  class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-semibold transition">
+            Rebuild from Evidence
+          </button>
+          {% endif %}
+          <a href="/api/v1/investigations/{{ recon_id }}/graph/export?fmt=graphml"
+             class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-semibold transition">
+            Export GraphML (Maltego)
+          </a>
+          <a href="/api/v1/investigations/{{ recon_id }}/graph/export?fmt=csv"
+             class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold transition">
+            Export CSV
+          </a>
+          <a href="/api/v1/investigations/{{ recon_id }}/graph/export?fmt=json"
+             class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold transition">
+            Export JSON
+          </a>
+        </div>
+      </div>
+
+      <div id="graphActionFeedback" class="hidden"></div>
+
+      <!-- Metrics Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-[10px] font-bold text-slate-400 uppercase">Total Entities</div>
+          <div id="graphNodeCount" class="text-lg font-extrabold text-slate-900 mt-0.5">0</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-[10px] font-bold text-slate-400 uppercase">Relationships</div>
+          <div id="graphEdgeCount" class="text-lg font-extrabold text-slate-900 mt-0.5">0</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-[10px] font-bold text-slate-400 uppercase">Clusters</div>
+          <div id="graphCompCount" class="text-lg font-extrabold text-slate-900 mt-0.5">0</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="text-[10px] font-bold text-slate-400 uppercase">Entity Filter</div>
+          <select id="graphTypeFilter" onchange="renderInvestigationGraph()" class="mt-1 w-full text-[11px] px-2 py-1 border border-slate-300 rounded bg-white">
+            <option value="">All Entity Types</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Interactive SVG Topology + Inspector -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div class="lg:col-span-2 rounded-xl border border-slate-200 bg-slate-950 p-3 overflow-auto">
+          <svg id="graphSvgCanvas" viewBox="0 0 900 520" class="w-full min-w-[680px] h-[440px]" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+          <div class="font-bold text-slate-900 border-b border-slate-200 pb-2">Selected Entity &amp; Attribution</div>
+          <div id="graphNodeInspector" class="text-[11px] text-slate-600 space-y-1.5">
+            Click any node in the topology canvas or entity table to inspect its Maltego type, source collector, confidence, and evidence reference.
+          </div>
+          <div class="pt-2 border-t border-slate-200">
+            <div class="text-[10px] font-bold text-slate-500 uppercase mb-1">Source Provenance Breakdown</div>
+            <div id="graphSourceBreakdown" class="space-y-1 text-[11px] text-slate-700"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if not is_admin %}
+    <!-- Manual Entity / Relationship & Maltego File Import Controls -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Add Entity -->
+      <div class="fiq-card p-5 space-y-3 text-xs">
+        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Add Entity Node</h3>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Entity Type (Maltego Compatible)</label>
+          <select id="addEntType" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white">
+            <option value="domain">Domain (maltego.Domain)</option>
+            <option value="subdomain">Subdomain (maltego.DNSName)</option>
+            <option value="ip">IPv4 Address (maltego.IPv4Address)</option>
+            <option value="email">Email (maltego.EmailAddress)</option>
+            <option value="organization">Organization (maltego.Company)</option>
+            <option value="person">Person (maltego.Person)</option>
+            <option value="service">Service (maltego.Service)</option>
+            <option value="url">URL (maltego.URL)</option>
+            <option value="nameserver">Nameserver (maltego.NSRecord)</option>
+            <option value="mx">MX Record (maltego.MXRecord)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Entity Value *</label>
+          <input id="addEntValue" type="text" placeholder="e.g. api.example.com or 10.0.0.5"
+                 class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Evidence / Source Reference</label>
+          <input id="addEntEvidence" type="text" placeholder="e.g. OSINT note or ticket ref"
+                 class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Link to Existing Node (Optional)</label>
+          <select id="addEntLinkSelect" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white">
+            <option value="">None</option>
+          </select>
+        </div>
+        <button type="button" onclick="submitAddEntity()" class="w-full py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-bold transition">
+          Add Entity to Graph
+        </button>
+      </div>
+
+      <!-- Add Relationship -->
+      <div class="fiq-card p-5 space-y-3 text-xs">
+        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Link Entities (Relationship)</h3>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Source Entity</label>
+          <select id="addRelSource" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white"></select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Relationship Type</label>
+          <input id="addRelType" type="text" value="RELATED_TO" placeholder="e.g. RESOLVES_TO, OWNED_BY"
+                 class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Target Entity</label>
+          <select id="addRelTarget" class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white"></select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Evidence Note</label>
+          <input id="addRelEvidence" type="text" placeholder="Correlation justification"
+                 class="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg">
+        </div>
+        <button type="button" onclick="submitAddRelationship()" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold transition">
+          Create Relationship Edge
+        </button>
+      </div>
+
+      <!-- Import Maltego File -->
+      <div class="fiq-card p-5 space-y-3 text-xs">
+        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Import Maltego GraphML / CSV / JSON</h3>
+        <p class="text-[11px] text-slate-500">Imports Maltego GraphML exports, entity CSV tables, or FootprintIQ graph JSON files into this investigation and archives the source file into SeaweedFS evidence.</p>
+        <input id="graphImportFile" type="file" accept=".graphml,.xml,.csv,.json"
+               class="w-full text-[11px] file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-700 file:font-semibold">
+        <button type="button" onclick="submitGraphImport()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold transition">
+          Import &amp; Correlate File
+        </button>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Entities & Relationships Tabular Directory -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="fiq-card p-5 space-y-3">
+        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Entities Directory</h3>
+        <div class="overflow-x-auto max-h-72 overflow-y-auto">
+          <table class="fiq-table">
+            <thead>
+              <tr><th>Type</th><th>Value</th><th>Source</th><th>Maltego Type</th></tr>
+            </thead>
+            <tbody id="graphEntitiesTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="fiq-card p-5 space-y-3">
+        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Relationship Edges</h3>
+        <div class="overflow-x-auto max-h-72 overflow-y-auto">
+          <table class="fiq-table">
+            <thead>
+              <tr><th>Source</th><th>Relationship</th><th>Target</th><th>Confidence</th></tr>
+            </thead>
+            <tbody id="graphEdgesTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Remediation Modal -->
+<div id="remModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="fiq-card max-w-md w-full p-6 space-y-4">
+    <h3 class="text-sm font-bold text-slate-900">Update Remediation Status</h3>
+    <div id="remModalTitle" class="text-xs font-semibold text-slate-700"></div>
+    <input type="hidden" id="remFindingId">
+    <input type="hidden" id="remExpectedVersion">
+
+    <div>
+      <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Status</label>
+      <select id="remStatusSelect" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white">
+        <option value="open">Open</option>
+        <option value="in_progress">In Progress</option>
+        <option value="resolved">Resolved</option>
+        <option value="mitigated">Mitigated</option>
+        <option value="accepted_risk">Accepted Risk</option>
+        <option value="false_positive">False Positive</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Remediation Notes</label>
+      <textarea id="remNotesInput" rows="3" placeholder="Document mitigation actions or verification evidence..."
+                class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white"></textarea>
+    </div>
+
+    <div class="flex justify-end space-x-2 pt-2">
+      <button type="button" onclick="closeRemediationModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold">Cancel</button>
+      <button type="button" onclick="submitRemediationUpdate()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold">Save Update</button>
+    </div>
+  </div>
+</div>
+
+<div id="fiqResultsMeta" class="hidden" data-recon-id="{{ recon_id }}"></div>
+
+<script>
+const RECON_ID = document.getElementById('fiqResultsMeta')?.dataset?.reconId || '';
+
+function esc(v) {
+  return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function switchResultsMode(mode) {
+  const execSec = document.getElementById('viewExecSection');
+  const techSec = document.getElementById('viewTechSection');
+  const graphSec = document.getElementById('viewGraphSection');
+  const bExec = document.getElementById('btnModeExec');
+  const bTech = document.getElementById('btnModeTech');
+  const bGraph = document.getElementById('btnModeGraph');
+
+  if (execSec) execSec.classList.toggle('hidden', mode !== 'exec');
+  if (techSec) techSec.classList.toggle('hidden', mode !== 'tech');
+  if (graphSec) graphSec.classList.toggle('hidden', mode !== 'graph');
+  if (bExec) bExec.className = 'px-4 py-2 rounded-lg text-xs font-bold transition ' +
+    (mode === 'exec' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50');
+  if (bTech) bTech.className = 'px-4 py-2 rounded-lg text-xs font-bold transition ' +
+    (mode === 'tech' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50');
+  if (bGraph) bGraph.className = 'px-4 py-2 rounded-lg text-xs font-bold transition ' +
+    (mode === 'graph' ? 'bg-slate-900 text-white' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50');
+
+  if (mode === 'graph' && !GRAPH_DATA_CACHE) {
+    loadInvestigationGraph();
+  }
+}
+
+function filterTechFindings() {
+  const q = (document.getElementById('techSearchInput').value || '').toLowerCase().trim();
+  const sev = document.getElementById('techSeverityFilter').value;
+  const rem = document.getElementById('techRemFilter').value;
+
+  document.querySelectorAll('.tech-finding-row').forEach(row => {
+    const matchesQ = !q || (row.dataset.search || '').includes(q);
+    const matchesSev = !sev || row.dataset.severity === sev;
+    const matchesRem = !rem || row.dataset.remediation === rem;
+    row.classList.toggle('hidden', !(matchesQ && matchesSev && matchesRem));
+  });
+}
+
+async function generateAndDownloadPdf(fmt) {
+  const activeScanId = {{ (selected_scan.scan_id if selected_scan else '')|tojson }};
+  FIQ_Alert('resultsActionFeedback', `Compiling ${fmt} PDF deliverable for ${RECON_ID}...`, 'loading');
+  try {
+    const res = await fetch('/api/v1/reports/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ investigation_id: RECON_ID, scan_id: activeScanId || null, report_format: fmt })
+    });
+    const data = await res.json();
+    if (res.ok && data.download_url) {
+      FIQ_Alert('resultsActionFeedback', `Generated ${data.file_name}. Starting download...`, 'success');
+      window.location.href = data.download_url;
+      setTimeout(() => window.location.reload(), 1200);
+    } else {
+      FIQ_Alert('resultsActionFeedback', data.detail || 'PDF compilation failed.', 'error');
+    }
+  } catch (err) {
+    FIQ_Alert('resultsActionFeedback', 'Error generating PDF: ' + err.message, 'error');
+  }
+}
+
+async function runComparison() {
+  const otherId = document.getElementById('compareSelect').value;
+  const box = document.getElementById('compareResultBox');
+  if (!otherId) return;
+  box.classList.remove('hidden');
+  box.textContent = 'Comparing campaigns...';
+  try {
+    const res = await fetch(`/api/v1/recon/${encodeURIComponent(RECON_ID)}/compare/${encodeURIComponent(otherId)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      box.textContent = data.detail || 'Comparison failed.';
+      return;
+    }
+    box.innerHTML = `
+      <div><strong>Exposure Score Change:</strong> ${esc(data.exposure_score_delta > 0 ? '+' + data.exposure_score_delta : data.exposure_score_delta)} pts</div>
+      <div><strong>New Findings:</strong> ${(data.new_findings || []).length}</div>
+      <div><strong>Resolved / Gone Findings:</strong> ${(data.resolved_findings || []).length}</div>
+      <div><strong>Persistent Findings:</strong> ${(data.persistent_findings || []).length}</div>`;
+  } catch (err) {
+    box.textContent = 'Error comparing campaigns: ' + err.message;
+  }
+}
+
+function openRemediationModal(btn) {
+  const ds = (btn && btn.dataset) ? btn.dataset : {};
+  document.getElementById('remFindingId').value = ds.findingId || '';
+  document.getElementById('remModalTitle').textContent = ds.findingTitle || '';
+  document.getElementById('remStatusSelect').value = ds.remStatus || 'open';
+  document.getElementById('remExpectedVersion').value = ds.versionId || '1';
+  document.getElementById('remNotesInput').value = '';
+  document.getElementById('remModal').classList.remove('hidden');
+}
+
+function closeRemediationModal() {
+  document.getElementById('remModal').classList.add('hidden');
+}
+
+async function submitRemediationUpdate() {
+  const finding_id = document.getElementById('remFindingId').value;
+  const status = document.getElementById('remStatusSelect').value;
+  const notes = document.getElementById('remNotesInput').value;
+  const expected_version = parseInt(document.getElementById('remExpectedVersion').value || '1', 10);
+
+  const res = await fetch(`/api/v1/recon/${encodeURIComponent(RECON_ID)}/remediation`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ finding_id, status, notes, expected_version })
+  });
+  const data = await res.json();
+  closeRemediationModal();
+  if (res.ok) {
+    window.location.reload();
+  } else {
+    FIQ_Alert('resultsActionFeedback', data.detail || 'Could not update finding status.', 'error');
+  }
+}
+
+// ============================================================================
+// ENTITY GRAPH & MALTEGO INTERCHANGE
+// ============================================================================
+let GRAPH_DATA_CACHE = null;
+
+async function loadInvestigationGraph() {
+  try {
+    const res = await fetch(`/api/v1/investigations/${encodeURIComponent(RECON_ID)}/graph`);
+    const data = await res.json();
+    if (!res.ok) {
+      FIQ_Alert('graphActionFeedback', data.detail || 'Failed to load entity graph.', 'error');
+      return;
+    }
+    GRAPH_DATA_CACHE = data;
+    populateGraphFilterAndSelects(data);
+    renderInvestigationGraph();
+  } catch (err) {
+    FIQ_Alert('graphActionFeedback', 'Error loading entity graph: ' + err.message, 'error');
+  }
+}
+
+async function rebuildInvestigationGraph() {
+  FIQ_Alert('graphActionFeedback', 'Rebuilding investigation entity graph from campaign evidence...', 'loading');
+  try {
+    const res = await fetch(`/api/v1/investigations/${encodeURIComponent(RECON_ID)}/graph/rebuild`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) {
+      FIQ_Alert('graphActionFeedback', data.detail || 'Rebuild failed.', 'error');
+      return;
+    }
+    GRAPH_DATA_CACHE = data;
+    populateGraphFilterAndSelects(data);
+    renderInvestigationGraph();
+    FIQ_Alert('graphActionFeedback', `Graph synchronized: ${data.metrics?.node_count || 0} entities, ${data.metrics?.edge_count || 0} relationships.`, 'success');
+  } catch (err) {
+    FIQ_Alert('graphActionFeedback', 'Error rebuilding graph: ' + err.message, 'error');
+  }
+}
+
+function populateGraphFilterAndSelects(data) {
+  const nodes = data.nodes || [];
+  const typeSel = document.getElementById('graphTypeFilter');
+  if (typeSel) {
+    const prev = typeSel.value;
+    const types = Array.from(new Set(nodes.map(n => n.entity_type || n.type || 'domain'))).sort();
+    typeSel.innerHTML = '<option value="">All Entity Types</option>' +
+      types.map(t => `<option value="${esc(t)}">${esc(t)}</option>`).join('');
+    typeSel.value = types.includes(prev) ? prev : '';
+  }
+
+  ['addEntLinkSelect', 'addRelSource', 'addRelTarget'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const head = id === 'addEntLinkSelect' ? '<option value="">None</option>' : '';
+    el.innerHTML = head + nodes.map(n =>
+      `<option value="${esc(n.id)}">[${esc(n.entity_type || n.type)}] ${esc(n.label || n.value)}</option>`
+    ).join('');
+  });
+}
+
+function renderInvestigationGraph() {
+  const data = GRAPH_DATA_CACHE;
+  if (!data) return;
+
+  const mal = data.maltego_integration || {};
+  const badge = document.getElementById('graphRuntimeBadge');
+  const note = document.getElementById('graphRuntimeNote');
+  if (badge) {
+    badge.textContent = mal.maltego_desktop_installed
+      ? 'Maltego Desktop + Interchange Ready'
+      : (mal.mode || 'Native Correlation + Maltego GraphML/CSV');
+    badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold ' +
+      (mal.maltego_desktop_installed ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800');
+  }
+  if (note && (mal.honesty_note || mal.mode)) note.textContent = mal.honesty_note || mal.mode;
+
+  document.getElementById('graphNodeCount').textContent = data.metrics?.node_count ?? (data.nodes || []).length;
+  document.getElementById('graphEdgeCount').textContent = data.metrics?.edge_count ?? (data.edges || []).length;
+  document.getElementById('graphCompCount').textContent = data.metrics?.component_count ?? (data.components || []).length;
+
+  const sb = document.getElementById('graphSourceBreakdown');
+  if (sb) {
+    const entries = Object.entries(data.source_breakdown || {});
+    sb.innerHTML = entries.length
+      ? entries.map(([k, v]) => `<div class="flex justify-between"><span class="mono text-slate-600">${esc(k)}</span><span class="font-bold text-slate-900">${esc(v)}</span></div>`).join('')
+      : '<span class="text-slate-400">No sources recorded.</span>';
+  }
+
+  const filterType = document.getElementById('graphTypeFilter')?.value || '';
+  const allNodes = data.nodes || [];
+  const nodes = filterType ? allNodes.filter(n => (n.entity_type || n.type) === filterType) : allNodes;
+  const visibleIds = new Set(nodes.map(n => n.id));
+  const edges = (data.edges || []).filter(e => visibleIds.has(e.source) && visibleIds.has(e.target));
+  const nodeMap = Object.fromEntries(allNodes.map(n => [n.id, n]));
+
+  // Render Entities & Edges Tables
+  const entBody = document.getElementById('graphEntitiesTbody');
+  if (entBody) {
+    entBody.innerHTML = nodes.length ? nodes.map(n => `
+      <tr class="cursor-pointer hover:bg-slate-50" onclick="inspectGraphNode('${esc(n.id)}')">
+        <td><span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold text-[10px] uppercase">${esc(n.entity_type || n.type)}</span></td>
+        <td class="mono text-xs text-slate-900 break-all">${esc(n.label || n.value)}</td>
+        <td class="text-[11px] text-slate-600">${esc(n.source_tool)}</td>
+        <td class="mono text-[10px] text-slate-500">${esc(n.maltego_type)}</td>
+      </tr>`).join('') : '<tr><td colspan="4" class="text-center text-xs text-slate-400 py-4">No entities match this filter.</td></tr>';
+  }
+
+  const edgeBody = document.getElementById('graphEdgesTbody');
+  if (edgeBody) {
+    edgeBody.innerHTML = edges.length ? edges.map(e => `
+      <tr>
+        <td class="mono text-[11px] text-slate-800">${esc(nodeMap[e.source]?.label || e.source)}</td>
+        <td><span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-bold text-[10px]">${esc(e.relationship)}</span></td>
+        <td class="mono text-[11px] text-slate-800">${esc(nodeMap[e.target]?.label || e.target)}</td>
+        <td class="text-[11px] text-slate-600">${esc(Math.round((e.confidence || 0.8) * 100))}%</td>
+      </tr>`).join('') : '<tr><td colspan="4" class="text-center text-xs text-slate-400 py-4">No edges match this filter.</td></tr>';
+  }
+
+  // Deterministic Layered SVG Rendering
+  const svg = document.getElementById('graphSvgCanvas');
+  if (!svg) return;
+  const displayNodes = nodes.slice(0, 60);
+  const displayIds = new Set(displayNodes.map(n => n.id));
+  const laneOrder = ['organization', 'domain', 'subdomain', 'nameserver', 'mx', 'email', 'person', 'ip', 'ipv6', 'service', 'url', 'vulnerability'];
+  const colorMap = {
+    domain: '#38bdf8', subdomain: '#0ea5e9', ip: '#34d399', ipv6: '#10b981',
+    service: '#fbbf24', vulnerability: '#f43f5e', email: '#a78bfa',
+    organization: '#c084fc', person: '#e879f9', nameserver: '#2dd4bf', mx: '#818cf8', url: '#fb923c'
+  };
+
+  const groups = {};
+  displayNodes.forEach(n => {
+    const t = n.entity_type || n.type || 'domain';
+    if (!groups[t]) groups[t] = [];
+    groups[t].push(n);
+  });
+  const activeLanes = laneOrder.filter(t => groups[t] && groups[t].length);
+  Object.keys(groups).forEach(t => { if (!activeLanes.includes(t)) activeLanes.push(t); });
+
+  const W = 900, H = 520;
+  const coords = {};
+  activeLanes.forEach((lane, lIdx) => {
+    const colX = activeLanes.length === 1 ? W / 2 : 90 + (lIdx * (W - 180) / (activeLanes.length - 1));
+    const arr = groups[lane];
+    arr.forEach((n, i) => {
+      const y = arr.length === 1 ? H / 2 : 55 + (i * (H - 100) / (arr.length - 1));
+      coords[n.id] = { x: colX, y };
+    });
+  });
+
+  let htmlParts = [];
+  edges.filter(e => displayIds.has(e.source) && displayIds.has(e.target)).forEach(e => {
+    const p1 = coords[e.source], p2 = coords[e.target];
+    if (!p1 || !p2) return;
+    htmlParts.push(`<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${p2.x.toFixed(1)}" y2="${p2.y.toFixed(1)}" stroke="#475569" stroke-width="1.4" stroke-opacity="0.7" />`);
+  });
+
+  displayNodes.forEach(n => {
+    const pos = coords[n.id];
+    if (!pos) return;
+    const t = n.entity_type || n.type || 'domain';
+    const fill = colorMap[t] || '#94a3b8';
+    const shortLbl = String(n.label || n.value || n.id).slice(0, 22);
+    htmlParts.push(`
+      <g style="cursor:pointer" onclick="inspectGraphNode('${esc(n.id)}')">
+        <circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="11" fill="${fill}" stroke="#0f172a" stroke-width="2" />
+        <text x="${pos.x.toFixed(1)}" y="${(pos.y + 22).toFixed(1)}" text-anchor="middle" fill="#e2e8f0" font-size="10" font-family="monospace">${esc(shortLbl)}</text>
+      </g>`);
+  });
+
+  if (!displayNodes.length) {
+    htmlParts.push('<text x="450" y="260" text-anchor="middle" fill="#94a3b8" font-size="13">No entities present yet. Run scans or add an entity below.</text>');
+  }
+  svg.innerHTML = htmlParts.join('');
+}
+
+function inspectGraphNode(nodeId) {
+  if (!GRAPH_DATA_CACHE) return;
+  const node = (GRAPH_DATA_CACHE.nodes || []).find(n => n.id === nodeId);
+  const box = document.getElementById('graphNodeInspector');
+  if (!node || !box) return;
+  box.innerHTML = `
+    <div><span class="font-bold text-slate-800">Label:</span> <span class="mono break-all">${esc(node.label || node.value)}</span></div>
+    <div><span class="font-bold text-slate-800">Type:</span> ${esc(node.entity_type || node.type)} (<span class="mono">${esc(node.maltego_type)}</span>)</div>
+    <div><span class="font-bold text-slate-800">Source Tool:</span> ${esc(node.source_tool)}</div>
+    <div><span class="font-bold text-slate-800">Risk Level:</span> ${esc(node.risk_level || 'info')}</div>
+    <div><span class="font-bold text-slate-800">Confidence:</span> ${esc(Math.round((node.confidence || 0.85) * 100))}%</div>
+    <div><span class="font-bold text-slate-800">Evidence Ref:</span> <span class="mono break-all">${esc(node.evidence_ref || 'Derived from campaign bundle')}</span></div>`;
+}
+
+async function submitAddEntity() {
+  const payload = {
+    entity_type: document.getElementById('addEntType').value,
+    value: document.getElementById('addEntValue').value.trim(),
+    evidence_ref: document.getElementById('addEntEvidence').value.trim() || null,
+    link_to_node_id: document.getElementById('addEntLinkSelect').value || null,
+  };
+  if (!payload.value) {
+    FIQ_Alert('graphActionFeedback', 'Entity value is required.', 'error');
+    return;
+  }
+  const res = await fetch(`/api/v1/investigations/${encodeURIComponent(RECON_ID)}/graph/entities`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    FIQ_Alert('graphActionFeedback', data.detail || 'Failed to add entity.', 'error');
+    return;
+  }
+  document.getElementById('addEntValue').value = '';
+  GRAPH_DATA_CACHE = data.graph || data;
+  populateGraphFilterAndSelects(GRAPH_DATA_CACHE);
+  renderInvestigationGraph();
+  FIQ_Alert('graphActionFeedback', 'Entity added and persisted to investigation graph.', 'success');
+}
+
+async function submitAddRelationship() {
+  const payload = {
+    source_node_id: document.getElementById('addRelSource').value,
+    target_node_id: document.getElementById('addRelTarget').value,
+    relationship_type: document.getElementById('addRelType').value.trim() || 'RELATED_TO',
+    evidence_ref: document.getElementById('addRelEvidence').value.trim() || null,
+  };
+  if (!payload.source_node_id || !payload.target_node_id) {
+    FIQ_Alert('graphActionFeedback', 'Both source and target entities are required.', 'error');
+    return;
+  }
+  const res = await fetch(`/api/v1/investigations/${encodeURIComponent(RECON_ID)}/graph/relationships`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    FIQ_Alert('graphActionFeedback', data.detail || 'Failed to add relationship.', 'error');
+    return;
+  }
+  GRAPH_DATA_CACHE = data.graph || data;
+  populateGraphFilterAndSelects(GRAPH_DATA_CACHE);
+  renderInvestigationGraph();
+  FIQ_Alert('graphActionFeedback', 'Relationship edge added.', 'success');
+}
+
+async function submitGraphImport() {
+  const input = document.getElementById('graphImportFile');
+  if (!input || !input.files || !input.files.length) {
+    FIQ_Alert('graphActionFeedback', 'Select a .graphml, .csv, or .json file first.', 'error');
+    return;
+  }
+  const fd = new FormData();
+  fd.append('file', input.files[0]);
+  FIQ_Alert('graphActionFeedback', 'Importing and validating entity file...', 'loading');
+  const res = await fetch(`/api/v1/investigations/${encodeURIComponent(RECON_ID)}/graph/import`, {
+    method: 'POST',
+    body: fd
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    FIQ_Alert('graphActionFeedback', data.detail || 'Import failed.', 'error');
+    return;
+  }
+  input.value = '';
+  GRAPH_DATA_CACHE = data.graph || data;
+  populateGraphFilterAndSelects(GRAPH_DATA_CACHE);
+  renderInvestigationGraph();
+  FIQ_Alert('graphActionFeedback', `Imported ${data.imported_entities || 0} entities and ${data.imported_relationships || 0} relationships.`, 'success');
+}
+
+// ============================================================================
+// TENABLE NESSUS READ-ONLY SCAN INSPECTION & IMPORT
+// ============================================================================
+async function loadNessusScansPanel() {
+  const summary = document.getElementById('nessusCapsSummary');
+  const box = document.getElementById('nessusScansContainer');
+  const isAdmin = {{ 'true' if is_admin else 'false' }};
+  summary.textContent = 'Querying Tenable Nessus API capabilities and existing scans...';
+  try {
+    const [capRes, scansRes] = await Promise.all([
+      fetch('/api/v1/scanners/nessus/capabilities'),
+      fetch('/api/v1/scanners/nessus/scans')
+    ]);
+    const capData = await capRes.json();
+    const scansData = await scansRes.json();
+    if (!capRes.ok || !capData.connected) {
+      summary.textContent = capData.error || 'Tenable Nessus instance is not currently reachable.';
+      return;
+    }
+    summary.textContent = `${capData.nessus_type || 'Nessus'} (${capData.version || 'Unknown'}) — Launch API: ${capData.capabilities?.scan_launch ? 'Enabled' : 'Read-Only Disabled by License'} | Scanners: ${capData.scanners_count ?? 0}`;
+    const scans = scansData.scans || [];
+    box.classList.remove('hidden');
+    if (!scans.length) {
+      box.innerHTML = '<div class="text-xs text-slate-400">No existing scans found on Nessus server.</div>';
+      return;
+    }
+    box.innerHTML = scans.map(s => `
+      <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs">
+        <div>
+          <span class="font-bold text-slate-900">${esc(s.name)}</span>
+          <span class="mono text-[10px] text-slate-500 ml-2">ID: ${esc(s.id)}</span>
+          <span class="ml-2 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-200 text-slate-700">${esc(s.status)}</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          ${!isAdmin ? `<button type="button" onclick="importNessusScan(${Number(s.id)})" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[11px] font-semibold">Import Findings</button>` : ''}
+        </div>
+      </div>`).join('');
+  } catch (err) {
+    summary.textContent = 'Error querying Nessus: ' + err.message;
+  }
+}
+
+async function importNessusScan(scanId) {
+  FIQ_Alert('resultsActionFeedback', `Importing Nessus scan ${scanId} into campaign ${RECON_ID}...`, 'loading');
+  try {
+    const res = await fetch(`/api/v1/scanners/nessus/scans/${encodeURIComponent(scanId)}/import?investigation_id=${encodeURIComponent(RECON_ID)}`, {
+      method: 'POST'
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      FIQ_Alert('resultsActionFeedback', data.detail || 'Nessus import failed.', 'error');
+      return;
+    }
+    FIQ_Alert('resultsActionFeedback', `Imported ${data.findings_imported || 0} findings from Nessus scan ${scanId} (status: ${data.nessus_scan_status || 'unknown'}).`, 'success');
+    if ((data.findings_imported || 0) > 0) {
+      setTimeout(() => window.location.reload(), 1200);
+    }
+  } catch (err) {
+    FIQ_Alert('resultsActionFeedback', 'Error importing Nessus scan: ' + err.message, 'error');
+  }
+}
+</script>
+{% endblock %}

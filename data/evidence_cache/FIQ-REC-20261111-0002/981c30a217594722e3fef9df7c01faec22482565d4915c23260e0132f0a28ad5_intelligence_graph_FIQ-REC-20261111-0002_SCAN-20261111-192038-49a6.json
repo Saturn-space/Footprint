@@ -1,0 +1,128 @@
+{
+  "investigation_id": "FIQ-REC-20261111-0002",
+  "campaign_name": "e2e_live_audit",
+  "target": "127.0.0.1",
+  "generated_at": "2026-11-11T19:20:45.362782+00:00",
+  "metrics": {
+    "node_count": 2,
+    "edge_count": 1,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.5,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "ip": 1,
+    "service": 1
+  },
+  "source_breakdown": {
+    "nmap": 2
+  },
+  "nodes": [
+    {
+      "id": "ENT:IP:15fac6f61d77",
+      "type": "ip",
+      "label": "127.0.0.1",
+      "canonical_value": "127.0.0.1",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "nmap"
+      ],
+      "risk_level": "info",
+      "confidence": 0.98,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "e2e_live_audit",
+        "value": "127.0.0.1",
+        "source_tool": "nmap",
+        "evidence_ref": "6,024a19bb9571",
+        "risk_level": "info",
+        "confidence": 0.98,
+        "maltego_type": "maltego.IPv4Address",
+        "hostname": null,
+        "os": null
+      },
+      "first_seen": "2026-11-11T19:20:45.362565+00:00",
+      "last_seen": "2026-11-11T19:20:45.362606+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "nmap",
+      "evidence_ref": "6,024a19bb9571",
+      "value": "127.0.0.1"
+    },
+    {
+      "id": "ENT:SERVICE:9da0cda09b6b",
+      "type": "service",
+      "label": "8000/tcp http [Uvicorn]",
+      "canonical_value": "127.0.0.1:8000/tcp (http)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "127.0.0.1",
+        "port": 8000,
+        "protocol": "tcp",
+        "service": "http",
+        "version": "Uvicorn",
+        "value": "127.0.0.1:8000/tcp (http)",
+        "source_tool": "nmap",
+        "evidence_ref": "6,024a19bb9571",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-11T19:20:45.362641+00:00",
+      "last_seen": "2026-11-11T19:20:45.362641+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "6,024a19bb9571",
+      "value": "127.0.0.1:8000/tcp (http)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:3bf9fb9148a0",
+      "source": "ENT:IP:15fac6f61d77",
+      "target": "ENT:SERVICE:9da0cda09b6b",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:127.0.0.1:8000"
+      ],
+      "first_observed": "2026-11-11T19:20:45.362654+00:00",
+      "last_observed": "2026-11-11T19:20:45.362654+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:IP:15fac6f61d77",
+      "ENT:SERVICE:9da0cda09b6b"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

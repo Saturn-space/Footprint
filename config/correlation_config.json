@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0",
+  "confidence_thresholds": {
+    "DIRECT": {
+      "base_score": 0.85,
+      "min_evidence_count": 1,
+      "description": "Explicit primary technical observation directly confirming the association"
+    },
+    "CORROBORATED": {
+      "base_score": 0.95,
+      "min_evidence_count": 2,
+      "description": "Multiple independent sources or tools confirming the identical association"
+    },
+    "INDIRECT": {
+      "base_score": 0.65,
+      "min_evidence_count": 1,
+      "description": "Derived or associative relationship based on contextual or secondary heuristics"
+    },
+    "UNCONFIRMED": {
+      "base_score": 0.40,
+      "min_evidence_count": 1,
+      "description": "Suggested by unverified third-party scraping or incomplete technical record"
+    }
+  },
+  "environment_boundaries": {
+    "lab_subnets": ["192.168.56.0/24"],
+    "lab_hosts": ["192.168.56.111"],
+    "loopback_hosts": ["127.0.0.1", "::1", "localhost"]
+  },
+  "normalization_rules": {
+    "lowercase_dns": true,
+    "strip_trailing_dot": true,
+    "canonicalize_ip": true,
+    "normalize_cpe": true
+  },
+  "graph_export": {
+    "format": "node_edge_json",
+    "include_attributes": true
+  }
+}
+

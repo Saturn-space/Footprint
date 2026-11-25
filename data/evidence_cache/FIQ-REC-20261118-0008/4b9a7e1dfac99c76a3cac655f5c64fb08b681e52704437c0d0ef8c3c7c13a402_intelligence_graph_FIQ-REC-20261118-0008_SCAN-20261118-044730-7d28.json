@@ -1,0 +1,1464 @@
+{
+  "investigation_id": "FIQ-REC-20261118-0008",
+  "campaign_name": "Test 2",
+  "target": "192.168.56.111",
+  "generated_at": "2026-11-18T04:52:20.330138+00:00",
+  "metrics": {
+    "node_count": 30,
+    "edge_count": 29,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.0333,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "ip": 1,
+    "service": 18,
+    "vulnerability": 11
+  },
+  "source_breakdown": {
+    "nmap": 19,
+    "nuclei": 4,
+    "nse": 7
+  },
+  "nodes": [
+    {
+      "id": "ENT:IP:da1f1bf65b4c",
+      "type": "ip",
+      "label": "192.168.56.111",
+      "canonical_value": "192.168.56.111",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "nmap"
+      ],
+      "risk_level": "info",
+      "confidence": 0.98,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "Test 2",
+        "value": "192.168.56.111",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "info",
+        "confidence": 0.98,
+        "maltego_type": "maltego.IPv4Address",
+        "hostname": null,
+        "os": null
+      },
+      "first_seen": "2026-11-18T04:52:20.329043+00:00",
+      "last_seen": "2026-11-18T04:52:20.329079+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111"
+    },
+    {
+      "id": "ENT:SERVICE:0c09575e827d",
+      "type": "service",
+      "label": "8009/tcp ajp13 [Apache Jserv]",
+      "canonical_value": "192.168.56.111:8009/tcp (ajp13)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 8009,
+        "protocol": "tcp",
+        "service": "ajp13",
+        "version": "Apache Jserv",
+        "value": "192.168.56.111:8009/tcp (ajp13)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329632+00:00",
+      "last_seen": "2026-11-18T04:52:20.329632+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:8009/tcp (ajp13)"
+    },
+    {
+      "id": "ENT:SERVICE:25e22b30e9bc",
+      "type": "service",
+      "label": "23/tcp telnet [Linux telnetd]",
+      "canonical_value": "192.168.56.111:23/tcp (telnet)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 23,
+        "protocol": "tcp",
+        "service": "telnet",
+        "version": "Linux telnetd",
+        "value": "192.168.56.111:23/tcp (telnet)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329157+00:00",
+      "last_seen": "2026-11-18T04:52:20.329157+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:23/tcp (telnet)"
+    },
+    {
+      "id": "ENT:SERVICE:3fa584eead44",
+      "type": "service",
+      "label": "445/tcp netbios-ssn [Samba smbd 3.X - 4.X]",
+      "canonical_value": "192.168.56.111:445/tcp (netbios-ssn)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 445,
+        "protocol": "tcp",
+        "service": "netbios-ssn",
+        "version": "Samba smbd 3.X - 4.X",
+        "value": "192.168.56.111:445/tcp (netbios-ssn)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329283+00:00",
+      "last_seen": "2026-11-18T04:52:20.329283+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:445/tcp (netbios-ssn)"
+    },
+    {
+      "id": "ENT:SERVICE:5f6ac25fd3a2",
+      "type": "service",
+      "label": "6000/tcp X11",
+      "canonical_value": "192.168.56.111:6000/tcp (X11)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 6000,
+        "protocol": "tcp",
+        "service": "X11",
+        "version": "",
+        "value": "192.168.56.111:6000/tcp (X11)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329610+00:00",
+      "last_seen": "2026-11-18T04:52:20.329610+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:6000/tcp (X11)"
+    },
+    {
+      "id": "ENT:SERVICE:769a4aa4ad27",
+      "type": "service",
+      "label": "21/tcp ftp [vsftpd 2.3.4]",
+      "canonical_value": "192.168.56.111:21/tcp (ftp)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 21,
+        "protocol": "tcp",
+        "service": "ftp",
+        "version": "vsftpd 2.3.4",
+        "value": "192.168.56.111:21/tcp (ftp)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329109+00:00",
+      "last_seen": "2026-11-18T04:52:20.329109+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:21/tcp (ftp)"
+    },
+    {
+      "id": "ENT:SERVICE:aa84c1d1b9e2",
+      "type": "service",
+      "label": "139/tcp netbios-ssn [Samba smbd 3.X - 4.X]",
+      "canonical_value": "192.168.56.111:139/tcp (netbios-ssn)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 139,
+        "protocol": "tcp",
+        "service": "netbios-ssn",
+        "version": "Samba smbd 3.X - 4.X",
+        "value": "192.168.56.111:139/tcp (netbios-ssn)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329269+00:00",
+      "last_seen": "2026-11-18T04:52:20.329269+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:139/tcp (netbios-ssn)"
+    },
+    {
+      "id": "ENT:SERVICE:b302af6b4a4e",
+      "type": "service",
+      "label": "514/tcp shell [Netkit rshd]",
+      "canonical_value": "192.168.56.111:514/tcp (shell)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 514,
+        "protocol": "tcp",
+        "service": "shell",
+        "version": "Netkit rshd",
+        "value": "192.168.56.111:514/tcp (shell)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329456+00:00",
+      "last_seen": "2026-11-18T04:52:20.329456+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:514/tcp (shell)"
+    },
+    {
+      "id": "ENT:SERVICE:b70b484fc763",
+      "type": "service",
+      "label": "22/tcp ssh [OpenSSH 4.7p1 Debian 8ub]",
+      "canonical_value": "192.168.56.111:22/tcp (ssh)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 22,
+        "protocol": "tcp",
+        "service": "ssh",
+        "version": "OpenSSH 4.7p1 Debian 8ubuntu1",
+        "value": "192.168.56.111:22/tcp (ssh)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329138+00:00",
+      "last_seen": "2026-11-18T04:52:20.329138+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:22/tcp (ssh)"
+    },
+    {
+      "id": "ENT:SERVICE:b90dc16a2d66",
+      "type": "service",
+      "label": "25/tcp smtp [Postfix smtpd]",
+      "canonical_value": "192.168.56.111:25/tcp (smtp)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 25,
+        "protocol": "tcp",
+        "service": "smtp",
+        "version": "Postfix smtpd",
+        "value": "192.168.56.111:25/tcp (smtp)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329191+00:00",
+      "last_seen": "2026-11-18T04:52:20.329191+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:25/tcp (smtp)"
+    },
+    {
+      "id": "ENT:SERVICE:d26e07ce53ec",
+      "type": "service",
+      "label": "80/tcp http [Apache httpd 2.2.8]",
+      "canonical_value": "192.168.56.111:80/tcp (http)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 80,
+        "protocol": "tcp",
+        "service": "http",
+        "version": "Apache httpd 2.2.8",
+        "value": "192.168.56.111:80/tcp (http)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329229+00:00",
+      "last_seen": "2026-11-18T04:52:20.329229+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:80/tcp (http)"
+    },
+    {
+      "id": "ENT:SERVICE:d79ed709fc9e",
+      "type": "service",
+      "label": "5432/tcp postgresql [PostgreSQL DB 8.3.0 - 8.]",
+      "canonical_value": "192.168.56.111:5432/tcp (postgresql)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 5432,
+        "protocol": "tcp",
+        "service": "postgresql",
+        "version": "PostgreSQL DB 8.3.0 - 8.3.7",
+        "value": "192.168.56.111:5432/tcp (postgresql)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329561+00:00",
+      "last_seen": "2026-11-18T04:52:20.329561+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:5432/tcp (postgresql)"
+    },
+    {
+      "id": "ENT:SERVICE:e13a7fbd6df2",
+      "type": "service",
+      "label": "3306/tcp mysql [MySQL 5.0.51a-3ubuntu5]",
+      "canonical_value": "192.168.56.111:3306/tcp (mysql)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 3306,
+        "protocol": "tcp",
+        "service": "mysql",
+        "version": "MySQL 5.0.51a-3ubuntu5",
+        "value": "192.168.56.111:3306/tcp (mysql)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329536+00:00",
+      "last_seen": "2026-11-18T04:52:20.329536+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:3306/tcp (mysql)"
+    },
+    {
+      "id": "ENT:SERVICE:e8d279e0880b",
+      "type": "service",
+      "label": "5900/tcp vnc [VNC]",
+      "canonical_value": "192.168.56.111:5900/tcp (vnc)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 5900,
+        "protocol": "tcp",
+        "service": "vnc",
+        "version": "VNC",
+        "value": "192.168.56.111:5900/tcp (vnc)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329589+00:00",
+      "last_seen": "2026-11-18T04:52:20.329589+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:5900/tcp (vnc)"
+    },
+    {
+      "id": "ENT:SERVICE:edc7e8c5bb4e",
+      "type": "service",
+      "label": "2049/tcp nfs [2-4]",
+      "canonical_value": "192.168.56.111:2049/tcp (nfs)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 2049,
+        "protocol": "tcp",
+        "service": "nfs",
+        "version": "2-4",
+        "value": "192.168.56.111:2049/tcp (nfs)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329490+00:00",
+      "last_seen": "2026-11-18T04:52:20.329490+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:2049/tcp (nfs)"
+    },
+    {
+      "id": "ENT:SERVICE:f11bbd305015",
+      "type": "service",
+      "label": "53/tcp domain [ISC BIND 9.4.2]",
+      "canonical_value": "192.168.56.111:53/tcp (domain)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 53,
+        "protocol": "tcp",
+        "service": "domain",
+        "version": "ISC BIND 9.4.2",
+        "value": "192.168.56.111:53/tcp (domain)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329207+00:00",
+      "last_seen": "2026-11-18T04:52:20.329207+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:53/tcp (domain)"
+    },
+    {
+      "id": "ENT:SERVICE:f238bd5a13e9",
+      "type": "service",
+      "label": "2121/tcp ftp [ProFTPD 1.3.1]",
+      "canonical_value": "192.168.56.111:2121/tcp (ftp)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 2121,
+        "protocol": "tcp",
+        "service": "ftp",
+        "version": "ProFTPD 1.3.1",
+        "value": "192.168.56.111:2121/tcp (ftp)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329513+00:00",
+      "last_seen": "2026-11-18T04:52:20.329513+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:2121/tcp (ftp)"
+    },
+    {
+      "id": "ENT:SERVICE:f9d26ebb30e3",
+      "type": "service",
+      "label": "111/tcp rpcbind [2]",
+      "canonical_value": "192.168.56.111:111/tcp (rpcbind)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 111,
+        "protocol": "tcp",
+        "service": "rpcbind",
+        "version": "2",
+        "value": "192.168.56.111:111/tcp (rpcbind)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329253+00:00",
+      "last_seen": "2026-11-18T04:52:20.329253+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:111/tcp (rpcbind)"
+    },
+    {
+      "id": "ENT:SERVICE:fbe64dae2b89",
+      "type": "service",
+      "label": "513/tcp login [OpenBSD or Solaris rlogi]",
+      "canonical_value": "192.168.56.111:513/tcp (login)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 513,
+        "protocol": "tcp",
+        "service": "login",
+        "version": "OpenBSD or Solaris rlogind",
+        "value": "192.168.56.111:513/tcp (login)",
+        "source_tool": "nmap",
+        "evidence_ref": "2,037430cca256",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-18T04:52:20.329422+00:00",
+      "last_seen": "2026-11-18T04:52:20.329422+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "2,037430cca256",
+      "value": "192.168.56.111:513/tcp (login)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:12d5a6a0ce56",
+      "type": "vulnerability",
+      "label": "[HIGH] PHP CGI v5.3.12/5.4.2 Remote Code Execution",
+      "canonical_value": "CVE-2012-1823|192.168.56.111|80|PHP CGI v5.3.12/5.4.2 Remote Code Execution",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "high",
+      "confidence": 0.9,
+      "attributes": {
+        "finding_id": "NUC-B06DB94F7D58",
+        "cve": "CVE-2012-1823",
+        "cvss": 7.5,
+        "severity": "High",
+        "value": "CVE-2012-1823|192.168.56.111|80|PHP CGI v5.3.12/5.4.2 Remote Code Execution",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,03776a67e319",
+        "risk_level": "high",
+        "confidence": 0.9,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329857+00:00",
+      "last_seen": "2026-11-18T04:52:20.329857+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,03776a67e319",
+      "value": "CVE-2012-1823|192.168.56.111|80|PHP CGI v5.3.12/5.4.2 Remote Code Execution"
+    },
+    {
+      "id": "ENT:VULNERABILITY:16cd74f2c971",
+      "type": "vulnerability",
+      "label": "[LOW] PHPinfo Page - Detect",
+      "canonical_value": "NUC-5EDE8E2E9671|192.168.56.111|80|PHPinfo Page - Detect",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "low",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-5EDE8E2E9671",
+        "cve": null,
+        "cvss": null,
+        "severity": "Low",
+        "value": "NUC-5EDE8E2E9671|192.168.56.111|80|PHPinfo Page - Detect",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,03776a67e319",
+        "risk_level": "low",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329902+00:00",
+      "last_seen": "2026-11-18T04:52:20.329902+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,03776a67e319",
+      "value": "NUC-5EDE8E2E9671|192.168.56.111|80|PHPinfo Page - Detect"
+    },
+    {
+      "id": "ENT:VULNERABILITY:16de800cd10b",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] phpMyAdmin Panel - Detect",
+      "canonical_value": "NUC-772275D28F41|192.168.56.111|80|phpMyAdmin Panel - Detect",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-772275D28F41",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-772275D28F41|192.168.56.111|80|phpMyAdmin Panel - Detect",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,03776a67e319",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329880+00:00",
+      "last_seen": "2026-11-18T04:52:20.329880+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,03776a67e319",
+      "value": "NUC-772275D28F41|192.168.56.111|80|phpMyAdmin Panel - Detect"
+    },
+    {
+      "id": "ENT:VULNERABILITY:4c62091473e3",
+      "type": "vulnerability",
+      "label": "[MEDIUM] Checks for SSLv3 CBC ciphersuite downgrade vulnerability (PO",
+      "canonical_value": "CVE-2014-3566|192.168.56.111|25|Checks for SSLv3 CBC ciphersuite downgrade vulnerability (POODLE).",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "medium",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-8A81793241",
+        "cve": "CVE-2014-3566",
+        "cvss": 4.3,
+        "severity": "Medium",
+        "value": "CVE-2014-3566|192.168.56.111|25|Checks for SSLv3 CBC ciphersuite downgrade vulnerability (POODLE).",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ssl-poodle",
+        "risk_level": "medium",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329758+00:00",
+      "last_seen": "2026-11-18T04:52:20.329758+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ssl-poodle",
+      "value": "CVE-2014-3566|192.168.56.111|25|Checks for SSLv3 CBC ciphersuite downgrade vulnerability (POODLE)."
+    },
+    {
+      "id": "ENT:VULNERABILITY:4fbdf9a45677",
+      "type": "vulnerability",
+      "label": "[MEDIUM] Checks for OpenSSL ChangeCipherSpec early-injection vulnerab",
+      "canonical_value": "CVE-2014-0224|192.168.56.111|3306|Checks for OpenSSL ChangeCipherSpec early-injection vulnerability.",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "medium",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-5319C815AA",
+        "cve": "CVE-2014-0224",
+        "cvss": 6.8,
+        "severity": "Medium",
+        "value": "CVE-2014-0224|192.168.56.111|3306|Checks for OpenSSL ChangeCipherSpec early-injection vulnerability.",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ssl-ccs-injection",
+        "risk_level": "medium",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329782+00:00",
+      "last_seen": "2026-11-18T04:52:20.329782+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ssl-ccs-injection",
+      "value": "CVE-2014-0224|192.168.56.111|3306|Checks for OpenSSL ChangeCipherSpec early-injection vulnerability."
+    },
+    {
+      "id": "ENT:VULNERABILITY:679719ba911d",
+      "type": "vulnerability",
+      "label": "[MEDIUM] Checks for SSLv3 CBC ciphersuite downgrade vulnerability (PO",
+      "canonical_value": "CVE-2014-3566|192.168.56.111|5432|Checks for SSLv3 CBC ciphersuite downgrade vulnerability (POODLE).",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "medium",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-6CF574EF05",
+        "cve": "CVE-2014-3566",
+        "cvss": 4.3,
+        "severity": "Medium",
+        "value": "CVE-2014-3566|192.168.56.111|5432|Checks for SSLv3 CBC ciphersuite downgrade vulnerability (POODLE).",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ssl-poodle",
+        "risk_level": "medium",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329802+00:00",
+      "last_seen": "2026-11-18T04:52:20.329802+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ssl-poodle",
+      "value": "CVE-2014-3566|192.168.56.111|5432|Checks for SSLv3 CBC ciphersuite downgrade vulnerability (POODLE)."
+    },
+    {
+      "id": "ENT:VULNERABILITY:869687d74019",
+      "type": "vulnerability",
+      "label": "[HIGH] Enumerates supported TLS/SSL protocol versions and cipher su",
+      "canonical_value": "NSE-6FAFBF9460|192.168.56.111|5432|Enumerates supported TLS/SSL protocol versions and cipher suites.",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "high",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-6FAFBF9460",
+        "cve": null,
+        "cvss": 7.5,
+        "severity": "High",
+        "value": "NSE-6FAFBF9460|192.168.56.111|5432|Enumerates supported TLS/SSL protocol versions and cipher suites.",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ssl-enum-ciphers",
+        "risk_level": "high",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329702+00:00",
+      "last_seen": "2026-11-18T04:52:20.329702+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ssl-enum-ciphers",
+      "value": "NSE-6FAFBF9460|192.168.56.111|5432|Enumerates supported TLS/SSL protocol versions and cipher suites."
+    },
+    {
+      "id": "ENT:VULNERABILITY:99443a55ea77",
+      "type": "vulnerability",
+      "label": "[LOW] Apache mod_negotiation - Pseudo Directory Listing",
+      "canonical_value": "NUC-9256E1C318DB|192.168.56.111|80|Apache mod_negotiation - Pseudo Directory Listing",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "low",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-9256E1C318DB",
+        "cve": null,
+        "cvss": 5.3,
+        "severity": "Low",
+        "value": "NUC-9256E1C318DB|192.168.56.111|80|Apache mod_negotiation - Pseudo Directory Listing",
+        "source_tool": "nuclei",
+        "evidence_ref": "6,03776a67e319",
+        "risk_level": "low",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329924+00:00",
+      "last_seen": "2026-11-18T04:52:20.329924+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "6,03776a67e319",
+      "value": "NUC-9256E1C318DB|192.168.56.111|80|Apache mod_negotiation - Pseudo Directory Listing"
+    },
+    {
+      "id": "ENT:VULNERABILITY:b18d43072f70",
+      "type": "vulnerability",
+      "label": "[HIGH] Enumerates supported TLS/SSL protocol versions and cipher su",
+      "canonical_value": "NSE-E471671FBC|192.168.56.111|25|Enumerates supported TLS/SSL protocol versions and cipher suites.",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "high",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-E471671FBC",
+        "cve": null,
+        "cvss": 7.5,
+        "severity": "High",
+        "value": "NSE-E471671FBC|192.168.56.111|25|Enumerates supported TLS/SSL protocol versions and cipher suites.",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ssl-enum-ciphers",
+        "risk_level": "high",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329670+00:00",
+      "last_seen": "2026-11-18T04:52:20.329670+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ssl-enum-ciphers",
+      "value": "NSE-E471671FBC|192.168.56.111|25|Enumerates supported TLS/SSL protocol versions and cipher suites."
+    },
+    {
+      "id": "ENT:VULNERABILITY:b51a9373897c",
+      "type": "vulnerability",
+      "label": "[CRITICAL] Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+      "canonical_value": "CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "critical",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-812CB6E85C",
+        "cve": "CVE-2011-2523",
+        "cvss": 9.8,
+        "severity": "Critical",
+        "value": "CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ftp-vsftpd-backdoor",
+        "risk_level": "critical",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329730+00:00",
+      "last_seen": "2026-11-18T04:52:20.329730+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ftp-vsftpd-backdoor",
+      "value": "CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition."
+    },
+    {
+      "id": "ENT:VULNERABILITY:bd990d1e9ae0",
+      "type": "vulnerability",
+      "label": "[MEDIUM] Checks for OpenSSL ChangeCipherSpec early-injection vulnerab",
+      "canonical_value": "CVE-2014-0224|192.168.56.111|5432|Checks for OpenSSL ChangeCipherSpec early-injection vulnerability.",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "medium",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-E624425891",
+        "cve": "CVE-2014-0224",
+        "cvss": 6.8,
+        "severity": "Medium",
+        "value": "CVE-2014-0224|192.168.56.111|5432|Checks for OpenSSL ChangeCipherSpec early-injection vulnerability.",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ssl-ccs-injection",
+        "risk_level": "medium",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-18T04:52:20.329824+00:00",
+      "last_seen": "2026-11-18T04:52:20.329824+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ssl-ccs-injection",
+      "value": "CVE-2014-0224|192.168.56.111|5432|Checks for OpenSSL ChangeCipherSpec early-injection vulnerability."
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:ded9c9abbc5e",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:0c09575e827d",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:8009"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329638+00:00",
+      "last_observed": "2026-11-18T04:52:20.329638+00:00"
+    },
+    {
+      "id": "REL:3e3a905b36e2",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:25e22b30e9bc",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:23"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329179+00:00",
+      "last_observed": "2026-11-18T04:52:20.329179+00:00"
+    },
+    {
+      "id": "REL:6a77195c51e1",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:3fa584eead44",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:445"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329370+00:00",
+      "last_observed": "2026-11-18T04:52:20.329370+00:00"
+    },
+    {
+      "id": "REL:62c797643a24",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:5f6ac25fd3a2",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:6000"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329617+00:00",
+      "last_observed": "2026-11-18T04:52:20.329617+00:00"
+    },
+    {
+      "id": "REL:3e96a3705c1a",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:769a4aa4ad27",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:21"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329118+00:00",
+      "last_observed": "2026-11-18T04:52:20.329118+00:00"
+    },
+    {
+      "id": "REL:1b631d1a43fe",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:aa84c1d1b9e2",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:139"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329273+00:00",
+      "last_observed": "2026-11-18T04:52:20.329273+00:00"
+    },
+    {
+      "id": "REL:1a9cc58fb165",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:b302af6b4a4e",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:514"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329466+00:00",
+      "last_observed": "2026-11-18T04:52:20.329466+00:00"
+    },
+    {
+      "id": "REL:26c3a43330ec",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:b70b484fc763",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:22"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329143+00:00",
+      "last_observed": "2026-11-18T04:52:20.329143+00:00"
+    },
+    {
+      "id": "REL:5609bb8ee15a",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:b90dc16a2d66",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:25"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329196+00:00",
+      "last_observed": "2026-11-18T04:52:20.329196+00:00"
+    },
+    {
+      "id": "REL:f17e4ae08825",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:d26e07ce53ec",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:80"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329236+00:00",
+      "last_observed": "2026-11-18T04:52:20.329236+00:00"
+    },
+    {
+      "id": "REL:43c314d0f4c1",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:d79ed709fc9e",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:5432"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329573+00:00",
+      "last_observed": "2026-11-18T04:52:20.329573+00:00"
+    },
+    {
+      "id": "REL:235908d38b8c",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:e13a7fbd6df2",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:3306"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329543+00:00",
+      "last_observed": "2026-11-18T04:52:20.329543+00:00"
+    },
+    {
+      "id": "REL:deed13d97440",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:e8d279e0880b",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:5900"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329595+00:00",
+      "last_observed": "2026-11-18T04:52:20.329595+00:00"
+    },
+    {
+      "id": "REL:4959ae1b2d24",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:edc7e8c5bb4e",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:2049"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329497+00:00",
+      "last_observed": "2026-11-18T04:52:20.329497+00:00"
+    },
+    {
+      "id": "REL:91b58ed7a4f2",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:f11bbd305015",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:53"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329213+00:00",
+      "last_observed": "2026-11-18T04:52:20.329213+00:00"
+    },
+    {
+      "id": "REL:cd22efdad0d6",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:f238bd5a13e9",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:2121"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329520+00:00",
+      "last_observed": "2026-11-18T04:52:20.329520+00:00"
+    },
+    {
+      "id": "REL:03ae23812c55",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:f9d26ebb30e3",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:111"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329258+00:00",
+      "last_observed": "2026-11-18T04:52:20.329258+00:00"
+    },
+    {
+      "id": "REL:45857a2d09ee",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:fbe64dae2b89",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:513"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329433+00:00",
+      "last_observed": "2026-11-18T04:52:20.329433+00:00"
+    },
+    {
+      "id": "REL:63ae1cc999fe",
+      "source": "ENT:SERVICE:769a4aa4ad27",
+      "target": "ENT:VULNERABILITY:b51a9373897c",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ftp-vsftpd-backdoor"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329739+00:00",
+      "last_observed": "2026-11-18T04:52:20.329739+00:00"
+    },
+    {
+      "id": "REL:541b7515c873",
+      "source": "ENT:SERVICE:b90dc16a2d66",
+      "target": "ENT:VULNERABILITY:4c62091473e3",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ssl-poodle"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329763+00:00",
+      "last_observed": "2026-11-18T04:52:20.329763+00:00"
+    },
+    {
+      "id": "REL:192172678cd6",
+      "source": "ENT:SERVICE:b90dc16a2d66",
+      "target": "ENT:VULNERABILITY:b18d43072f70",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ssl-enum-ciphers"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329677+00:00",
+      "last_observed": "2026-11-18T04:52:20.329677+00:00"
+    },
+    {
+      "id": "REL:f33e557f33ba",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:12d5a6a0ce56",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.9,
+      "confidence_score": 0.9,
+      "evidence_ids": [
+        "6,03776a67e319"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329863+00:00",
+      "last_observed": "2026-11-18T04:52:20.329863+00:00"
+    },
+    {
+      "id": "REL:1c894f965de8",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:16cd74f2c971",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "6,03776a67e319"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329907+00:00",
+      "last_observed": "2026-11-18T04:52:20.329907+00:00"
+    },
+    {
+      "id": "REL:84f6252f76a6",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:16de800cd10b",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "6,03776a67e319"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329886+00:00",
+      "last_observed": "2026-11-18T04:52:20.329886+00:00"
+    },
+    {
+      "id": "REL:dc8ff512fa42",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:99443a55ea77",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "6,03776a67e319"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329930+00:00",
+      "last_observed": "2026-11-18T04:52:20.329930+00:00"
+    },
+    {
+      "id": "REL:c588df9c5492",
+      "source": "ENT:SERVICE:d79ed709fc9e",
+      "target": "ENT:VULNERABILITY:679719ba911d",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ssl-poodle"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329807+00:00",
+      "last_observed": "2026-11-18T04:52:20.329807+00:00"
+    },
+    {
+      "id": "REL:b868ebec5ee4",
+      "source": "ENT:SERVICE:d79ed709fc9e",
+      "target": "ENT:VULNERABILITY:869687d74019",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ssl-enum-ciphers"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329708+00:00",
+      "last_observed": "2026-11-18T04:52:20.329708+00:00"
+    },
+    {
+      "id": "REL:4354f2ad28d1",
+      "source": "ENT:SERVICE:d79ed709fc9e",
+      "target": "ENT:VULNERABILITY:bd990d1e9ae0",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ssl-ccs-injection"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329830+00:00",
+      "last_observed": "2026-11-18T04:52:20.329830+00:00"
+    },
+    {
+      "id": "REL:4bd837517bcb",
+      "source": "ENT:SERVICE:e13a7fbd6df2",
+      "target": "ENT:VULNERABILITY:4fbdf9a45677",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ssl-ccs-injection"
+      ],
+      "first_observed": "2026-11-18T04:52:20.329788+00:00",
+      "last_observed": "2026-11-18T04:52:20.329788+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:IP:da1f1bf65b4c",
+      "ENT:SERVICE:0c09575e827d",
+      "ENT:SERVICE:25e22b30e9bc",
+      "ENT:SERVICE:3fa584eead44",
+      "ENT:SERVICE:5f6ac25fd3a2",
+      "ENT:SERVICE:769a4aa4ad27",
+      "ENT:SERVICE:aa84c1d1b9e2",
+      "ENT:SERVICE:b302af6b4a4e",
+      "ENT:SERVICE:b70b484fc763",
+      "ENT:SERVICE:b90dc16a2d66",
+      "ENT:SERVICE:d26e07ce53ec",
+      "ENT:SERVICE:d79ed709fc9e",
+      "ENT:SERVICE:e13a7fbd6df2",
+      "ENT:SERVICE:e8d279e0880b",
+      "ENT:SERVICE:edc7e8c5bb4e",
+      "ENT:SERVICE:f11bbd305015",
+      "ENT:SERVICE:f238bd5a13e9",
+      "ENT:SERVICE:f9d26ebb30e3",
+      "ENT:SERVICE:fbe64dae2b89",
+      "ENT:VULNERABILITY:12d5a6a0ce56",
+      "ENT:VULNERABILITY:16cd74f2c971",
+      "ENT:VULNERABILITY:16de800cd10b",
+      "ENT:VULNERABILITY:4c62091473e3",
+      "ENT:VULNERABILITY:4fbdf9a45677",
+      "ENT:VULNERABILITY:679719ba911d",
+      "ENT:VULNERABILITY:869687d74019",
+      "ENT:VULNERABILITY:99443a55ea77",
+      "ENT:VULNERABILITY:b18d43072f70",
+      "ENT:VULNERABILITY:b51a9373897c",
+      "ENT:VULNERABILITY:bd990d1e9ae0"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

@@ -1,0 +1,32 @@
+section,id,entity_type,maltego_type,value,label,source_tool,risk_level,confidence,evidence_ref
+entity,ENT:IP:da1f1bf65b4c,ip,maltego.IPv4Address,192.168.56.111,192.168.56.111,nmap,info,0.98,"7,01df3e7974e5"
+entity,ENT:SERVICE:06085c52dfed,service,maltego.Service,http-admin-check,http-admin-check,analyst_manual,info,0.85,manual:FIQ-REC-20261111-0004
+entity,ENT:SERVICE:769a4aa4ad27,service,maltego.Service,192.168.56.111:21/tcp (ftp),21/tcp ftp [vsftpd 2.3.4],nmap,low,0.95,"7,01df3e7974e5"
+entity,ENT:SERVICE:b70b484fc763,service,maltego.Service,192.168.56.111:22/tcp (ssh),22/tcp ssh [OpenSSH 4.7p1 Debian 8ub],nmap,low,0.95,"7,01df3e7974e5"
+entity,ENT:SERVICE:d26e07ce53ec,service,maltego.Service,192.168.56.111:80/tcp (http),80/tcp http [Apache httpd 2.2.8],nmap,low,0.95,"7,01df3e7974e5"
+entity,ENT:VULNERABILITY:257489b2bfae,vulnerability,maltego.Vulnerability,NUC-7CA930412687|192.168.56.111|80|HTTP Missing Security Headers (permissions-policy),[INFORMATIONAL] HTTP Missing Security Headers (permissions-policy),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:31de34fd981b,vulnerability,maltego.Vulnerability,NUC-C70A537577E2|192.168.56.111|80|HTTP Missing Security Headers (referrer-policy),[INFORMATIONAL] HTTP Missing Security Headers (referrer-policy),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:347351356437,vulnerability,maltego.Vulnerability,NUC-A8A7BFCDC451|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-opener-policy),[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-opener-policy),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:4160240a7f1e,vulnerability,maltego.Vulnerability,NUC-C579929F34BB|192.168.56.111|80|HTTP Missing Security Headers (x-content-type-options),[INFORMATIONAL] HTTP Missing Security Headers (x-content-type-options),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:5b9a89dd9ea7,vulnerability,maltego.Vulnerability,NUC-67350C76FD92|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-resource-policy),[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-resource-policy),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:93ae42352c51,vulnerability,maltego.Vulnerability,NUC-4AC90863F87B|192.168.56.111|80|HTTP Missing Security Headers (strict-transport-security),[INFORMATIONAL] HTTP Missing Security Headers (strict-transport-security),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:9daf6f32740e,vulnerability,maltego.Vulnerability,NUC-73D416D18A64|192.168.56.111|80|HTTP Missing Security Headers (x-frame-options),[INFORMATIONAL] HTTP Missing Security Headers (x-frame-options),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:b51a9373897c,vulnerability,maltego.Vulnerability,CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.,[CRITICAL] Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.,nse,critical,0.95,nse_script:ftp-vsftpd-backdoor
+entity,ENT:VULNERABILITY:bad58fcb3027,vulnerability,maltego.Vulnerability,NUC-B1D1EB825735|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-embedder-policy),[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-embedder-policy),nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:d81cbf947845,vulnerability,maltego.Vulnerability,NUC-F2382085C41A|192.168.56.111|80|HTTP Missing Security Headers (x-permitted-cross-domain-policies),[INFORMATIONAL] HTTP Missing Security Headers (x-permitted-cross-domain-poli,nuclei,info,0.78,"4,01e18f68f59d"
+entity,ENT:VULNERABILITY:fa85cbf2ab8f,vulnerability,maltego.Vulnerability,NUC-8719E0B43855|192.168.56.111|80|HTTP Missing Security Headers (content-security-policy),[INFORMATIONAL] HTTP Missing Security Headers (content-security-policy),nuclei,info,0.78,"4,01e18f68f59d"
+edge,ENT:IP:da1f1bf65b4c,RESOLVES_TO,ENT:SERVICE:06085c52dfed,manual_link:investigator1,,correlation,info,0.85,manual_link:investigator1
+edge,ENT:IP:da1f1bf65b4c,EXPOSES_SERVICE,ENT:SERVICE:769a4aa4ad27,nmap:192.168.56.111:21,,correlation,info,0.95,nmap:192.168.56.111:21
+edge,ENT:IP:da1f1bf65b4c,EXPOSES_SERVICE,ENT:SERVICE:b70b484fc763,nmap:192.168.56.111:22,,correlation,info,0.95,nmap:192.168.56.111:22
+edge,ENT:IP:da1f1bf65b4c,EXPOSES_SERVICE,ENT:SERVICE:d26e07ce53ec,nmap:192.168.56.111:80,,correlation,info,0.95,nmap:192.168.56.111:80
+edge,ENT:SERVICE:769a4aa4ad27,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:b51a9373897c,nse_script:ftp-vsftpd-backdoor,,correlation,info,0.95,nse_script:ftp-vsftpd-backdoor
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:257489b2bfae,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:31de34fd981b,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:347351356437,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:4160240a7f1e,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:5b9a89dd9ea7,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:93ae42352c51,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:9daf6f32740e,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:bad58fcb3027,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:d81cbf947845,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"
+edge,ENT:SERVICE:d26e07ce53ec,EXPOSES_VULNERABILITY,ENT:VULNERABILITY:fa85cbf2ab8f,"4,01e18f68f59d",,correlation,info,0.78,"4,01e18f68f59d"

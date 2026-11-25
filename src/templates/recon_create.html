@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}New Recon — FootprintIQ{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6 pb-12">
+
+  <!-- Header -->
+  <div class="fiq-card p-6 border-l-4 border-l-blue-600 reveal-on-scroll">
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-blue-100 text-blue-800">
+            New Campaign Wizard &bull; Step 1
+          </span>
+          <span class="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-slate-100 text-slate-600">
+            No Auto-Scan on Creation
+          </span>
+        </div>
+        <h1 class="text-xl font-bold text-slate-900 mt-1.5">Create New Recon</h1>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Initialize a structured reconnaissance campaign first. You will select Passive, Active, or Vulnerability assessment modules inside the Recon Workspace.
+        </p>
+      </div>
+      <a href="/recon" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition shrink-0">
+        Back to Campaigns
+      </a>
+    </div>
+  </div>
+
+  <!-- Feedback Alert Box -->
+  <div id="createFeedbackBox" class="hidden" role="status" aria-live="polite"></div>
+
+  <!-- Step 1 Simple Creation Form -->
+  <form id="createReconForm" onsubmit="submitCreateRecon(event)" class="fiq-card p-6 space-y-6">
+    <div class="space-y-4">
+      <h2 class="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">Essential Recon Details</h2>
+
+      <div>
+        <label for="campName" class="block text-xs font-semibold text-slate-700 mb-1">
+          Recon Name <span class="text-rose-600">*</span>
+        </label>
+        <input id="campName" name="name" type="text" required
+               placeholder="External Security Assessment"
+               class="w-full text-sm px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+        <p class="text-[11px] text-slate-400 mt-1">A clear title identifying this assessment campaign.</p>
+      </div>
+
+      <div>
+        <label for="campTarget" class="block text-xs font-semibold text-slate-700 mb-1">
+          Target (IP address, IP range, or domain) <span class="text-rose-600">*</span>
+        </label>
+        <input id="campTarget" name="target" type="text" required value="{{ default_target or '' }}"
+               placeholder="example.com, 192.0.2.10, or authorized CIDR / range"
+               class="w-full mono text-sm px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+        <p class="text-[11px] text-slate-400 mt-1">
+          Specify a valid target domain, single IPv4/IPv6 address, CIDR subnet, or IP range. Do not include URL paths or http:// prefixes.
+        </p>
+      </div>
+
+      <div>
+        <label for="campPurpose" class="block text-xs font-semibold text-slate-700 mb-1">
+          Purpose <span class="text-rose-600">*</span>
+        </label>
+        <input id="campPurpose" name="purpose" type="text" required list="purposeSuggestions"
+               placeholder="Security Assessment"
+               class="w-full text-sm px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+        <datalist id="purposeSuggestions">
+          <option value="External Attack Surface Assessment"></option>
+          <option value="Internal Network Security Audit"></option>
+          <option value="Vulnerability Verification &amp; Patch Validation"></option>
+          <option value="Passive OSINT Baseline Collection"></option>
+          <option value="Compliance Readiness Review"></option>
+        </datalist>
+      </div>
+    </div>
+
+    <!-- Optional Scope & Authorization Details -->
+    <div class="border-t border-slate-100 pt-4 space-y-4">
+      <button type="button" onclick="toggleOptionalScope()" id="btnToggleOptional"
+              class="flex items-center justify-between w-full text-left text-xs font-bold text-slate-700 hover:text-blue-700 transition">
+        <span>Optional Scope Notes, Exclusions &amp; Description</span>
+        <span id="optionalArrow" class="text-slate-400 text-[11px]">Show Options +</span>
+      </button>
+
+      <div id="optionalScopeFields" class="hidden space-y-4 pt-1">
+        <div>
+          <label for="campDescription" class="block text-xs font-semibold text-slate-700 mb-1">Description</label>
+          <textarea id="campDescription" name="description" rows="2"
+                    placeholder="Optional operational context or stakeholder notes..."
+                    class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="campScopeDesc" class="block text-xs font-semibold text-slate-700 mb-1">Scope Notes</label>
+            <input id="campScopeDesc" name="scope_description" type="text"
+                   placeholder="e.g. Authorized DMZ &amp; perimeter window"
+                   class="w-full text-xs px-3.5 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+          </div>
+          <div>
+            <label for="campExcludedTargets" class="block text-xs font-semibold text-slate-700 mb-1">Excluded Targets</label>
+            <input id="campExcludedTargets" name="excluded_targets" type="text"
+                   placeholder="Comma-separated out-of-scope IPs/domains"
+                   class="w-full mono text-xs px-3.5 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+          </div>
+        </div>
+      </div>
+
+      <label class="flex items-start space-x-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer">
+        <input id="authConfirmCheck" type="checkbox" checked
+               class="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+        <span class="text-xs text-slate-700">
+          <strong class="font-semibold text-slate-900">Target Authorization Confirmation:</strong>
+          I confirm this assessment target falls within explicit authorization scope. (Passive OSINT applies only public queries; active/vulnerability scanning enforces server-side scope checks.)
+        </span>
+      </label>
+    </div>
+
+    <div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-100">
+      <p class="text-[11px] text-slate-500">
+        Saves campaign in <strong>Draft</strong> status without launching any network scan.
+      </p>
+      <button type="submit" id="btnCreateRecon"
+              class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg shadow-sm transition inline-flex items-center justify-center space-x-2">
+        <span>Create Recon</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </form>
+
+</div>
+
+<script>
+function toggleOptionalScope() {
+  const box = document.getElementById('optionalScopeFields');
+  const arrow = document.getElementById('optionalArrow');
+  const hidden = box.classList.toggle('hidden');
+  arrow.textContent = hidden ? 'Show Options +' : 'Hide Options −';
+}
+
+function showCreateAlert(isError, msg) {
+  const box = document.getElementById('createFeedbackBox');
+  box.className = isError
+    ? 'p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 font-medium'
+    : 'p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-medium';
+  box.textContent = msg;
+  box.classList.remove('hidden');
+}
+
+async function submitCreateRecon(ev) {
+  ev.preventDefault();
+  const btn = document.getElementById('btnCreateRecon');
+  const name = document.getElementById('campName').value.trim();
+  const targetVal = document.getElementById('campTarget').value.trim();
+  const purpose = document.getElementById('campPurpose').value.trim();
+  const description = document.getElementById('campDescription').value.trim();
+  const scopeDesc = document.getElementById('campScopeDesc').value.trim();
+  const excludedTargets = document.getElementById('campExcludedTargets').value.trim();
+  const authConfirmed = document.getElementById('authConfirmCheck').checked;
+
+  if (!name || !targetVal || !purpose) {
+    showCreateAlert(true, 'Please fill in Recon Name, Target, and Purpose.');
+    return;
+  }
+
+  const targetsList = targetVal.split(',').map(s => s.trim()).filter(Boolean);
+  btn.disabled = true;
+  const origHtml = btn.innerHTML;
+  btn.textContent = 'Creating Recon...';
+
+  try {
+    const res = await fetch('/api/v1/recon', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        target_value: targetsList[0] || targetVal,
+        targets: targetsList,
+        purpose,
+        description,
+        scope_description: scopeDesc,
+        excluded_targets: excludedTargets,
+        selected_scan_types: 'draft',
+        scan_config_json: JSON.stringify({ selected_categories: [] }),
+        authorization_confirmed: authConfirmed
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showCreateAlert(true, data.detail || 'Could not create Recon campaign.');
+      btn.disabled = false;
+      btn.innerHTML = origHtml;
+      return;
+    }
+
+    showCreateAlert(false, `Recon campaign created: ${data.recon_id}. Redirecting to Recon Workspace...`);
+    window.location.href = `/recon/${encodeURIComponent(data.recon_id)}/workspace?created=1`;
+  } catch (err) {
+    showCreateAlert(true, 'Network error while creating campaign: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = origHtml;
+  }
+}
+</script>
+{% endblock %}

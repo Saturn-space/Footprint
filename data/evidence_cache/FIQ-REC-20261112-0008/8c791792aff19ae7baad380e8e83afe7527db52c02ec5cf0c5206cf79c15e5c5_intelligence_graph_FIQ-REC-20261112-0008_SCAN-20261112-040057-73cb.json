@@ -1,0 +1,4905 @@
+{
+  "investigation_id": "FIQ-REC-20261112-0008",
+  "campaign_name": "passive test",
+  "target": "mozilla.org",
+  "generated_at": "2026-11-12T04:02:04.437137+00:00",
+  "metrics": {
+    "node_count": 113,
+    "edge_count": 112,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.0088,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "domain": 1,
+    "email": 2,
+    "ip": 1,
+    "ipv6": 1,
+    "mx": 4,
+    "nameserver": 4,
+    "organization": 1,
+    "subdomain": 99
+  },
+  "source_breakdown": {
+    "passive_recon": 1,
+    "theharvester": 2,
+    "dns_osint": 10,
+    "whois_rdap": 1,
+    "theharvester_dns": 99
+  },
+  "nodes": [
+    {
+      "id": "ENT:DOMAIN:087ffdf131a7",
+      "type": "domain",
+      "label": "mozilla.org",
+      "canonical_value": "mozilla.org",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "passive_recon"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "passive test",
+        "value": "mozilla.org",
+        "source_tool": "passive_recon",
+        "evidence_ref": "2,02dadefc2e0d",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Domain"
+      },
+      "first_seen": "2026-11-12T04:02:04.432595+00:00",
+      "last_seen": "2026-11-12T04:02:04.432634+00:00",
+      "entity_type": "domain",
+      "maltego_type": "maltego.Domain",
+      "source_tool": "passive_recon",
+      "evidence_ref": "2,02dadefc2e0d",
+      "value": "mozilla.org"
+    },
+    {
+      "id": "ENT:EMAIL:51df8e2aede6",
+      "type": "email",
+      "label": "cmartorella@edge-security.com",
+      "canonical_value": "cmartorella@edge-security.com",
+      "tags": [],
+      "sources": [
+        "theharvester"
+      ],
+      "risk_level": "info",
+      "confidence": 0.8,
+      "attributes": {
+        "value": "cmartorella@edge-security.com",
+        "source_tool": "theharvester",
+        "evidence_ref": "theharvester:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.8,
+        "maltego_type": "maltego.EmailAddress"
+      },
+      "first_seen": "2026-11-12T04:02:04.436152+00:00",
+      "last_seen": "2026-11-12T04:02:04.436152+00:00",
+      "entity_type": "email",
+      "maltego_type": "maltego.EmailAddress",
+      "source_tool": "theharvester",
+      "evidence_ref": "theharvester:mozilla.org",
+      "value": "cmartorella@edge-security.com"
+    },
+    {
+      "id": "ENT:EMAIL:91b7f7b32806",
+      "type": "email",
+      "label": "abusecomplaints@markmonitor.com",
+      "canonical_value": "abusecomplaints@markmonitor.com",
+      "tags": [],
+      "sources": [
+        "theharvester"
+      ],
+      "risk_level": "info",
+      "confidence": 0.8,
+      "attributes": {
+        "value": "abusecomplaints@markmonitor.com",
+        "source_tool": "theharvester",
+        "evidence_ref": "theharvester:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.8,
+        "maltego_type": "maltego.EmailAddress"
+      },
+      "first_seen": "2026-11-12T04:02:04.436137+00:00",
+      "last_seen": "2026-11-12T04:02:04.436137+00:00",
+      "entity_type": "email",
+      "maltego_type": "maltego.EmailAddress",
+      "source_tool": "theharvester",
+      "evidence_ref": "theharvester:mozilla.org",
+      "value": "abusecomplaints@markmonitor.com"
+    },
+    {
+      "id": "ENT:IP:7949ec685392",
+      "type": "ip",
+      "label": "35.190.14.201",
+      "canonical_value": "35.190.14.201",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "35.190.14.201",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv4Address"
+      },
+      "first_seen": "2026-11-12T04:02:04.436075+00:00",
+      "last_seen": "2026-11-12T04:02:04.436117+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:mozilla.org",
+      "value": "35.190.14.201"
+    },
+    {
+      "id": "ENT:IPV6:000234adb2ba",
+      "type": "ipv6",
+      "label": "2600:1901:0:c197::",
+      "canonical_value": "2600:1901:0:c197::",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "2600:1901:0:c197::",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv6Address"
+      },
+      "first_seen": "2026-11-12T04:02:04.436088+00:00",
+      "last_seen": "2026-11-12T04:02:04.436100+00:00",
+      "entity_type": "ipv6",
+      "maltego_type": "maltego.IPv6Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:mozilla.org",
+      "value": "2600:1901:0:c197::"
+    },
+    {
+      "id": "ENT:MX:0b8258f36da4",
+      "type": "mx",
+      "label": "alt1.aspmx.l.google.com",
+      "canonical_value": "alt1.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt1.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.436062+00:00",
+      "last_seen": "2026-11-12T04:02:04.436062+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "alt1.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:0d6be481d647",
+      "type": "mx",
+      "label": "alt2.aspmx.l.google.com",
+      "canonical_value": "alt2.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt2.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.436051+00:00",
+      "last_seen": "2026-11-12T04:02:04.436051+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "alt2.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:5baaa2ffae62",
+      "type": "mx",
+      "label": "aspmx.l.google.com",
+      "canonical_value": "aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.436041+00:00",
+      "last_seen": "2026-11-12T04:02:04.436041+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:98620f2d9f9a",
+      "type": "mx",
+      "label": "aspmx3.googlemail.com",
+      "canonical_value": "aspmx3.googlemail.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "aspmx3.googlemail.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.436028+00:00",
+      "last_seen": "2026-11-12T04:02:04.436028+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "aspmx3.googlemail.com"
+    },
+    {
+      "id": "ENT:NAMESERVER:054094ff1105",
+      "type": "nameserver",
+      "label": "ns4-64.akam.net",
+      "canonical_value": "ns4-64.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns4-64.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.435954+00:00",
+      "last_seen": "2026-11-12T04:02:04.435954+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns4-64.akam.net"
+    },
+    {
+      "id": "ENT:NAMESERVER:1b8af4e99834",
+      "type": "nameserver",
+      "label": "ns1-240.akam.net",
+      "canonical_value": "ns1-240.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns1-240.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.435991+00:00",
+      "last_seen": "2026-11-12T04:02:04.435991+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns1-240.akam.net"
+    },
+    {
+      "id": "ENT:NAMESERVER:2c9820591d80",
+      "type": "nameserver",
+      "label": "ns7-66.akam.net",
+      "canonical_value": "ns7-66.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns7-66.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.435974+00:00",
+      "last_seen": "2026-11-12T04:02:04.435974+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns7-66.akam.net"
+    },
+    {
+      "id": "ENT:NAMESERVER:600786b4052c",
+      "type": "nameserver",
+      "label": "ns5-65.akam.net",
+      "canonical_value": "ns5-65.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns5-65.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-12T04:02:04.436007+00:00",
+      "last_seen": "2026-11-12T04:02:04.436007+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns5-65.akam.net"
+    },
+    {
+      "id": "ENT:ORGANIZATION:7a2b1accd565",
+      "type": "organization",
+      "label": "MarkMonitor Inc.",
+      "canonical_value": "Registrar: MarkMonitor Inc.",
+      "tags": [],
+      "sources": [
+        "whois_rdap"
+      ],
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "role": "registrar",
+        "value": "Registrar: MarkMonitor Inc.",
+        "source_tool": "whois_rdap",
+        "evidence_ref": "whois:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.9,
+        "maltego_type": "maltego.Company"
+      },
+      "first_seen": "2026-11-12T04:02:04.432897+00:00",
+      "last_seen": "2026-11-12T04:02:04.432897+00:00",
+      "entity_type": "organization",
+      "maltego_type": "maltego.Company",
+      "source_tool": "whois_rdap",
+      "evidence_ref": "whois:mozilla.org",
+      "value": "Registrar: MarkMonitor Inc."
+    },
+    {
+      "id": "ENT:SUBDOMAIN:085d99c61e14",
+      "type": "subdomain",
+      "label": "git.mozilla.org",
+      "canonical_value": "git.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "git.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433531+00:00",
+      "last_seen": "2026-11-12T04:02:04.433531+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "git.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:0f8ad3141bf5",
+      "type": "subdomain",
+      "label": "wot.iot.mozilla.org",
+      "canonical_value": "wot.iot.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "wot.iot.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435861+00:00",
+      "last_seen": "2026-11-12T04:02:04.435861+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "wot.iot.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:12e1a9906829",
+      "type": "subdomain",
+      "label": "extensions.mozilla.org",
+      "canonical_value": "extensions.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "extensions.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433401+00:00",
+      "last_seen": "2026-11-12T04:02:04.433401+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "extensions.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:14e59e700802",
+      "type": "subdomain",
+      "label": "dev.mozilla.org",
+      "canonical_value": "dev.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "dev.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433326+00:00",
+      "last_seen": "2026-11-12T04:02:04.433326+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "dev.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:15b63debebf8",
+      "type": "subdomain",
+      "label": "addons.update.mozilla.org",
+      "canonical_value": "addons.update.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "addons.update.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433034+00:00",
+      "last_seen": "2026-11-12T04:02:04.433034+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "addons.update.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:196eb7e8e3fc",
+      "type": "subdomain",
+      "label": "ssl-config.mozilla.org",
+      "canonical_value": "ssl-config.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "ssl-config.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433880+00:00",
+      "last_seen": "2026-11-12T04:02:04.433880+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "ssl-config.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:197cb0c28135",
+      "type": "subdomain",
+      "label": "reviewboard.mozilla.org",
+      "canonical_value": "reviewboard.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "reviewboard.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433832+00:00",
+      "last_seen": "2026-11-12T04:02:04.433832+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "reviewboard.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:1b41ee0cde40",
+      "type": "subdomain",
+      "label": "market.mozilla.org",
+      "canonical_value": "market.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "market.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433679+00:00",
+      "last_seen": "2026-11-12T04:02:04.433679+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "market.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:1c5afd59aff5",
+      "type": "subdomain",
+      "label": "techspeakers.mozilla.org",
+      "canonical_value": "techspeakers.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "techspeakers.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435630+00:00",
+      "last_seen": "2026-11-12T04:02:04.435630+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "techspeakers.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:1d656610c53f",
+      "type": "subdomain",
+      "label": "devderby.mozilla.org",
+      "canonical_value": "devderby.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "devderby.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433337+00:00",
+      "last_seen": "2026-11-12T04:02:04.433337+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "devderby.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:1ee1d7dfc674",
+      "type": "subdomain",
+      "label": "content.mozilla.org",
+      "canonical_value": "content.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "content.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433281+00:00",
+      "last_seen": "2026-11-12T04:02:04.433281+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "content.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:21e31706a230",
+      "type": "subdomain",
+      "label": "activations.mozilla.org",
+      "canonical_value": "activations.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "activations.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433012+00:00",
+      "last_seen": "2026-11-12T04:02:04.433012+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "activations.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:237039023e03",
+      "type": "subdomain",
+      "label": "ask.mozilla.org",
+      "canonical_value": "ask.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "ask.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433097+00:00",
+      "last_seen": "2026-11-12T04:02:04.433097+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "ask.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:25edb6f7a9c1",
+      "type": "subdomain",
+      "label": "mobilepartners.mozilla.org",
+      "canonical_value": "mobilepartners.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "mobilepartners.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433697+00:00",
+      "last_seen": "2026-11-12T04:02:04.433697+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "mobilepartners.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:28f1a31cd21c",
+      "type": "subdomain",
+      "label": "themes.mozilla.org",
+      "canonical_value": "themes.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "themes.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435659+00:00",
+      "last_seen": "2026-11-12T04:02:04.435659+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "themes.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:2ed210f69e0e",
+      "type": "subdomain",
+      "label": "nightly.mozilla.org",
+      "canonical_value": "nightly.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "nightly.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433726+00:00",
+      "last_seen": "2026-11-12T04:02:04.433726+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "nightly.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:3249f0d8b3a8",
+      "type": "subdomain",
+      "label": "community.mozilla.org",
+      "canonical_value": "community.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "community.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433250+00:00",
+      "last_seen": "2026-11-12T04:02:04.433250+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "community.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:324b16f9b70b",
+      "type": "subdomain",
+      "label": "contribute.mozilla.org",
+      "canonical_value": "contribute.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "contribute.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433292+00:00",
+      "last_seen": "2026-11-12T04:02:04.433292+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "contribute.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:3bcb7578b70c",
+      "type": "subdomain",
+      "label": "mozilla.org",
+      "canonical_value": "mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433707+00:00",
+      "last_seen": "2026-11-12T04:02:04.433707+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:3e419d318ca9",
+      "type": "subdomain",
+      "label": "sendto.mozilla.org",
+      "canonical_value": "sendto.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "sendto.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433850+00:00",
+      "last_seen": "2026-11-12T04:02:04.433850+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "sendto.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:3f5c0a4a946c",
+      "type": "subdomain",
+      "label": "forum.learning.mozilla.org",
+      "canonical_value": "forum.learning.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "forum.learning.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433470+00:00",
+      "last_seen": "2026-11-12T04:02:04.433470+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "forum.learning.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:44b4c212b4ba",
+      "type": "subdomain",
+      "label": "iot.mozilla.org",
+      "canonical_value": "iot.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "iot.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433596+00:00",
+      "last_seen": "2026-11-12T04:02:04.433596+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "iot.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:4751625ae4a0",
+      "type": "subdomain",
+      "label": "ssr2020.mozilla.org",
+      "canonical_value": "ssr2020.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "ssr2020.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433890+00:00",
+      "last_seen": "2026-11-12T04:02:04.433890+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "ssr2020.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:488688b56e08",
+      "type": "subdomain",
+      "label": "input.mozilla.org",
+      "canonical_value": "input.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "input.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433585+00:00",
+      "last_seen": "2026-11-12T04:02:04.433585+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "input.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:4ac232047100",
+      "type": "subdomain",
+      "label": "confsurvey.mozilla.org",
+      "canonical_value": "confsurvey.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "confsurvey.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433271+00:00",
+      "last_seen": "2026-11-12T04:02:04.433271+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "confsurvey.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:4d89929d54f6",
+      "type": "subdomain",
+      "label": "mpl.mozilla.org",
+      "canonical_value": "mpl.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "mpl.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433717+00:00",
+      "last_seen": "2026-11-12T04:02:04.433717+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "mpl.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:4f3de26c5aed",
+      "type": "subdomain",
+      "label": "extranet.mozilla.org",
+      "canonical_value": "extranet.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "extranet.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433414+00:00",
+      "last_seen": "2026-11-12T04:02:04.433414+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "extranet.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:512838f4d4ce",
+      "type": "subdomain",
+      "label": "feedback.mozilla.org",
+      "canonical_value": "feedback.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "feedback.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433426+00:00",
+      "last_seen": "2026-11-12T04:02:04.433426+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "feedback.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:51b2bd84a105",
+      "type": "subdomain",
+      "label": "videos.mozilla.org",
+      "canonical_value": "videos.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "videos.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435793+00:00",
+      "last_seen": "2026-11-12T04:02:04.435793+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "videos.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:52aa6d8dc905",
+      "type": "subdomain",
+      "label": "updates.mozilla.org",
+      "canonical_value": "updates.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "updates.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435776+00:00",
+      "last_seen": "2026-11-12T04:02:04.435776+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "updates.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:532144a91711",
+      "type": "subdomain",
+      "label": "sre-blocklist.mozilla.org",
+      "canonical_value": "sre-blocklist.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "sre-blocklist.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433869+00:00",
+      "last_seen": "2026-11-12T04:02:04.433869+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "sre-blocklist.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:543032286a12",
+      "type": "subdomain",
+      "label": "surf.mozilla.org",
+      "canonical_value": "surf.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "surf.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433927+00:00",
+      "last_seen": "2026-11-12T04:02:04.433927+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "surf.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:56b015ad147d",
+      "type": "subdomain",
+      "label": "airmo.mozilla.org",
+      "canonical_value": "airmo.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "airmo.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433060+00:00",
+      "last_seen": "2026-11-12T04:02:04.433060+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "airmo.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:5889c0577075",
+      "type": "subdomain",
+      "label": "spark.mozilla.org",
+      "canonical_value": "spark.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "spark.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433859+00:00",
+      "last_seen": "2026-11-12T04:02:04.433859+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "spark.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:59a04ab403ae",
+      "type": "subdomain",
+      "label": "www.support.mozilla.org",
+      "canonical_value": "www.support.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "www.support.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435927+00:00",
+      "last_seen": "2026-11-12T04:02:04.435927+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "www.support.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:5a0cf7a23f6e",
+      "type": "subdomain",
+      "label": "college.mozilla.org",
+      "canonical_value": "college.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "college.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433236+00:00",
+      "last_seen": "2026-11-12T04:02:04.433236+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "college.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:5b22dff09975",
+      "type": "subdomain",
+      "label": "open.mozilla.org",
+      "canonical_value": "open.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "open.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433746+00:00",
+      "last_seen": "2026-11-12T04:02:04.433746+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "open.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:5b4d50327cfa",
+      "type": "subdomain",
+      "label": "www-archive.mozilla.org",
+      "canonical_value": "www-archive.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "www-archive.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435878+00:00",
+      "last_seen": "2026-11-12T04:02:04.435878+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "www-archive.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:5e8cbe606f47",
+      "type": "subdomain",
+      "label": "planet.mozilla.org",
+      "canonical_value": "planet.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "planet.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433786+00:00",
+      "last_seen": "2026-11-12T04:02:04.433786+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "planet.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:5ed668405fd4",
+      "type": "subdomain",
+      "label": "hub.mozilla.org",
+      "canonical_value": "hub.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "hub.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433574+00:00",
+      "last_seen": "2026-11-12T04:02:04.433574+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "hub.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:5f39f816e4a6",
+      "type": "subdomain",
+      "label": "blog.mozilla.org",
+      "canonical_value": "blog.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "blog.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433216+00:00",
+      "last_seen": "2026-11-12T04:02:04.433216+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "blog.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:6022cab68ffc",
+      "type": "subdomain",
+      "label": "release.mozilla.org",
+      "canonical_value": "release.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "release.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433813+00:00",
+      "last_seen": "2026-11-12T04:02:04.433813+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "release.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:610f10d36bf5",
+      "type": "subdomain",
+      "label": "talkback.mozilla.org",
+      "canonical_value": "talkback.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "talkback.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433955+00:00",
+      "last_seen": "2026-11-12T04:02:04.433955+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "talkback.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:618fac13e096",
+      "type": "subdomain",
+      "label": "ref-blog.mozilla.org",
+      "canonical_value": "ref-blog.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "ref-blog.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433795+00:00",
+      "last_seen": "2026-11-12T04:02:04.433795+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "ref-blog.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:67404cf4c047",
+      "type": "subdomain",
+      "label": "reports.telemetry.mozilla.org",
+      "canonical_value": "reports.telemetry.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "reports.telemetry.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433823+00:00",
+      "last_seen": "2026-11-12T04:02:04.433823+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "reports.telemetry.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:68a0a666bd5c",
+      "type": "subdomain",
+      "label": "students.mozilla.org",
+      "canonical_value": "students.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "students.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433918+00:00",
+      "last_seen": "2026-11-12T04:02:04.433918+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "students.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:68cf4378e9f0",
+      "type": "subdomain",
+      "label": "talkback-public.mozilla.org",
+      "canonical_value": "talkback-public.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "talkback-public.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433936+00:00",
+      "last_seen": "2026-11-12T04:02:04.433936+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "talkback-public.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:693b992827ee",
+      "type": "subdomain",
+      "label": "store.mozilla.org",
+      "canonical_value": "store.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "store.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433907+00:00",
+      "last_seen": "2026-11-12T04:02:04.433907+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "store.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:69544a9d1160",
+      "type": "subdomain",
+      "label": "docs.iot.mozilla.org",
+      "canonical_value": "docs.iot.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "docs.iot.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433361+00:00",
+      "last_seen": "2026-11-12T04:02:04.433361+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "docs.iot.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:6bc2ecb0d8b5",
+      "type": "subdomain",
+      "label": "firefoxflicks.mozilla.org",
+      "canonical_value": "firefoxflicks.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "firefoxflicks.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433448+00:00",
+      "last_seen": "2026-11-12T04:02:04.433448+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "firefoxflicks.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:6deb752c62b7",
+      "type": "subdomain",
+      "label": "masterfirefoxos.mozilla.org",
+      "canonical_value": "masterfirefoxos.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "masterfirefoxos.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433688+00:00",
+      "last_seen": "2026-11-12T04:02:04.433688+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "masterfirefoxos.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:6f86f838317a",
+      "type": "subdomain",
+      "label": "ambassadors.mozilla.org",
+      "canonical_value": "ambassadors.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "ambassadors.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433073+00:00",
+      "last_seen": "2026-11-12T04:02:04.433073+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "ambassadors.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:716b9cbb9b77",
+      "type": "subdomain",
+      "label": "phonebook.mozilla.org",
+      "canonical_value": "phonebook.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "phonebook.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433777+00:00",
+      "last_seen": "2026-11-12T04:02:04.433777+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "phonebook.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:7411318cb958",
+      "type": "subdomain",
+      "label": "update.mozilla.org",
+      "canonical_value": "update.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "update.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435758+00:00",
+      "last_seen": "2026-11-12T04:02:04.435758+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "update.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:76e20decda42",
+      "type": "subdomain",
+      "label": "dynamicua-origin.mozilla.org",
+      "canonical_value": "dynamicua-origin.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "dynamicua-origin.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433381+00:00",
+      "last_seen": "2026-11-12T04:02:04.433381+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "dynamicua-origin.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:771e06d01474",
+      "type": "subdomain",
+      "label": "start.mozilla.org",
+      "canonical_value": "start.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "start.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433898+00:00",
+      "last_seen": "2026-11-12T04:02:04.433898+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "start.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:7e804a88cc5f",
+      "type": "subdomain",
+      "label": "www.store.mozilla.org",
+      "canonical_value": "www.store.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "www.store.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435911+00:00",
+      "last_seen": "2026-11-12T04:02:04.435911+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "www.store.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:869b4351528c",
+      "type": "subdomain",
+      "label": "beta.mozilla.org",
+      "canonical_value": "beta.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "beta.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433196+00:00",
+      "last_seen": "2026-11-12T04:02:04.433196+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "beta.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:86cf55c0f934",
+      "type": "subdomain",
+      "label": "goggles.mozilla.org",
+      "canonical_value": "goggles.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "goggles.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433552+00:00",
+      "last_seen": "2026-11-12T04:02:04.433552+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "goggles.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:8c69e5d199e8",
+      "type": "subdomain",
+      "label": "aurora.mozilla.org",
+      "canonical_value": "aurora.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "aurora.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433180+00:00",
+      "last_seen": "2026-11-12T04:02:04.433180+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "aurora.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:8dc9204f8bd4",
+      "type": "subdomain",
+      "label": "refractr.mozilla.org",
+      "canonical_value": "refractr.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "refractr.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433805+00:00",
+      "last_seen": "2026-11-12T04:02:04.433805+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "refractr.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:922629ed5580",
+      "type": "subdomain",
+      "label": "thimble.mozilla.org",
+      "canonical_value": "thimble.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "thimble.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435686+00:00",
+      "last_seen": "2026-11-12T04:02:04.435686+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "thimble.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:9319da8283dd",
+      "type": "subdomain",
+      "label": "docs.pub.build.mozilla.org",
+      "canonical_value": "docs.pub.build.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "docs.pub.build.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433371+00:00",
+      "last_seen": "2026-11-12T04:02:04.433371+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "docs.pub.build.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:941e36917984",
+      "type": "subdomain",
+      "label": "creative.mozilla.org",
+      "canonical_value": "creative.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "creative.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433302+00:00",
+      "last_seen": "2026-11-12T04:02:04.433302+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "creative.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:9468f758e293",
+      "type": "subdomain",
+      "label": "talkback-reports.mozilla.org",
+      "canonical_value": "talkback-reports.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "talkback-reports.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433946+00:00",
+      "last_seen": "2026-11-12T04:02:04.433946+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "talkback-reports.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:9625a4a364a1",
+      "type": "subdomain",
+      "label": "events.mozilla.org",
+      "canonical_value": "events.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "events.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433390+00:00",
+      "last_seen": "2026-11-12T04:02:04.433390+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "events.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:97bc0c1b829e",
+      "type": "subdomain",
+      "label": "triagebot.mozilla.org",
+      "canonical_value": "triagebot.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "triagebot.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435726+00:00",
+      "last_seen": "2026-11-12T04:02:04.435726+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "triagebot.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:9a6125cbc9db",
+      "type": "subdomain",
+      "label": "festival.mozilla.org",
+      "canonical_value": "festival.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "festival.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433437+00:00",
+      "last_seen": "2026-11-12T04:02:04.433437+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "festival.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:9eb2b0399f69",
+      "type": "subdomain",
+      "label": "pastebin.mozilla.org",
+      "canonical_value": "pastebin.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "pastebin.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433767+00:00",
+      "last_seen": "2026-11-12T04:02:04.433767+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "pastebin.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:9edd4efb97e2",
+      "type": "subdomain",
+      "label": "air.mozilla.org",
+      "canonical_value": "air.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "air.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433048+00:00",
+      "last_seen": "2026-11-12T04:02:04.433048+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "air.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:a10b76052c03",
+      "type": "subdomain",
+      "label": "note-blog.mozilla.org",
+      "canonical_value": "note-blog.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "note-blog.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433736+00:00",
+      "last_seen": "2026-11-12T04:02:04.433736+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "note-blog.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:a14825ef82f3",
+      "type": "subdomain",
+      "label": "guides.mozilla.org",
+      "canonical_value": "guides.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "guides.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433563+00:00",
+      "last_seen": "2026-11-12T04:02:04.433563+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "guides.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:a37a6d0bafd7",
+      "type": "subdomain",
+      "label": "m.input.mozilla.org",
+      "canonical_value": "m.input.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "m.input.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433670+00:00",
+      "last_seen": "2026-11-12T04:02:04.433670+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "m.input.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:a51ebaca99ec",
+      "type": "subdomain",
+      "label": "foundation.mozilla.org",
+      "canonical_value": "foundation.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "foundation.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433496+00:00",
+      "last_seen": "2026-11-12T04:02:04.433496+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "foundation.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:a5b7d7d0f22d",
+      "type": "subdomain",
+      "label": "apps.mozilla.org",
+      "canonical_value": "apps.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "apps.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433085+00:00",
+      "last_seen": "2026-11-12T04:02:04.433085+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "apps.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:a604718584cb",
+      "type": "subdomain",
+      "label": "teach.mozilla.org",
+      "canonical_value": "teach.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "teach.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435592+00:00",
+      "last_seen": "2026-11-12T04:02:04.435592+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "teach.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:a9b75b1bd63c",
+      "type": "subdomain",
+      "label": "website-beta.mozilla.org",
+      "canonical_value": "website-beta.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "website-beta.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435827+00:00",
+      "last_seen": "2026-11-12T04:02:04.435827+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "website-beta.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:ab502ced3519",
+      "type": "subdomain",
+      "label": "friends.mozilla.org",
+      "canonical_value": "friends.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "friends.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433509+00:00",
+      "last_seen": "2026-11-12T04:02:04.433509+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "friends.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:b5cdf01c22e3",
+      "type": "subdomain",
+      "label": "treestatus.mozilla.org",
+      "canonical_value": "treestatus.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "treestatus.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435708+00:00",
+      "last_seen": "2026-11-12T04:02:04.435708+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "treestatus.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:bc30ab8d2d8e",
+      "type": "subdomain",
+      "label": "firefoxlive.mozilla.org",
+      "canonical_value": "firefoxlive.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "firefoxlive.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433459+00:00",
+      "last_seen": "2026-11-12T04:02:04.433459+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "firefoxlive.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:bcca81f0d116",
+      "type": "subdomain",
+      "label": "designlanguage.mozilla.org",
+      "canonical_value": "designlanguage.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "designlanguage.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433313+00:00",
+      "last_seen": "2026-11-12T04:02:04.433313+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "designlanguage.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:c2d708bbd03c",
+      "type": "subdomain",
+      "label": "krakenbenchmark.mozilla.org",
+      "canonical_value": "krakenbenchmark.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "krakenbenchmark.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433624+00:00",
+      "last_seen": "2026-11-12T04:02:04.433624+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "krakenbenchmark.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:c594de4ea4e9",
+      "type": "subdomain",
+      "label": "jobs.mozilla.org",
+      "canonical_value": "jobs.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "jobs.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433605+00:00",
+      "last_seen": "2026-11-12T04:02:04.433605+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "jobs.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:c6ef5cef9b7d",
+      "type": "subdomain",
+      "label": "communitystore.mozilla.org",
+      "canonical_value": "communitystore.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "communitystore.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433261+00:00",
+      "last_seen": "2026-11-12T04:02:04.433261+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "communitystore.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:c7123c41bbf2",
+      "type": "subdomain",
+      "label": "webdev.mozilla.org",
+      "canonical_value": "webdev.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "webdev.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435809+00:00",
+      "last_seen": "2026-11-12T04:02:04.435809+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "webdev.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:cdb474073585",
+      "type": "subdomain",
+      "label": "forums.mozilla.org",
+      "canonical_value": "forums.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "forums.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433483+00:00",
+      "last_seen": "2026-11-12T04:02:04.433483+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "forums.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:d01edc1a555a",
+      "type": "subdomain",
+      "label": "www.blog.mozilla.org",
+      "canonical_value": "www.blog.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "www.blog.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435895+00:00",
+      "last_seen": "2026-11-12T04:02:04.435895+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "www.blog.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:d82ad131d5f6",
+      "type": "subdomain",
+      "label": "give.mozilla.org",
+      "canonical_value": "give.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "give.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433541+00:00",
+      "last_seen": "2026-11-12T04:02:04.433541+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "give.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:e290f5fb131e",
+      "type": "subdomain",
+      "label": "l10n.mozilla.org",
+      "canonical_value": "l10n.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "l10n.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433633+00:00",
+      "last_seen": "2026-11-12T04:02:04.433633+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "l10n.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:e37518e277e3",
+      "type": "subdomain",
+      "label": "dnt.mozilla.org",
+      "canonical_value": "dnt.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "dnt.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433349+00:00",
+      "last_seen": "2026-11-12T04:02:04.433349+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "dnt.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:e45d521ba94a",
+      "type": "subdomain",
+      "label": "fsa.mozilla.org",
+      "canonical_value": "fsa.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "fsa.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433520+00:00",
+      "last_seen": "2026-11-12T04:02:04.433520+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "fsa.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:e6556413ba0e",
+      "type": "subdomain",
+      "label": "learning.mozilla.org",
+      "canonical_value": "learning.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "learning.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433652+00:00",
+      "last_seen": "2026-11-12T04:02:04.433652+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "learning.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:e6d2784dd5d1",
+      "type": "subdomain",
+      "label": "labs.mozilla.org",
+      "canonical_value": "labs.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "labs.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433642+00:00",
+      "last_seen": "2026-11-12T04:02:04.433642+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "labs.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:f7d41716a098",
+      "type": "subdomain",
+      "label": "webwewant.mozilla.org",
+      "canonical_value": "webwewant.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "webwewant.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435844+00:00",
+      "last_seen": "2026-11-12T04:02:04.435844+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "webwewant.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:f97e219073d8",
+      "type": "subdomain",
+      "label": "university.mozilla.org",
+      "canonical_value": "university.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "university.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.435742+00:00",
+      "last_seen": "2026-11-12T04:02:04.435742+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "university.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:fb3357e9d41d",
+      "type": "subdomain",
+      "label": "openinnovation.mozilla.org",
+      "canonical_value": "openinnovation.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "openinnovation.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433757+00:00",
+      "last_seen": "2026-11-12T04:02:04.433757+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "openinnovation.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:fd958140a16a",
+      "type": "subdomain",
+      "label": "science.mozilla.org",
+      "canonical_value": "science.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "science.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433841+00:00",
+      "last_seen": "2026-11-12T04:02:04.433841+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "science.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:fdb305b3e96b",
+      "type": "subdomain",
+      "label": "library.mozilla.org",
+      "canonical_value": "library.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "library.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433661+00:00",
+      "last_seen": "2026-11-12T04:02:04.433661+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "library.mozilla.org"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:ff419e98fa5a",
+      "type": "subdomain",
+      "label": "join.mozilla.org",
+      "canonical_value": "join.mozilla.org",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "join.mozilla.org",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T04:02:04.433615+00:00",
+      "last_seen": "2026-11-12T04:02:04.433615+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.org",
+      "value": "join.mozilla.org"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:a37a222b390a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:EMAIL:51df8e2aede6",
+      "relationship_type": "ASSOCIATED_EMAIL",
+      "relationship": "ASSOCIATED_EMAIL",
+      "weight": 0.8,
+      "confidence": 0.8,
+      "confidence_score": 0.8,
+      "evidence_ids": [
+        "theharvester:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436156+00:00",
+      "last_observed": "2026-11-12T04:02:04.436156+00:00"
+    },
+    {
+      "id": "REL:58177ffa9322",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:EMAIL:91b7f7b32806",
+      "relationship_type": "ASSOCIATED_EMAIL",
+      "relationship": "ASSOCIATED_EMAIL",
+      "weight": 0.8,
+      "confidence": 0.8,
+      "confidence_score": 0.8,
+      "evidence_ids": [
+        "theharvester:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436141+00:00",
+      "last_observed": "2026-11-12T04:02:04.436141+00:00"
+    },
+    {
+      "id": "REL:8f935db8b6c3",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:IP:7949ec685392",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436123+00:00",
+      "last_observed": "2026-11-12T04:02:04.436123+00:00"
+    },
+    {
+      "id": "REL:390b7f73301c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:IPV6:000234adb2ba",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436108+00:00",
+      "last_observed": "2026-11-12T04:02:04.436108+00:00"
+    },
+    {
+      "id": "REL:018032b45411",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:0b8258f36da4",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436066+00:00",
+      "last_observed": "2026-11-12T04:02:04.436066+00:00"
+    },
+    {
+      "id": "REL:10001db09ad4",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:0d6be481d647",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436054+00:00",
+      "last_observed": "2026-11-12T04:02:04.436054+00:00"
+    },
+    {
+      "id": "REL:1a57fbdf8b59",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:5baaa2ffae62",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436044+00:00",
+      "last_observed": "2026-11-12T04:02:04.436044+00:00"
+    },
+    {
+      "id": "REL:388ae348df17",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:98620f2d9f9a",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436032+00:00",
+      "last_observed": "2026-11-12T04:02:04.436032+00:00"
+    },
+    {
+      "id": "REL:2ea3c5e920b0",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:054094ff1105",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435961+00:00",
+      "last_observed": "2026-11-12T04:02:04.435961+00:00"
+    },
+    {
+      "id": "REL:33e5ae49a380",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:1b8af4e99834",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435996+00:00",
+      "last_observed": "2026-11-12T04:02:04.435996+00:00"
+    },
+    {
+      "id": "REL:390b46fdd6bf",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:2c9820591d80",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435979+00:00",
+      "last_observed": "2026-11-12T04:02:04.435979+00:00"
+    },
+    {
+      "id": "REL:2f7ed53fe3de",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:600786b4052c",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.436012+00:00",
+      "last_observed": "2026-11-12T04:02:04.436012+00:00"
+    },
+    {
+      "id": "REL:96eefc8ad34a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:ORGANIZATION:7a2b1accd565",
+      "relationship_type": "REGISTERED_WITH",
+      "relationship": "REGISTERED_WITH",
+      "weight": 0.85,
+      "confidence": 0.9,
+      "confidence_score": 0.9,
+      "evidence_ids": [
+        "whois:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.432970+00:00",
+      "last_observed": "2026-11-12T04:02:04.432970+00:00"
+    },
+    {
+      "id": "REL:97b3fa111437",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:085d99c61e14",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433534+00:00",
+      "last_observed": "2026-11-12T04:02:04.433534+00:00"
+    },
+    {
+      "id": "REL:e83edf149b71",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:0f8ad3141bf5",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435866+00:00",
+      "last_observed": "2026-11-12T04:02:04.435866+00:00"
+    },
+    {
+      "id": "REL:56beefd2f444",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:12e1a9906829",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433405+00:00",
+      "last_observed": "2026-11-12T04:02:04.433405+00:00"
+    },
+    {
+      "id": "REL:afb192722f69",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:14e59e700802",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433329+00:00",
+      "last_observed": "2026-11-12T04:02:04.433329+00:00"
+    },
+    {
+      "id": "REL:3569718d5fa0",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:15b63debebf8",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433039+00:00",
+      "last_observed": "2026-11-12T04:02:04.433039+00:00"
+    },
+    {
+      "id": "REL:5de2683a2c70",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:196eb7e8e3fc",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433883+00:00",
+      "last_observed": "2026-11-12T04:02:04.433883+00:00"
+    },
+    {
+      "id": "REL:534e98219ae0",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:197cb0c28135",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433835+00:00",
+      "last_observed": "2026-11-12T04:02:04.433835+00:00"
+    },
+    {
+      "id": "REL:c15052c96ac9",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:1b41ee0cde40",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433682+00:00",
+      "last_observed": "2026-11-12T04:02:04.433682+00:00"
+    },
+    {
+      "id": "REL:8d75d4341d7c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:1c5afd59aff5",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435640+00:00",
+      "last_observed": "2026-11-12T04:02:04.435640+00:00"
+    },
+    {
+      "id": "REL:f73492a83ee7",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:1d656610c53f",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433341+00:00",
+      "last_observed": "2026-11-12T04:02:04.433341+00:00"
+    },
+    {
+      "id": "REL:1ebf1edda385",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:1ee1d7dfc674",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433285+00:00",
+      "last_observed": "2026-11-12T04:02:04.433285+00:00"
+    },
+    {
+      "id": "REL:83a62945e1cd",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:21e31706a230",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433022+00:00",
+      "last_observed": "2026-11-12T04:02:04.433022+00:00"
+    },
+    {
+      "id": "REL:90406b023b55",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:237039023e03",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433157+00:00",
+      "last_observed": "2026-11-12T04:02:04.433157+00:00"
+    },
+    {
+      "id": "REL:cc236388100a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:25edb6f7a9c1",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433700+00:00",
+      "last_observed": "2026-11-12T04:02:04.433700+00:00"
+    },
+    {
+      "id": "REL:164a5cd4c2d3",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:28f1a31cd21c",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435672+00:00",
+      "last_observed": "2026-11-12T04:02:04.435672+00:00"
+    },
+    {
+      "id": "REL:d4747833a7c4",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:2ed210f69e0e",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433729+00:00",
+      "last_observed": "2026-11-12T04:02:04.433729+00:00"
+    },
+    {
+      "id": "REL:36bda20192e6",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:3249f0d8b3a8",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433254+00:00",
+      "last_observed": "2026-11-12T04:02:04.433254+00:00"
+    },
+    {
+      "id": "REL:408ddeae0168",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:324b16f9b70b",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433295+00:00",
+      "last_observed": "2026-11-12T04:02:04.433295+00:00"
+    },
+    {
+      "id": "REL:302595358f5b",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:3bcb7578b70c",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433711+00:00",
+      "last_observed": "2026-11-12T04:02:04.433711+00:00"
+    },
+    {
+      "id": "REL:1f7b73b51423",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:3e419d318ca9",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433852+00:00",
+      "last_observed": "2026-11-12T04:02:04.433852+00:00"
+    },
+    {
+      "id": "REL:8ed0e84e5f0d",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:3f5c0a4a946c",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433474+00:00",
+      "last_observed": "2026-11-12T04:02:04.433474+00:00"
+    },
+    {
+      "id": "REL:e61f6de50b10",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:44b4c212b4ba",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433599+00:00",
+      "last_observed": "2026-11-12T04:02:04.433599+00:00"
+    },
+    {
+      "id": "REL:2b7290ed4fca",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:4751625ae4a0",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433893+00:00",
+      "last_observed": "2026-11-12T04:02:04.433893+00:00"
+    },
+    {
+      "id": "REL:50a3473d92c4",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:488688b56e08",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433588+00:00",
+      "last_observed": "2026-11-12T04:02:04.433588+00:00"
+    },
+    {
+      "id": "REL:2f0d307da9e2",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:4ac232047100",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433274+00:00",
+      "last_observed": "2026-11-12T04:02:04.433274+00:00"
+    },
+    {
+      "id": "REL:c1719d969586",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:4d89929d54f6",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433720+00:00",
+      "last_observed": "2026-11-12T04:02:04.433720+00:00"
+    },
+    {
+      "id": "REL:ec7708eb1724",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:4f3de26c5aed",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433418+00:00",
+      "last_observed": "2026-11-12T04:02:04.433418+00:00"
+    },
+    {
+      "id": "REL:235257e837fa",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:512838f4d4ce",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433430+00:00",
+      "last_observed": "2026-11-12T04:02:04.433430+00:00"
+    },
+    {
+      "id": "REL:8353fd763dfc",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:51b2bd84a105",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435798+00:00",
+      "last_observed": "2026-11-12T04:02:04.435798+00:00"
+    },
+    {
+      "id": "REL:c3eb398666a5",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:52aa6d8dc905",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435781+00:00",
+      "last_observed": "2026-11-12T04:02:04.435781+00:00"
+    },
+    {
+      "id": "REL:b86b708ce63e",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:532144a91711",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433873+00:00",
+      "last_observed": "2026-11-12T04:02:04.433873+00:00"
+    },
+    {
+      "id": "REL:c5bb40e4d574",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:543032286a12",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433930+00:00",
+      "last_observed": "2026-11-12T04:02:04.433930+00:00"
+    },
+    {
+      "id": "REL:34e561796e26",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:56b015ad147d",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433064+00:00",
+      "last_observed": "2026-11-12T04:02:04.433064+00:00"
+    },
+    {
+      "id": "REL:aea783eb4b53",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:5889c0577075",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433862+00:00",
+      "last_observed": "2026-11-12T04:02:04.433862+00:00"
+    },
+    {
+      "id": "REL:a1c03281d886",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:59a04ab403ae",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435932+00:00",
+      "last_observed": "2026-11-12T04:02:04.435932+00:00"
+    },
+    {
+      "id": "REL:c7b4890b64ab",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:5a0cf7a23f6e",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433242+00:00",
+      "last_observed": "2026-11-12T04:02:04.433242+00:00"
+    },
+    {
+      "id": "REL:30a3ce66c696",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:5b22dff09975",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433749+00:00",
+      "last_observed": "2026-11-12T04:02:04.433749+00:00"
+    },
+    {
+      "id": "REL:38b5db4211c2",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:5b4d50327cfa",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435883+00:00",
+      "last_observed": "2026-11-12T04:02:04.435883+00:00"
+    },
+    {
+      "id": "REL:ece4d1d7debb",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:5e8cbe606f47",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433789+00:00",
+      "last_observed": "2026-11-12T04:02:04.433789+00:00"
+    },
+    {
+      "id": "REL:b9f5d2028b80",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:5ed668405fd4",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433578+00:00",
+      "last_observed": "2026-11-12T04:02:04.433578+00:00"
+    },
+    {
+      "id": "REL:11b3e8a67118",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:5f39f816e4a6",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433223+00:00",
+      "last_observed": "2026-11-12T04:02:04.433223+00:00"
+    },
+    {
+      "id": "REL:5200e81c9eae",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:6022cab68ffc",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433816+00:00",
+      "last_observed": "2026-11-12T04:02:04.433816+00:00"
+    },
+    {
+      "id": "REL:be021b8f9fea",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:610f10d36bf5",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433958+00:00",
+      "last_observed": "2026-11-12T04:02:04.433958+00:00"
+    },
+    {
+      "id": "REL:f24d178b3d4c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:618fac13e096",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433798+00:00",
+      "last_observed": "2026-11-12T04:02:04.433798+00:00"
+    },
+    {
+      "id": "REL:d6823721978c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:67404cf4c047",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433826+00:00",
+      "last_observed": "2026-11-12T04:02:04.433826+00:00"
+    },
+    {
+      "id": "REL:30842d2bfc31",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:68a0a666bd5c",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433921+00:00",
+      "last_observed": "2026-11-12T04:02:04.433921+00:00"
+    },
+    {
+      "id": "REL:aba683d9e95f",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:68cf4378e9f0",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433939+00:00",
+      "last_observed": "2026-11-12T04:02:04.433939+00:00"
+    },
+    {
+      "id": "REL:e549b87930a8",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:693b992827ee",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433910+00:00",
+      "last_observed": "2026-11-12T04:02:04.433910+00:00"
+    },
+    {
+      "id": "REL:cf6e5fb83141",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:69544a9d1160",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433364+00:00",
+      "last_observed": "2026-11-12T04:02:04.433364+00:00"
+    },
+    {
+      "id": "REL:81f1b8a9539a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:6bc2ecb0d8b5",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433451+00:00",
+      "last_observed": "2026-11-12T04:02:04.433451+00:00"
+    },
+    {
+      "id": "REL:00a0497a1a69",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:6deb752c62b7",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433691+00:00",
+      "last_observed": "2026-11-12T04:02:04.433691+00:00"
+    },
+    {
+      "id": "REL:aa1b46c32026",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:6f86f838317a",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433076+00:00",
+      "last_observed": "2026-11-12T04:02:04.433076+00:00"
+    },
+    {
+      "id": "REL:b3a03ff0d172",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:716b9cbb9b77",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433780+00:00",
+      "last_observed": "2026-11-12T04:02:04.433780+00:00"
+    },
+    {
+      "id": "REL:49596f6dc76c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:7411318cb958",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435764+00:00",
+      "last_observed": "2026-11-12T04:02:04.435764+00:00"
+    },
+    {
+      "id": "REL:509096daac35",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:76e20decda42",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433384+00:00",
+      "last_observed": "2026-11-12T04:02:04.433384+00:00"
+    },
+    {
+      "id": "REL:f269c79ddd6f",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:771e06d01474",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433901+00:00",
+      "last_observed": "2026-11-12T04:02:04.433901+00:00"
+    },
+    {
+      "id": "REL:75329ec4e5ec",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:7e804a88cc5f",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435916+00:00",
+      "last_observed": "2026-11-12T04:02:04.435916+00:00"
+    },
+    {
+      "id": "REL:f0dde8311da1",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:869b4351528c",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433201+00:00",
+      "last_observed": "2026-11-12T04:02:04.433201+00:00"
+    },
+    {
+      "id": "REL:dee48a023711",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:86cf55c0f934",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433556+00:00",
+      "last_observed": "2026-11-12T04:02:04.433556+00:00"
+    },
+    {
+      "id": "REL:f3db29a354d7",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:8c69e5d199e8",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433186+00:00",
+      "last_observed": "2026-11-12T04:02:04.433186+00:00"
+    },
+    {
+      "id": "REL:15cfa6a94a4f",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:8dc9204f8bd4",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433807+00:00",
+      "last_observed": "2026-11-12T04:02:04.433807+00:00"
+    },
+    {
+      "id": "REL:84594dd14ef9",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:922629ed5580",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435692+00:00",
+      "last_observed": "2026-11-12T04:02:04.435692+00:00"
+    },
+    {
+      "id": "REL:f6d1629cb531",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:9319da8283dd",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433374+00:00",
+      "last_observed": "2026-11-12T04:02:04.433374+00:00"
+    },
+    {
+      "id": "REL:ddbf46f1f7dc",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:941e36917984",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433306+00:00",
+      "last_observed": "2026-11-12T04:02:04.433306+00:00"
+    },
+    {
+      "id": "REL:fb48ff5d3e54",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:9468f758e293",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433949+00:00",
+      "last_observed": "2026-11-12T04:02:04.433949+00:00"
+    },
+    {
+      "id": "REL:3d2682ba5fcc",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:9625a4a364a1",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433394+00:00",
+      "last_observed": "2026-11-12T04:02:04.433394+00:00"
+    },
+    {
+      "id": "REL:d1d6a14e0b08",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:97bc0c1b829e",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435730+00:00",
+      "last_observed": "2026-11-12T04:02:04.435730+00:00"
+    },
+    {
+      "id": "REL:1cdb2738bd5a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:9a6125cbc9db",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433441+00:00",
+      "last_observed": "2026-11-12T04:02:04.433441+00:00"
+    },
+    {
+      "id": "REL:b88922f47a36",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:9eb2b0399f69",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433770+00:00",
+      "last_observed": "2026-11-12T04:02:04.433770+00:00"
+    },
+    {
+      "id": "REL:fa31130d161c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:9edd4efb97e2",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433052+00:00",
+      "last_observed": "2026-11-12T04:02:04.433052+00:00"
+    },
+    {
+      "id": "REL:3a84e9cd0662",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:a10b76052c03",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433739+00:00",
+      "last_observed": "2026-11-12T04:02:04.433739+00:00"
+    },
+    {
+      "id": "REL:82a71cc2513b",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:a14825ef82f3",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433567+00:00",
+      "last_observed": "2026-11-12T04:02:04.433567+00:00"
+    },
+    {
+      "id": "REL:1f1de9b9cb67",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:a37a6d0bafd7",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433673+00:00",
+      "last_observed": "2026-11-12T04:02:04.433673+00:00"
+    },
+    {
+      "id": "REL:f6ffb8e98038",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:a51ebaca99ec",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433500+00:00",
+      "last_observed": "2026-11-12T04:02:04.433500+00:00"
+    },
+    {
+      "id": "REL:6b7096ac4a29",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:a5b7d7d0f22d",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433089+00:00",
+      "last_observed": "2026-11-12T04:02:04.433089+00:00"
+    },
+    {
+      "id": "REL:dd5f625ff5eb",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:a604718584cb",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435609+00:00",
+      "last_observed": "2026-11-12T04:02:04.435609+00:00"
+    },
+    {
+      "id": "REL:1f43fdc7b0ba",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:a9b75b1bd63c",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435832+00:00",
+      "last_observed": "2026-11-12T04:02:04.435832+00:00"
+    },
+    {
+      "id": "REL:706bdeec814b",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:ab502ced3519",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433513+00:00",
+      "last_observed": "2026-11-12T04:02:04.433513+00:00"
+    },
+    {
+      "id": "REL:a312f0c79c32",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:b5cdf01c22e3",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435714+00:00",
+      "last_observed": "2026-11-12T04:02:04.435714+00:00"
+    },
+    {
+      "id": "REL:3211846eb46a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:bc30ab8d2d8e",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433463+00:00",
+      "last_observed": "2026-11-12T04:02:04.433463+00:00"
+    },
+    {
+      "id": "REL:a4c5a0f0396a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:bcca81f0d116",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433317+00:00",
+      "last_observed": "2026-11-12T04:02:04.433317+00:00"
+    },
+    {
+      "id": "REL:38f72d0d99a2",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:c2d708bbd03c",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433627+00:00",
+      "last_observed": "2026-11-12T04:02:04.433627+00:00"
+    },
+    {
+      "id": "REL:575ec9d957fb",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:c594de4ea4e9",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433609+00:00",
+      "last_observed": "2026-11-12T04:02:04.433609+00:00"
+    },
+    {
+      "id": "REL:22c259391164",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:c6ef5cef9b7d",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433264+00:00",
+      "last_observed": "2026-11-12T04:02:04.433264+00:00"
+    },
+    {
+      "id": "REL:24d65ed7fd3d",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:c7123c41bbf2",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435814+00:00",
+      "last_observed": "2026-11-12T04:02:04.435814+00:00"
+    },
+    {
+      "id": "REL:55a9d72279c5",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:cdb474073585",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433487+00:00",
+      "last_observed": "2026-11-12T04:02:04.433487+00:00"
+    },
+    {
+      "id": "REL:c3d20df93dd4",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:d01edc1a555a",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435900+00:00",
+      "last_observed": "2026-11-12T04:02:04.435900+00:00"
+    },
+    {
+      "id": "REL:5ca9905433eb",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:d82ad131d5f6",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433545+00:00",
+      "last_observed": "2026-11-12T04:02:04.433545+00:00"
+    },
+    {
+      "id": "REL:2f547748d9ba",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:e290f5fb131e",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433636+00:00",
+      "last_observed": "2026-11-12T04:02:04.433636+00:00"
+    },
+    {
+      "id": "REL:279309a6656c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:e37518e277e3",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433352+00:00",
+      "last_observed": "2026-11-12T04:02:04.433352+00:00"
+    },
+    {
+      "id": "REL:0d0470c78b20",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:e45d521ba94a",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433523+00:00",
+      "last_observed": "2026-11-12T04:02:04.433523+00:00"
+    },
+    {
+      "id": "REL:21434020b1e6",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:e6556413ba0e",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433654+00:00",
+      "last_observed": "2026-11-12T04:02:04.433654+00:00"
+    },
+    {
+      "id": "REL:6f8e6c9a713e",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:e6d2784dd5d1",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433645+00:00",
+      "last_observed": "2026-11-12T04:02:04.433645+00:00"
+    },
+    {
+      "id": "REL:d68eec5c0e8f",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:f7d41716a098",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435849+00:00",
+      "last_observed": "2026-11-12T04:02:04.435849+00:00"
+    },
+    {
+      "id": "REL:514ae8c34358",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:f97e219073d8",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.435747+00:00",
+      "last_observed": "2026-11-12T04:02:04.435747+00:00"
+    },
+    {
+      "id": "REL:8049a583b411",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:fb3357e9d41d",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433760+00:00",
+      "last_observed": "2026-11-12T04:02:04.433760+00:00"
+    },
+    {
+      "id": "REL:1337a5751899",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:fd958140a16a",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433844+00:00",
+      "last_observed": "2026-11-12T04:02:04.433844+00:00"
+    },
+    {
+      "id": "REL:1f6e54320f48",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:fdb305b3e96b",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433664+00:00",
+      "last_observed": "2026-11-12T04:02:04.433664+00:00"
+    },
+    {
+      "id": "REL:46366a548a6a",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:SUBDOMAIN:ff419e98fa5a",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.org"
+      ],
+      "first_observed": "2026-11-12T04:02:04.433618+00:00",
+      "last_observed": "2026-11-12T04:02:04.433618+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:DOMAIN:087ffdf131a7",
+      "ENT:EMAIL:51df8e2aede6",
+      "ENT:EMAIL:91b7f7b32806",
+      "ENT:IP:7949ec685392",
+      "ENT:IPV6:000234adb2ba",
+      "ENT:MX:0b8258f36da4",
+      "ENT:MX:0d6be481d647",
+      "ENT:MX:5baaa2ffae62",
+      "ENT:MX:98620f2d9f9a",
+      "ENT:NAMESERVER:054094ff1105",
+      "ENT:NAMESERVER:1b8af4e99834",
+      "ENT:NAMESERVER:2c9820591d80",
+      "ENT:NAMESERVER:600786b4052c",
+      "ENT:ORGANIZATION:7a2b1accd565",
+      "ENT:SUBDOMAIN:085d99c61e14",
+      "ENT:SUBDOMAIN:0f8ad3141bf5",
+      "ENT:SUBDOMAIN:12e1a9906829",
+      "ENT:SUBDOMAIN:14e59e700802",
+      "ENT:SUBDOMAIN:15b63debebf8",
+      "ENT:SUBDOMAIN:196eb7e8e3fc",
+      "ENT:SUBDOMAIN:197cb0c28135",
+      "ENT:SUBDOMAIN:1b41ee0cde40",
+      "ENT:SUBDOMAIN:1c5afd59aff5",
+      "ENT:SUBDOMAIN:1d656610c53f",
+      "ENT:SUBDOMAIN:1ee1d7dfc674",
+      "ENT:SUBDOMAIN:21e31706a230",
+      "ENT:SUBDOMAIN:237039023e03",
+      "ENT:SUBDOMAIN:25edb6f7a9c1",
+      "ENT:SUBDOMAIN:28f1a31cd21c",
+      "ENT:SUBDOMAIN:2ed210f69e0e",
+      "ENT:SUBDOMAIN:3249f0d8b3a8",
+      "ENT:SUBDOMAIN:324b16f9b70b",
+      "ENT:SUBDOMAIN:3bcb7578b70c",
+      "ENT:SUBDOMAIN:3e419d318ca9",
+      "ENT:SUBDOMAIN:3f5c0a4a946c",
+      "ENT:SUBDOMAIN:44b4c212b4ba",
+      "ENT:SUBDOMAIN:4751625ae4a0",
+      "ENT:SUBDOMAIN:488688b56e08",
+      "ENT:SUBDOMAIN:4ac232047100",
+      "ENT:SUBDOMAIN:4d89929d54f6",
+      "ENT:SUBDOMAIN:4f3de26c5aed",
+      "ENT:SUBDOMAIN:512838f4d4ce",
+      "ENT:SUBDOMAIN:51b2bd84a105",
+      "ENT:SUBDOMAIN:52aa6d8dc905",
+      "ENT:SUBDOMAIN:532144a91711",
+      "ENT:SUBDOMAIN:543032286a12",
+      "ENT:SUBDOMAIN:56b015ad147d",
+      "ENT:SUBDOMAIN:5889c0577075",
+      "ENT:SUBDOMAIN:59a04ab403ae",
+      "ENT:SUBDOMAIN:5a0cf7a23f6e",
+      "ENT:SUBDOMAIN:5b22dff09975",
+      "ENT:SUBDOMAIN:5b4d50327cfa",
+      "ENT:SUBDOMAIN:5e8cbe606f47",
+      "ENT:SUBDOMAIN:5ed668405fd4",
+      "ENT:SUBDOMAIN:5f39f816e4a6",
+      "ENT:SUBDOMAIN:6022cab68ffc",
+      "ENT:SUBDOMAIN:610f10d36bf5",
+      "ENT:SUBDOMAIN:618fac13e096",
+      "ENT:SUBDOMAIN:67404cf4c047",
+      "ENT:SUBDOMAIN:68a0a666bd5c",
+      "ENT:SUBDOMAIN:68cf4378e9f0",
+      "ENT:SUBDOMAIN:693b992827ee",
+      "ENT:SUBDOMAIN:69544a9d1160",
+      "ENT:SUBDOMAIN:6bc2ecb0d8b5",
+      "ENT:SUBDOMAIN:6deb752c62b7",
+      "ENT:SUBDOMAIN:6f86f838317a",
+      "ENT:SUBDOMAIN:716b9cbb9b77",
+      "ENT:SUBDOMAIN:7411318cb958",
+      "ENT:SUBDOMAIN:76e20decda42",
+      "ENT:SUBDOMAIN:771e06d01474",
+      "ENT:SUBDOMAIN:7e804a88cc5f",
+      "ENT:SUBDOMAIN:869b4351528c",
+      "ENT:SUBDOMAIN:86cf55c0f934",
+      "ENT:SUBDOMAIN:8c69e5d199e8",
+      "ENT:SUBDOMAIN:8dc9204f8bd4",
+      "ENT:SUBDOMAIN:922629ed5580",
+      "ENT:SUBDOMAIN:9319da8283dd",
+      "ENT:SUBDOMAIN:941e36917984",
+      "ENT:SUBDOMAIN:9468f758e293",
+      "ENT:SUBDOMAIN:9625a4a364a1",
+      "ENT:SUBDOMAIN:97bc0c1b829e",
+      "ENT:SUBDOMAIN:9a6125cbc9db",
+      "ENT:SUBDOMAIN:9eb2b0399f69",
+      "ENT:SUBDOMAIN:9edd4efb97e2",
+      "ENT:SUBDOMAIN:a10b76052c03",
+      "ENT:SUBDOMAIN:a14825ef82f3",
+      "ENT:SUBDOMAIN:a37a6d0bafd7",
+      "ENT:SUBDOMAIN:a51ebaca99ec",
+      "ENT:SUBDOMAIN:a5b7d7d0f22d",
+      "ENT:SUBDOMAIN:a604718584cb",
+      "ENT:SUBDOMAIN:a9b75b1bd63c",
+      "ENT:SUBDOMAIN:ab502ced3519",
+      "ENT:SUBDOMAIN:b5cdf01c22e3",
+      "ENT:SUBDOMAIN:bc30ab8d2d8e",
+      "ENT:SUBDOMAIN:bcca81f0d116",
+      "ENT:SUBDOMAIN:c2d708bbd03c",
+      "ENT:SUBDOMAIN:c594de4ea4e9",
+      "ENT:SUBDOMAIN:c6ef5cef9b7d",
+      "ENT:SUBDOMAIN:c7123c41bbf2",
+      "ENT:SUBDOMAIN:cdb474073585",
+      "ENT:SUBDOMAIN:d01edc1a555a",
+      "ENT:SUBDOMAIN:d82ad131d5f6",
+      "ENT:SUBDOMAIN:e290f5fb131e",
+      "ENT:SUBDOMAIN:e37518e277e3",
+      "ENT:SUBDOMAIN:e45d521ba94a",
+      "ENT:SUBDOMAIN:e6556413ba0e",
+      "ENT:SUBDOMAIN:e6d2784dd5d1",
+      "ENT:SUBDOMAIN:f7d41716a098",
+      "ENT:SUBDOMAIN:f97e219073d8",
+      "ENT:SUBDOMAIN:fb3357e9d41d",
+      "ENT:SUBDOMAIN:fd958140a16a",
+      "ENT:SUBDOMAIN:fdb305b3e96b",
+      "ENT:SUBDOMAIN:ff419e98fa5a"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

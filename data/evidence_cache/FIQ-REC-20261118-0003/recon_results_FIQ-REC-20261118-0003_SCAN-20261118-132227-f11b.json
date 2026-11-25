@@ -1,0 +1,131 @@
+{
+  "recon_id": "FIQ-REC-20261118-0003",
+  "target": "192.168.56.113",
+  "hostname": "ns1.corp-edge.internal",
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.113",
+      "port": 22,
+      "protocol": "tcp",
+      "service": "ssh",
+      "product": "OpenSSH",
+      "version": "8.9p1 Ubuntu",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.113",
+      "port": 53,
+      "protocol": "tcp",
+      "service": "domain",
+      "product": "ISC BIND",
+      "version": "9.16.1",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.113",
+      "port": 80,
+      "protocol": "tcp",
+      "service": "http",
+      "product": "Apache httpd",
+      "version": "2.4.52",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.113",
+      "port": 443,
+      "protocol": "tcp",
+      "service": "https",
+      "product": "Apache httpd",
+      "version": "2.4.52",
+      "state": "open"
+    }
+  ],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.113",
+      "hostname": "ns1.corp-edge.internal",
+      "status": "up",
+      "latency_ms": 1.25,
+      "os_match": "Linux 2.6.x - 5.x",
+      "open_ports_count": 4
+    }
+  ],
+  "passive_results": [
+    {
+      "source": "WHOIS / RDAP",
+      "domain": "ns1.corp-edge.internal",
+      "registrar": "FootprintIQ Internal Assessment Registry",
+      "created_date": "2024-01-15T00:00:00Z",
+      "org": "FootprintIQ Security Operations Lab",
+      "nameservers": [
+        "ns1.local",
+        "ns2.local"
+      ]
+    },
+    {
+      "source": "theHarvester",
+      "query": "ns1.corp-edge.internal",
+      "emails_discovered": [
+        "admin@demo.internal",
+        "security@demo.internal",
+        "ops@demo.internal"
+      ],
+      "subdomains_discovered": [
+        "mail.ns1.corp-edge.internal",
+        "api.ns1.corp-edge.internal",
+        "vpn.ns1.corp-edge.internal"
+      ]
+    },
+    {
+      "source": "DNS OSINT",
+      "target": "192.168.56.113",
+      "records": [
+        {
+          "type": "A",
+          "name": "ns1.corp-edge.internal",
+          "value": "192.168.56.113",
+          "ttl": 3600
+        },
+        {
+          "type": "PTR",
+          "name": "192.168.56.113.in-addr.arpa",
+          "value": "ns1.corp-edge.internal",
+          "ttl": 3600
+        }
+      ]
+    }
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "theharvester",
+      "status": "COMPLETED",
+      "detail": "Verified external records unchanged",
+      "duration_seconds": 18.0
+    },
+    {
+      "scanner": "whois_rdap_dns",
+      "status": "COMPLETED",
+      "detail": "Re-verified DNS nameserver configuration",
+      "duration_seconds": 12.0
+    },
+    {
+      "scanner": "nmap",
+      "status": "COMPLETED",
+      "detail": "Discovered 4 open TCP services across target",
+      "duration_seconds": 62.0
+    },
+    {
+      "scanner": "nmap_nse",
+      "status": "COMPLETED",
+      "detail": "Rechecked remediation status of previous vulnerability findings",
+      "duration_seconds": 68.0
+    },
+    {
+      "scanner": "nuclei",
+      "status": "COMPLETED",
+      "detail": "Confirmed patched CVEs and endpoints",
+      "duration_seconds": 35.0
+    }
+  ],
+  "generated_at": "2026-11-17T13:25:41.306581+00:00"
+}

@@ -1,0 +1,140 @@
+{
+  "recon_id": "FIQ-REC-20261118-0002",
+  "target": "192.168.56.112",
+  "hostname": "api-gateway.demo.internal",
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.112",
+      "port": 80,
+      "protocol": "tcp",
+      "service": "http",
+      "product": "nginx",
+      "version": "1.18.0",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.112",
+      "port": 443,
+      "protocol": "tcp",
+      "service": "https",
+      "product": "nginx",
+      "version": "1.18.0",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.112",
+      "port": 8080,
+      "protocol": "tcp",
+      "service": "http",
+      "product": "Spring Boot Gateway",
+      "version": "2.5.4",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.112",
+      "port": 8443,
+      "protocol": "tcp",
+      "service": "https",
+      "product": "Apache Tomcat",
+      "version": "9.0.41",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.112",
+      "port": 9000,
+      "protocol": "tcp",
+      "service": "http",
+      "product": "SonarQube API Console",
+      "version": "8.9.1",
+      "state": "open"
+    }
+  ],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.112",
+      "hostname": "api-gateway.demo.internal",
+      "status": "up",
+      "latency_ms": 1.25,
+      "os_match": "Linux 2.6.x - 5.x",
+      "open_ports_count": 5
+    }
+  ],
+  "passive_results": [
+    {
+      "source": "WHOIS / RDAP",
+      "domain": "api-gateway.demo.internal",
+      "registrar": "FootprintIQ Internal Assessment Registry",
+      "created_date": "2024-01-15T00:00:00Z",
+      "org": "FootprintIQ Security Operations Lab",
+      "nameservers": [
+        "ns1.local",
+        "ns2.local"
+      ]
+    },
+    {
+      "source": "theHarvester",
+      "query": "api-gateway.demo.internal",
+      "emails_discovered": [
+        "admin@demo.internal",
+        "security@demo.internal",
+        "ops@demo.internal"
+      ],
+      "subdomains_discovered": [
+        "mail.api-gateway.demo.internal",
+        "api.api-gateway.demo.internal",
+        "vpn.api-gateway.demo.internal"
+      ]
+    },
+    {
+      "source": "DNS OSINT",
+      "target": "192.168.56.112",
+      "records": [
+        {
+          "type": "A",
+          "name": "api-gateway.demo.internal",
+          "value": "192.168.56.112",
+          "ttl": 3600
+        },
+        {
+          "type": "PTR",
+          "name": "192.168.56.112.in-addr.arpa",
+          "value": "api-gateway.demo.internal",
+          "ttl": 3600
+        }
+      ]
+    }
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "theharvester",
+      "status": "COMPLETED",
+      "detail": "Verified external records unchanged",
+      "duration_seconds": 18.0
+    },
+    {
+      "scanner": "whois_rdap_dns",
+      "status": "COMPLETED",
+      "detail": "Re-verified DNS nameserver configuration",
+      "duration_seconds": 12.0
+    },
+    {
+      "scanner": "nmap",
+      "status": "COMPLETED",
+      "detail": "Discovered 5 open TCP services across target",
+      "duration_seconds": 62.0
+    },
+    {
+      "scanner": "nmap_nse",
+      "status": "COMPLETED",
+      "detail": "Rechecked remediation status of previous vulnerability findings",
+      "duration_seconds": 68.0
+    },
+    {
+      "scanner": "nuclei",
+      "status": "COMPLETED",
+      "detail": "Confirmed patched CVEs and endpoints",
+      "duration_seconds": 35.0
+    }
+  ],
+  "generated_at": "2026-11-17T13:22:29.502595+00:00"
+}

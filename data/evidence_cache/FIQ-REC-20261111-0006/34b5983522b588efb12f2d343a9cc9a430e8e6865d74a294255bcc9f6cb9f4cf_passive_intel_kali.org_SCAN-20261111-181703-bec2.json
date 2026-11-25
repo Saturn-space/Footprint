@@ -1,0 +1,165 @@
+{
+  "target": "kali.org",
+  "target_kind": "domain",
+  "timestamp_utc": "2026-11-11T18:17:03.969672+00:00",
+  "checks_requested": [
+    "reverse_dns",
+    "rdap_lookup",
+    "whois_lookup",
+    "dns_records",
+    "asn_ip_hosting"
+  ],
+  "checks_executed": [
+    {
+      "id": "whois_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "rdap_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "asn_ip_hosting",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "dns_records",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "reverse_dns",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    }
+  ],
+  "unavailable_checks": [],
+  "domain_intel": {
+    "whois": {
+      "registrar": "Gandi SAS",
+      "organization": null,
+      "creation_date": "2002-07-20T20:54:27+00:00",
+      "expiration_date": "2027-07-20T20:54:27+00:00",
+      "name_servers": [
+        "nash.ns.cloudflare.com",
+        "nina.ns.cloudflare.com"
+      ],
+      "status": "SUCCESS"
+    },
+    "rdap": {
+      "status": "SUCCESS",
+      "query": "kali.org",
+      "handle": null,
+      "name": "",
+      "start_address": null,
+      "end_address": null,
+      "ip_version": null,
+      "country": null,
+      "entities": [
+        {
+          "handle": "81",
+          "roles": [
+            "registrar"
+          ]
+        }
+      ],
+      "status_list": [
+        "client transfer prohibited"
+      ]
+    },
+    "dns_records": {
+      "A": [
+        "104.18.4.159",
+        "104.18.5.159"
+      ],
+      "AAAA": [
+        "2606:4700::6812:59f",
+        "2606:4700::6812:49f"
+      ],
+      "MX": [
+        "alt3.aspmx.l.google.com",
+        "alt4.aspmx.l.google.com",
+        "aspmx.l.google.com",
+        "alt1.aspmx.l.google.com",
+        "alt2.aspmx.l.google.com"
+      ],
+      "NS": [
+        "nina.ns.cloudflare.com",
+        "nash.ns.cloudflare.com"
+      ],
+      "TXT": [
+        "google-site-verification=QO0m_WIzc81XaujadDfsFymI53IwsX4sCt-Tin9ugoI",
+        "mjb3j7d41a5qd3i4qo8j8d9q7g",
+        "MS=2F24AAB1EA3933DA8A05BF4B28C70033E0001820",
+        "v=spf1 a ip4:208.88.127.98 ip4:52.44.83.41 include:_spf.google.com include:sendgrid.net ~all"
+      ]
+    },
+    "dns_enumeration": {},
+    "nameserver_analysis": null,
+    "subdomains": [],
+    "dns_security": null
+  },
+  "osint_intel": {
+    "emails": [
+      "abuse@support.gandi.net"
+    ],
+    "crtsh_certificates": [],
+    "public_org_info": null,
+    "public_metadata": null,
+    "search_engine_intel": null,
+    "technology_intel": [],
+    "external_apis": {}
+  },
+  "infrastructure_intel": {
+    "resolved_ips": [
+      "104.18.4.159",
+      "104.18.5.159",
+      "2606:4700::6812:49f",
+      "2606:4700::6812:59f"
+    ],
+    "ip_intelligence": null,
+    "reverse_dns": [
+      {
+        "status": "NO_PTR",
+        "ip": "104.18.4.159",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      },
+      {
+        "status": "NO_PTR",
+        "ip": "104.18.5.159",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      },
+      {
+        "status": "NO_PTR",
+        "ip": "2606:4700::6812:49f",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      },
+      {
+        "status": "NO_PTR",
+        "ip": "2606:4700::6812:59f",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      }
+    ],
+    "asn_hosting": {
+      "handle": null,
+      "name": "",
+      "start_address": null,
+      "end_address": null,
+      "country": null,
+      "cidr": null,
+      "org": null
+    },
+    "ip_geolocation": null,
+    "hosting_info": null,
+    "tls_certificates": null,
+    "http_headers": []
+  },
+  "errors": []
+}

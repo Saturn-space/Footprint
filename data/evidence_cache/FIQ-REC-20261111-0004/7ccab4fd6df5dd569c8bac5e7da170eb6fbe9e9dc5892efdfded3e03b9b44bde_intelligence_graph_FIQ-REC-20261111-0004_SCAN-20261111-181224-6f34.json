@@ -1,0 +1,744 @@
+{
+  "investigation_id": "FIQ-REC-20261111-0004",
+  "campaign_name": "Final 7-Tool Architecture E2E Audit",
+  "target": "192.168.56.111",
+  "generated_at": "2026-11-11T18:13:05.806502+00:00",
+  "metrics": {
+    "node_count": 15,
+    "edge_count": 14,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.0667,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "ip": 1,
+    "service": 3,
+    "vulnerability": 11
+  },
+  "source_breakdown": {
+    "nmap": 4,
+    "nuclei": 10,
+    "nse": 1
+  },
+  "nodes": [
+    {
+      "id": "ENT:IP:da1f1bf65b4c",
+      "type": "ip",
+      "label": "192.168.56.111",
+      "canonical_value": "192.168.56.111",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "nmap"
+      ],
+      "risk_level": "info",
+      "confidence": 0.98,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "Final 7-Tool Architecture E2E Audit",
+        "value": "192.168.56.111",
+        "source_tool": "nmap",
+        "evidence_ref": "7,01df3e7974e5",
+        "risk_level": "info",
+        "confidence": 0.98,
+        "maltego_type": "maltego.IPv4Address",
+        "hostname": null,
+        "os": null
+      },
+      "first_seen": "2026-11-11T18:13:05.805783+00:00",
+      "last_seen": "2026-11-11T18:13:05.805837+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "value": "192.168.56.111"
+    },
+    {
+      "id": "ENT:SERVICE:769a4aa4ad27",
+      "type": "service",
+      "label": "21/tcp ftp [vsftpd 2.3.4]",
+      "canonical_value": "192.168.56.111:21/tcp (ftp)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 21,
+        "protocol": "tcp",
+        "service": "ftp",
+        "version": "vsftpd 2.3.4",
+        "value": "192.168.56.111:21/tcp (ftp)",
+        "source_tool": "nmap",
+        "evidence_ref": "7,01df3e7974e5",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-11T18:13:05.805874+00:00",
+      "last_seen": "2026-11-11T18:13:05.805874+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "value": "192.168.56.111:21/tcp (ftp)"
+    },
+    {
+      "id": "ENT:SERVICE:b70b484fc763",
+      "type": "service",
+      "label": "22/tcp ssh [OpenSSH 4.7p1 Debian 8ub]",
+      "canonical_value": "192.168.56.111:22/tcp (ssh)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 22,
+        "protocol": "tcp",
+        "service": "ssh",
+        "version": "OpenSSH 4.7p1 Debian 8ubuntu1",
+        "value": "192.168.56.111:22/tcp (ssh)",
+        "source_tool": "nmap",
+        "evidence_ref": "7,01df3e7974e5",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-11T18:13:05.805917+00:00",
+      "last_seen": "2026-11-11T18:13:05.805917+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "value": "192.168.56.111:22/tcp (ssh)"
+    },
+    {
+      "id": "ENT:SERVICE:d26e07ce53ec",
+      "type": "service",
+      "label": "80/tcp http [Apache httpd 2.2.8]",
+      "canonical_value": "192.168.56.111:80/tcp (http)",
+      "tags": [],
+      "sources": [
+        "nmap"
+      ],
+      "risk_level": "low",
+      "confidence": 0.95,
+      "attributes": {
+        "host": "192.168.56.111",
+        "port": 80,
+        "protocol": "tcp",
+        "service": "http",
+        "version": "Apache httpd 2.2.8",
+        "value": "192.168.56.111:80/tcp (http)",
+        "source_tool": "nmap",
+        "evidence_ref": "7,01df3e7974e5",
+        "risk_level": "low",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Service"
+      },
+      "first_seen": "2026-11-11T18:13:05.805993+00:00",
+      "last_seen": "2026-11-11T18:13:05.805993+00:00",
+      "entity_type": "service",
+      "maltego_type": "maltego.Service",
+      "source_tool": "nmap",
+      "evidence_ref": "7,01df3e7974e5",
+      "value": "192.168.56.111:80/tcp (http)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:257489b2bfae",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (permissions-policy)",
+      "canonical_value": "NUC-7CA930412687|192.168.56.111|80|HTTP Missing Security Headers (permissions-policy)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-7CA930412687",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-7CA930412687|192.168.56.111|80|HTTP Missing Security Headers (permissions-policy)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806311+00:00",
+      "last_seen": "2026-11-11T18:13:05.806311+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-7CA930412687|192.168.56.111|80|HTTP Missing Security Headers (permissions-policy)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:31de34fd981b",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (referrer-policy)",
+      "canonical_value": "NUC-C70A537577E2|192.168.56.111|80|HTTP Missing Security Headers (referrer-policy)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-C70A537577E2",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-C70A537577E2|192.168.56.111|80|HTTP Missing Security Headers (referrer-policy)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806239+00:00",
+      "last_seen": "2026-11-11T18:13:05.806239+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-C70A537577E2|192.168.56.111|80|HTTP Missing Security Headers (referrer-policy)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:347351356437",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-opener-policy)",
+      "canonical_value": "NUC-A8A7BFCDC451|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-opener-policy)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-A8A7BFCDC451",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-A8A7BFCDC451|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-opener-policy)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806334+00:00",
+      "last_seen": "2026-11-11T18:13:05.806334+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-A8A7BFCDC451|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-opener-policy)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:4160240a7f1e",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (x-content-type-options)",
+      "canonical_value": "NUC-C579929F34BB|192.168.56.111|80|HTTP Missing Security Headers (x-content-type-options)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-C579929F34BB",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-C579929F34BB|192.168.56.111|80|HTTP Missing Security Headers (x-content-type-options)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806189+00:00",
+      "last_seen": "2026-11-11T18:13:05.806189+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-C579929F34BB|192.168.56.111|80|HTTP Missing Security Headers (x-content-type-options)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:5b9a89dd9ea7",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-resource-policy)",
+      "canonical_value": "NUC-67350C76FD92|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-resource-policy)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-67350C76FD92",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-67350C76FD92|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-resource-policy)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806287+00:00",
+      "last_seen": "2026-11-11T18:13:05.806287+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-67350C76FD92|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-resource-policy)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:93ae42352c51",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (strict-transport-security)",
+      "canonical_value": "NUC-4AC90863F87B|192.168.56.111|80|HTTP Missing Security Headers (strict-transport-security)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-4AC90863F87B",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-4AC90863F87B|192.168.56.111|80|HTTP Missing Security Headers (strict-transport-security)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806100+00:00",
+      "last_seen": "2026-11-11T18:13:05.806100+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-4AC90863F87B|192.168.56.111|80|HTTP Missing Security Headers (strict-transport-security)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:9daf6f32740e",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (x-frame-options)",
+      "canonical_value": "NUC-73D416D18A64|192.168.56.111|80|HTTP Missing Security Headers (x-frame-options)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-73D416D18A64",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-73D416D18A64|192.168.56.111|80|HTTP Missing Security Headers (x-frame-options)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806162+00:00",
+      "last_seen": "2026-11-11T18:13:05.806162+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-73D416D18A64|192.168.56.111|80|HTTP Missing Security Headers (x-frame-options)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:b51a9373897c",
+      "type": "vulnerability",
+      "label": "[CRITICAL] Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+      "canonical_value": "CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+      "tags": [],
+      "sources": [
+        "nse"
+      ],
+      "risk_level": "critical",
+      "confidence": 0.95,
+      "attributes": {
+        "finding_id": "NSE-192_168_56_111-21-ftp-vsftpd-backdoor",
+        "cve": "CVE-2011-2523",
+        "cvss": 9.8,
+        "severity": "Critical",
+        "value": "CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition.",
+        "source_tool": "nse",
+        "evidence_ref": "nse_script:ftp-vsftpd-backdoor",
+        "risk_level": "critical",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806061+00:00",
+      "last_seen": "2026-11-11T18:13:05.806061+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nse",
+      "evidence_ref": "nse_script:ftp-vsftpd-backdoor",
+      "value": "CVE-2011-2523|192.168.56.111|21|Checks for vsftpd 2.3.4 Smiley Face Backdoor condition."
+    },
+    {
+      "id": "ENT:VULNERABILITY:bad58fcb3027",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (cross-origin-embedder-policy)",
+      "canonical_value": "NUC-B1D1EB825735|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-embedder-policy)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-B1D1EB825735",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-B1D1EB825735|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-embedder-policy)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806263+00:00",
+      "last_seen": "2026-11-11T18:13:05.806263+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-B1D1EB825735|192.168.56.111|80|HTTP Missing Security Headers (cross-origin-embedder-policy)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:d81cbf947845",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (x-permitted-cross-domain-poli",
+      "canonical_value": "NUC-F2382085C41A|192.168.56.111|80|HTTP Missing Security Headers (x-permitted-cross-domain-policies)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-F2382085C41A",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-F2382085C41A|192.168.56.111|80|HTTP Missing Security Headers (x-permitted-cross-domain-policies)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806213+00:00",
+      "last_seen": "2026-11-11T18:13:05.806213+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-F2382085C41A|192.168.56.111|80|HTTP Missing Security Headers (x-permitted-cross-domain-policies)"
+    },
+    {
+      "id": "ENT:VULNERABILITY:fa85cbf2ab8f",
+      "type": "vulnerability",
+      "label": "[INFORMATIONAL] HTTP Missing Security Headers (content-security-policy)",
+      "canonical_value": "NUC-8719E0B43855|192.168.56.111|80|HTTP Missing Security Headers (content-security-policy)",
+      "tags": [],
+      "sources": [
+        "nuclei"
+      ],
+      "risk_level": "info",
+      "confidence": 0.78,
+      "attributes": {
+        "finding_id": "NUC-8719E0B43855",
+        "cve": null,
+        "cvss": null,
+        "severity": "Informational",
+        "value": "NUC-8719E0B43855|192.168.56.111|80|HTTP Missing Security Headers (content-security-policy)",
+        "source_tool": "nuclei",
+        "evidence_ref": "4,01e18f68f59d",
+        "risk_level": "info",
+        "confidence": 0.78,
+        "maltego_type": "maltego.Vulnerability"
+      },
+      "first_seen": "2026-11-11T18:13:05.806135+00:00",
+      "last_seen": "2026-11-11T18:13:05.806135+00:00",
+      "entity_type": "vulnerability",
+      "maltego_type": "maltego.Vulnerability",
+      "source_tool": "nuclei",
+      "evidence_ref": "4,01e18f68f59d",
+      "value": "NUC-8719E0B43855|192.168.56.111|80|HTTP Missing Security Headers (content-security-policy)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:3e96a3705c1a",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:769a4aa4ad27",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:21"
+      ],
+      "first_observed": "2026-11-11T18:13:05.805887+00:00",
+      "last_observed": "2026-11-11T18:13:05.805887+00:00"
+    },
+    {
+      "id": "REL:26c3a43330ec",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:b70b484fc763",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:22"
+      ],
+      "first_observed": "2026-11-11T18:13:05.805928+00:00",
+      "last_observed": "2026-11-11T18:13:05.805928+00:00"
+    },
+    {
+      "id": "REL:f17e4ae08825",
+      "source": "ENT:IP:da1f1bf65b4c",
+      "target": "ENT:SERVICE:d26e07ce53ec",
+      "relationship_type": "EXPOSES_SERVICE",
+      "relationship": "EXPOSES_SERVICE",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nmap:192.168.56.111:80"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806011+00:00",
+      "last_observed": "2026-11-11T18:13:05.806011+00:00"
+    },
+    {
+      "id": "REL:63ae1cc999fe",
+      "source": "ENT:SERVICE:769a4aa4ad27",
+      "target": "ENT:VULNERABILITY:b51a9373897c",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "nse_script:ftp-vsftpd-backdoor"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806070+00:00",
+      "last_observed": "2026-11-11T18:13:05.806070+00:00"
+    },
+    {
+      "id": "REL:9aa03d2ca8d7",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:257489b2bfae",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806317+00:00",
+      "last_observed": "2026-11-11T18:13:05.806317+00:00"
+    },
+    {
+      "id": "REL:ea6ce4c227c4",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:31de34fd981b",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806246+00:00",
+      "last_observed": "2026-11-11T18:13:05.806246+00:00"
+    },
+    {
+      "id": "REL:a4c45fe7b470",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:347351356437",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806341+00:00",
+      "last_observed": "2026-11-11T18:13:05.806341+00:00"
+    },
+    {
+      "id": "REL:ac6106bd4efb",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:4160240a7f1e",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806196+00:00",
+      "last_observed": "2026-11-11T18:13:05.806196+00:00"
+    },
+    {
+      "id": "REL:969d53ee0ddb",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:5b9a89dd9ea7",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806293+00:00",
+      "last_observed": "2026-11-11T18:13:05.806293+00:00"
+    },
+    {
+      "id": "REL:0cda068e1e0d",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:93ae42352c51",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806110+00:00",
+      "last_observed": "2026-11-11T18:13:05.806110+00:00"
+    },
+    {
+      "id": "REL:519d6e10e50d",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:9daf6f32740e",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806170+00:00",
+      "last_observed": "2026-11-11T18:13:05.806170+00:00"
+    },
+    {
+      "id": "REL:a0b13407bdd2",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:bad58fcb3027",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806270+00:00",
+      "last_observed": "2026-11-11T18:13:05.806270+00:00"
+    },
+    {
+      "id": "REL:91225fe74647",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:d81cbf947845",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806220+00:00",
+      "last_observed": "2026-11-11T18:13:05.806220+00:00"
+    },
+    {
+      "id": "REL:994798c840e6",
+      "source": "ENT:SERVICE:d26e07ce53ec",
+      "target": "ENT:VULNERABILITY:fa85cbf2ab8f",
+      "relationship_type": "EXPOSES_VULNERABILITY",
+      "relationship": "EXPOSES_VULNERABILITY",
+      "weight": 1.0,
+      "confidence": 0.78,
+      "confidence_score": 0.78,
+      "evidence_ids": [
+        "4,01e18f68f59d"
+      ],
+      "first_observed": "2026-11-11T18:13:05.806142+00:00",
+      "last_observed": "2026-11-11T18:13:05.806142+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:IP:da1f1bf65b4c",
+      "ENT:SERVICE:769a4aa4ad27",
+      "ENT:SERVICE:b70b484fc763",
+      "ENT:SERVICE:d26e07ce53ec",
+      "ENT:VULNERABILITY:257489b2bfae",
+      "ENT:VULNERABILITY:31de34fd981b",
+      "ENT:VULNERABILITY:347351356437",
+      "ENT:VULNERABILITY:4160240a7f1e",
+      "ENT:VULNERABILITY:5b9a89dd9ea7",
+      "ENT:VULNERABILITY:93ae42352c51",
+      "ENT:VULNERABILITY:9daf6f32740e",
+      "ENT:VULNERABILITY:b51a9373897c",
+      "ENT:VULNERABILITY:bad58fcb3027",
+      "ENT:VULNERABILITY:d81cbf947845",
+      "ENT:VULNERABILITY:fa85cbf2ab8f"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 30.39,
+  "scanners_executed": [
+    "nmap_services"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Hosts UP: 1, Open ports: 24"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.111",
+      "hostname": null,
+      "status": "up",
+      "os_matches": [],
+      "open_ports_count": 24
+    }
+  ],
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.111",
+      "port": 21,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ftp",
+      "service_version": "vsftpd 2.3.4",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ssh",
+      "service_version": "OpenSSH 4.7p1 Debian 8ubuntu1",
+      "extrainfo": "protocol 2.0"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 23,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "telnet",
+      "service_version": "Linux telnetd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 25,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "smtp",
+      "service_version": "Postfix smtpd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 53,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "domain",
+      "service_version": "ISC BIND 9.4.2",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Apache httpd 2.2.8",
+      "extrainfo": "(Ubuntu) DAV/2"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 111,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "rpcbind",
+      "service_version": "2",
+      "extrainfo": "RPC #100000"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 139,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "netbios-ssn",
+      "service_version": "Samba smbd 3.X - 4.X",
+      "extrainfo": "workgroup: WORKGROUP"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 445,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "netbios-ssn",
+      "service_version": "Samba smbd 3.X - 4.X",
+      "extrainfo": "workgroup: WORKGROUP"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 512,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "exec",
+      "service_version": "netkit-rsh rexecd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 513,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "login",
+      "service_version": "",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 514,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "shell",
+      "service_version": "Netkit rshd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 1099,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "java-rmi",
+      "service_version": "GNU Classpath grmiregistry",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 1524,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "bindshell",
+      "service_version": "Metasploitable root shell",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 2049,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "nfs",
+      "service_version": "2-4",
+      "extrainfo": "RPC #100003"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 2121,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ftp",
+      "service_version": "ProFTPD 1.3.1",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 3306,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "mysql",
+      "service_version": "MySQL 5.0.51a-3ubuntu5",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 3632,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "distccd",
+      "service_version": "distccd v1",
+      "extrainfo": "(GNU) 4.2.4 (Ubuntu 4.2.4-1ubuntu4)"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 5432,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "postgresql",
+      "service_version": "PostgreSQL DB 8.3.0 - 8.3.7",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 5900,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "vnc",
+      "service_version": "VNC",
+      "extrainfo": "protocol 3.3"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 6000,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "X11",
+      "service_version": "",
+      "extrainfo": "access denied"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 6667,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "irc",
+      "service_version": "UnrealIRCd",
+      "extrainfo": null
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 8009,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ajp13",
+      "service_version": "Apache Jserv",
+      "extrainfo": "Protocol v1.3"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 8180,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Apache Tomcat/Coyote JSP engine 1.1",
+      "extrainfo": null
+    }
+  ]
+}

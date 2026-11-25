@@ -1,0 +1,646 @@
+{
+  "investigation_id": "FIQ-REC-20261111-0006",
+  "campaign_name": "Passive OSINT Live Audit (kali.org)",
+  "target": "kali.org",
+  "generated_at": "2026-11-11T18:17:08.382611+00:00",
+  "metrics": {
+    "node_count": 14,
+    "edge_count": 13,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.0714,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "domain": 1,
+    "email": 1,
+    "ip": 2,
+    "ipv6": 2,
+    "mx": 5,
+    "nameserver": 2,
+    "organization": 1
+  },
+  "source_breakdown": {
+    "passive_recon": 1,
+    "theharvester": 1,
+    "dns_osint": 11,
+    "whois_rdap": 1
+  },
+  "nodes": [
+    {
+      "id": "ENT:DOMAIN:78f943e2d085",
+      "type": "domain",
+      "label": "kali.org",
+      "canonical_value": "kali.org",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "passive_recon"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "Passive OSINT Live Audit (kali.org)",
+        "value": "kali.org",
+        "source_tool": "passive_recon",
+        "evidence_ref": "7,01f547adbc7c",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Domain"
+      },
+      "first_seen": "2026-11-11T18:17:08.381897+00:00",
+      "last_seen": "2026-11-11T18:17:08.381940+00:00",
+      "entity_type": "domain",
+      "maltego_type": "maltego.Domain",
+      "source_tool": "passive_recon",
+      "evidence_ref": "7,01f547adbc7c",
+      "value": "kali.org"
+    },
+    {
+      "id": "ENT:EMAIL:2fe31860f61f",
+      "type": "email",
+      "label": "abuse@support.gandi.net",
+      "canonical_value": "abuse@support.gandi.net",
+      "tags": [],
+      "sources": [
+        "theharvester"
+      ],
+      "risk_level": "info",
+      "confidence": 0.8,
+      "attributes": {
+        "value": "abuse@support.gandi.net",
+        "source_tool": "theharvester",
+        "evidence_ref": "theharvester:kali.org",
+        "risk_level": "info",
+        "confidence": 0.8,
+        "maltego_type": "maltego.EmailAddress"
+      },
+      "first_seen": "2026-11-11T18:17:08.382482+00:00",
+      "last_seen": "2026-11-11T18:17:08.382482+00:00",
+      "entity_type": "email",
+      "maltego_type": "maltego.EmailAddress",
+      "source_tool": "theharvester",
+      "evidence_ref": "theharvester:kali.org",
+      "value": "abuse@support.gandi.net"
+    },
+    {
+      "id": "ENT:IP:2aaf6a4d5841",
+      "type": "ip",
+      "label": "104.18.4.159",
+      "canonical_value": "104.18.4.159",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "104.18.4.159",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:kali.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv4Address"
+      },
+      "first_seen": "2026-11-11T18:17:08.382181+00:00",
+      "last_seen": "2026-11-11T18:17:08.382273+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:kali.org",
+      "value": "104.18.4.159"
+    },
+    {
+      "id": "ENT:IP:5acc07da55c5",
+      "type": "ip",
+      "label": "104.18.5.159",
+      "canonical_value": "104.18.5.159",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "104.18.5.159",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:kali.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv4Address"
+      },
+      "first_seen": "2026-11-11T18:17:08.382203+00:00",
+      "last_seen": "2026-11-11T18:17:08.382396+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:kali.org",
+      "value": "104.18.5.159"
+    },
+    {
+      "id": "ENT:IPV6:6fc6e7f5f99a",
+      "type": "ipv6",
+      "label": "2606:4700::6812:49f",
+      "canonical_value": "2606:4700::6812:49f",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "2606:4700::6812:49f",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:kali.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv6Address"
+      },
+      "first_seen": "2026-11-11T18:17:08.382251+00:00",
+      "last_seen": "2026-11-11T18:17:08.382434+00:00",
+      "entity_type": "ipv6",
+      "maltego_type": "maltego.IPv6Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:kali.org",
+      "value": "2606:4700::6812:49f"
+    },
+    {
+      "id": "ENT:IPV6:985959bd7ad2",
+      "type": "ipv6",
+      "label": "2606:4700::6812:59f",
+      "canonical_value": "2606:4700::6812:59f",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "2606:4700::6812:59f",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:kali.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv6Address"
+      },
+      "first_seen": "2026-11-11T18:17:08.382229+00:00",
+      "last_seen": "2026-11-11T18:17:08.382458+00:00",
+      "entity_type": "ipv6",
+      "maltego_type": "maltego.IPv6Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:kali.org",
+      "value": "2606:4700::6812:59f"
+    },
+    {
+      "id": "ENT:MX:0b8258f36da4",
+      "type": "mx",
+      "label": "alt1.aspmx.l.google.com",
+      "canonical_value": "alt1.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt1.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:kali.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-11T18:17:08.382134+00:00",
+      "last_seen": "2026-11-11T18:17:08.382134+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:kali.org",
+      "value": "alt1.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:0d6be481d647",
+      "type": "mx",
+      "label": "alt2.aspmx.l.google.com",
+      "canonical_value": "alt2.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt2.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:kali.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-11T18:17:08.382156+00:00",
+      "last_seen": "2026-11-11T18:17:08.382156+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:kali.org",
+      "value": "alt2.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:3942cb466dfc",
+      "type": "mx",
+      "label": "alt3.aspmx.l.google.com",
+      "canonical_value": "alt3.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt3.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:kali.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-11T18:17:08.382063+00:00",
+      "last_seen": "2026-11-11T18:17:08.382063+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:kali.org",
+      "value": "alt3.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:5baaa2ffae62",
+      "type": "mx",
+      "label": "aspmx.l.google.com",
+      "canonical_value": "aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:kali.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-11T18:17:08.382111+00:00",
+      "last_seen": "2026-11-11T18:17:08.382111+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:kali.org",
+      "value": "aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:f283bcee7c3b",
+      "type": "mx",
+      "label": "alt4.aspmx.l.google.com",
+      "canonical_value": "alt4.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt4.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:kali.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-11T18:17:08.382088+00:00",
+      "last_seen": "2026-11-11T18:17:08.382088+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:kali.org",
+      "value": "alt4.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:NAMESERVER:a976200dd9f4",
+      "type": "nameserver",
+      "label": "nina.ns.cloudflare.com",
+      "canonical_value": "nina.ns.cloudflare.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "nina.ns.cloudflare.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:kali.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-11T18:17:08.382009+00:00",
+      "last_seen": "2026-11-11T18:17:08.382009+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:kali.org",
+      "value": "nina.ns.cloudflare.com"
+    },
+    {
+      "id": "ENT:NAMESERVER:d860f03356a8",
+      "type": "nameserver",
+      "label": "nash.ns.cloudflare.com",
+      "canonical_value": "nash.ns.cloudflare.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "nash.ns.cloudflare.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:kali.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-11T18:17:08.382035+00:00",
+      "last_seen": "2026-11-11T18:17:08.382035+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:kali.org",
+      "value": "nash.ns.cloudflare.com"
+    },
+    {
+      "id": "ENT:ORGANIZATION:849a487e279e",
+      "type": "organization",
+      "label": "Gandi SAS",
+      "canonical_value": "Registrar: Gandi SAS",
+      "tags": [],
+      "sources": [
+        "whois_rdap"
+      ],
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "role": "registrar",
+        "value": "Registrar: Gandi SAS",
+        "source_tool": "whois_rdap",
+        "evidence_ref": "whois:kali.org",
+        "risk_level": "info",
+        "confidence": 0.9,
+        "maltego_type": "maltego.Company"
+      },
+      "first_seen": "2026-11-11T18:17:08.381970+00:00",
+      "last_seen": "2026-11-11T18:17:08.381970+00:00",
+      "entity_type": "organization",
+      "maltego_type": "maltego.Company",
+      "source_tool": "whois_rdap",
+      "evidence_ref": "whois:kali.org",
+      "value": "Registrar: Gandi SAS"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:3e8c465becbf",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:EMAIL:2fe31860f61f",
+      "relationship_type": "ASSOCIATED_EMAIL",
+      "relationship": "ASSOCIATED_EMAIL",
+      "weight": 0.8,
+      "confidence": 0.8,
+      "confidence_score": 0.8,
+      "evidence_ids": [
+        "theharvester:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382489+00:00",
+      "last_observed": "2026-11-11T18:17:08.382489+00:00"
+    },
+    {
+      "id": "REL:83fb57a2d63b",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:IP:2aaf6a4d5841",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382286+00:00",
+      "last_observed": "2026-11-11T18:17:08.382286+00:00"
+    },
+    {
+      "id": "REL:50c46cc9c331",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:IP:5acc07da55c5",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382416+00:00",
+      "last_observed": "2026-11-11T18:17:08.382416+00:00"
+    },
+    {
+      "id": "REL:b33de3bb5e35",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:IPV6:6fc6e7f5f99a",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382444+00:00",
+      "last_observed": "2026-11-11T18:17:08.382444+00:00"
+    },
+    {
+      "id": "REL:ac19cdcc3b14",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:IPV6:985959bd7ad2",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382465+00:00",
+      "last_observed": "2026-11-11T18:17:08.382465+00:00"
+    },
+    {
+      "id": "REL:25dc0982f020",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:MX:0b8258f36da4",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382139+00:00",
+      "last_observed": "2026-11-11T18:17:08.382139+00:00"
+    },
+    {
+      "id": "REL:6d8a0d62ca43",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:MX:0d6be481d647",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382163+00:00",
+      "last_observed": "2026-11-11T18:17:08.382163+00:00"
+    },
+    {
+      "id": "REL:d15b5c56eed7",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:MX:3942cb466dfc",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382071+00:00",
+      "last_observed": "2026-11-11T18:17:08.382071+00:00"
+    },
+    {
+      "id": "REL:bc796b82f1e1",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:MX:5baaa2ffae62",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382118+00:00",
+      "last_observed": "2026-11-11T18:17:08.382118+00:00"
+    },
+    {
+      "id": "REL:eccf9e068a3b",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:MX:f283bcee7c3b",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382095+00:00",
+      "last_observed": "2026-11-11T18:17:08.382095+00:00"
+    },
+    {
+      "id": "REL:cb68715b49a8",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:NAMESERVER:a976200dd9f4",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382017+00:00",
+      "last_observed": "2026-11-11T18:17:08.382017+00:00"
+    },
+    {
+      "id": "REL:34ed2d25c071",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:NAMESERVER:d860f03356a8",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.382042+00:00",
+      "last_observed": "2026-11-11T18:17:08.382042+00:00"
+    },
+    {
+      "id": "REL:3d4e5ec87340",
+      "source": "ENT:DOMAIN:78f943e2d085",
+      "target": "ENT:ORGANIZATION:849a487e279e",
+      "relationship_type": "REGISTERED_WITH",
+      "relationship": "REGISTERED_WITH",
+      "weight": 0.85,
+      "confidence": 0.9,
+      "confidence_score": 0.9,
+      "evidence_ids": [
+        "whois:kali.org"
+      ],
+      "first_observed": "2026-11-11T18:17:08.381981+00:00",
+      "last_observed": "2026-11-11T18:17:08.381981+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:DOMAIN:78f943e2d085",
+      "ENT:EMAIL:2fe31860f61f",
+      "ENT:IP:2aaf6a4d5841",
+      "ENT:IP:5acc07da55c5",
+      "ENT:IPV6:6fc6e7f5f99a",
+      "ENT:IPV6:985959bd7ad2",
+      "ENT:MX:0b8258f36da4",
+      "ENT:MX:0d6be481d647",
+      "ENT:MX:3942cb466dfc",
+      "ENT:MX:5baaa2ffae62",
+      "ENT:MX:f283bcee7c3b",
+      "ENT:NAMESERVER:a976200dd9f4",
+      "ENT:NAMESERVER:d860f03356a8",
+      "ENT:ORGANIZATION:849a487e279e"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "target": "example.com",
+  "target_kind": "domain",
+  "timestamp_utc": "2026-11-11T11:55:36.699969+00:00",
+  "checks_requested": [
+    "dns_records",
+    "rdap_lookup",
+    "asn_ip_hosting",
+    "reverse_dns",
+    "whois_lookup"
+  ],
+  "checks_executed": [
+    {
+      "id": "whois_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "rdap_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "asn_ip_hosting",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "dns_records",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "reverse_dns",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    }
+  ],
+  "unavailable_checks": [],
+  "domain_intel": {
+    "whois": {
+      "registrar": "RESERVED-Internet Assigned Numbers Authority",
+      "organization": null,
+      "creation_date": "1995-08-14T04:00:00+00:00",
+      "expiration_date": "2027-08-13T04:00:00+00:00",
+      "name_servers": [
+        "elliott.ns.cloudflare.com",
+        "hera.ns.cloudflare.com"
+      ],
+      "status": "SUCCESS"
+    },
+    "rdap": {
+      "status": "SUCCESS",
+      "query": "example.com",
+      "handle": "2336799_DOMAIN_COM-VRSN",
+      "name": "2336799_DOMAIN_COM-VRSN",
+      "start_address": null,
+      "end_address": null,
+      "ip_version": null,
+      "country": null,
+      "entities": [
+        {
+          "handle": "376",
+          "roles": [
+            "registrar"
+          ]
+        }
+      ],
+      "status_list": [
+        "client delete prohibited",
+        "client transfer prohibited",
+        "client update prohibited"
+      ]
+    },
+    "dns_records": {
+      "A": [
+        "172.66.147.243",
+        "104.20.23.154"
+      ],
+      "AAAA": [
+        "2606:4700:10::ac42:93f3",
+        "2606:4700:10::6814:179a"
+      ],
+      "MX": [
+        "."
+      ],
+      "NS": [
+        "hera.ns.cloudflare.com",
+        "elliott.ns.cloudflare.com"
+      ],
+      "TXT": [
+        "v=spf1 -all",
+        "_k2n1y4vw3qtb4skdx9e7dxt97qrmmq9"
+      ]
+    },
+    "subdomains": [],
+    "dns_security": null
+  },
+  "osint_intel": {
+    "emails": [],
+    "crtsh_certificates": [],
+    "external_apis": {}
+  },
+  "infrastructure_intel": {
+    "resolved_ips": [
+      "104.20.23.154",
+      "172.66.147.243",
+      "2606:4700:10::6814:179a",
+      "2606:4700:10::ac42:93f3"
+    ],
+    "reverse_dns": [
+      {
+        "status": "NO_PTR",
+        "ip": "104.20.23.154",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      },
+      {
+        "status": "NO_PTR",
+        "ip": "172.66.147.243",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      },
+      {
+        "status": "NO_PTR",
+        "ip": "2606:4700:10::6814:179a",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      },
+      {
+        "status": "NO_PTR",
+        "ip": "2606:4700:10::ac42:93f3",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      }
+    ],
+    "asn_hosting": {
+      "handle": "2336799_DOMAIN_COM-VRSN",
+      "name": "2336799_DOMAIN_COM-VRSN",
+      "start_address": null,
+      "end_address": null,
+      "country": null,
+      "cidr": null,
+      "org": null
+    },
+    "tls_certificates": null,
+    "http_headers": []
+  },
+  "errors": []
+}

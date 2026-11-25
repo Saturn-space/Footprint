@@ -1,0 +1,1069 @@
+{% extends "base.html" %}
+{% block title %}Integrated Report Analysis — {{ report.file_name or report.report_id }} — FootprintIQ{% endblock %}
+
+{% block content %}
+{% set exec_a = analysis.executive_analysis %}
+{% set vuln_a = analysis.vulnerability_analysis %}
+{% set risk_i = analysis.risk_interpretation %}
+{% set rem_a = analysis.remediation_analysis %}
+{% set lim_a = analysis.assessment_limitations %}
+{% set camp = analysis.campaign %}
+{% set an = analysis.analytics or {} %}
+{% set sev = vuln_a.severity_distribution %}
+
+<div class="space-y-6 max-w-7xl mx-auto pb-14">
+
+  <!-- 1. Exact Report Identity Header -->
+  <div class="fiq-card p-6 border-l-4 border-l-blue-600">
+    <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+      <div class="space-y-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+            Integrated Report Analysis
+          </span>
+          <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-indigo-50 text-indigo-700 border border-indigo-200">
+            {{ report.report_format|upper }}
+          </span>
+          {% if report.run_label or (analysis.scan_run and analysis.scan_run.run_label) %}
+          <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            {{ report.run_label or analysis.scan_run.run_label }}
+          </span>
+          {% endif %}
+          {% if report.db_report_id %}
+          <span class="mono px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+            {{ report.db_report_id }}
+          </span>
+          {% endif %}
+          {% if lim_a.is_complete %}
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">Verified Complete</span>
+          {% else %}
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-amber-50 text-amber-800 border border-amber-200">Partial Coverage</span>
+          {% endif %}
+        </div>
+
+        <h1 class="text-xl font-bold text-slate-900">
+          Analysing: {{ report.file_name or report.report_id }}
+          &mdash; {{ report.report_format|title }}
+          &mdash; {{ report.run_label or (analysis.scan_run.run_label if analysis.scan_run else 'Full Campaign Scope') }}
+        </h1>
+
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
+          <span>Investigation: <strong class="text-slate-800">{{ camp.name }}</strong> (<span class="mono">{{ camp.investigation_id }}</span>)</span>
+          <span>Target: <strong class="mono text-slate-800">{{ camp.target_value or 'N/A' }}</strong></span>
+          {% if analysis.scan_run and analysis.scan_run.scan_id %}
+          <span>Scan Run ID: <strong class="mono text-slate-800">{{ analysis.scan_run.scan_id }}</strong></span>
+          {% endif %}
+          <span>Duration: <strong class="mono text-slate-800">{{ an.run_duration or 'N/A' }}</strong></span>
+          <span>Generated (IST): <strong class="text-slate-800">{{ report.generated_at_ist or (report.generated_at|ist) }}</strong></span>
+          {% if report.generated_by_username %}
+          <span>Author: <strong class="text-slate-800">{{ report.generated_by_username }}</strong></span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 shrink-0">
+        <a href="/reports" class="px-3.5 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition">
+          &larr; Back to Reports
+        </a>
+        <a href="{{ report.download_url }}&inline=true" target="_blank" rel="noopener"
+           class="px-3.5 py-2 rounded-lg border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition">
+          View PDF
+        </a>
+        <a href="{{ report.download_url }}"
+           class="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-sm transition">
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    {% if analysis.available_runs and analysis.available_runs|length > 1 %}
+    <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
+      <span class="text-slate-500 font-semibold">Switch Run Scope:</span>
+      {% for r in analysis.available_runs %}
+      {% set is_curr = analysis.scan_run and analysis.scan_run.scan_id == r.scan_id %}
+      <a href="/reports/{{ report.report_id }}?scan_id={{ r.scan_id }}"
+         class="px-2.5 py-1 rounded-md border text-[11px] font-semibold transition
+         {% if is_curr %}bg-blue-600 text-white border-blue-600{% else %}bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200{% endif %}">
+        {{ r.run_label or ('Run ' ~ r.run_number) }} ({{ r.status }})
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Honest Incomplete Coverage Warning -->
+  {% if not lim_a.is_complete and lim_a.incomplete_warning %}
+  <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
+    <div class="font-bold">Assessment Coverage Warning</div>
+    <p>{{ lim_a.incomplete_warning }}</p>
+    {% if lim_a.coverage_gaps %}
+    <ul class="list-disc pl-5 text-[11px] space-y-0.5">
+      {% for g in lim_a.coverage_gaps %}<li>{{ g }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- 2. Clickable KPI Summary Cards -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+    <button type="button" onclick="applyCrossFilter('severity', 'Critical')" data-kpi-sev="Critical"
+            class="fiq-card p-3.5 text-left hover:border-rose-400 transition cursor-pointer">
+      <div class="text-[10px] font-bold uppercase text-rose-700">Critical</div>
+      <div class="text-2xl font-bold text-rose-700 mt-0.5">{{ sev.get('Critical', 0) }}</div>
+      <div class="text-[10px] text-slate-400">Click to filter</div>
+    </button>
+    <button type="button" onclick="applyCrossFilter('severity', 'High')" data-kpi-sev="High"
+            class="fiq-card p-3.5 text-left hover:border-orange-400 transition cursor-pointer">
+      <div class="text-[10px] font-bold uppercase text-orange-700">High</div>
+      <div class="text-2xl font-bold text-orange-700 mt-0.5">{{ sev.get('High', 0) }}</div>
+      <div class="text-[10px] text-slate-400">Click to filter</div>
+    </button>
+    <button type="button" onclick="applyCrossFilter('severity', 'Medium')" data-kpi-sev="Medium"
+            class="fiq-card p-3.5 text-left hover:border-amber-400 transition cursor-pointer">
+      <div class="text-[10px] font-bold uppercase text-amber-700">Medium</div>
+      <div class="text-2xl font-bold text-amber-700 mt-0.5">{{ sev.get('Medium', 0) }}</div>
+      <div class="text-[10px] text-slate-400">Click to filter</div>
+    </button>
+    <button type="button" onclick="applyCrossFilter('severity', 'Low')" data-kpi-sev="Low"
+            class="fiq-card p-3.5 text-left hover:border-blue-400 transition cursor-pointer">
+      <div class="text-[10px] font-bold uppercase text-blue-700">Low</div>
+      <div class="text-2xl font-bold text-blue-700 mt-0.5">{{ sev.get('Low', 0) }}</div>
+      <div class="text-[10px] text-slate-400">Click to filter</div>
+    </button>
+    <button type="button" onclick="applyCrossFilter('severity', 'Informational')" data-kpi-sev="Informational"
+            class="fiq-card p-3.5 text-left hover:border-slate-400 transition cursor-pointer">
+      <div class="text-[10px] font-bold uppercase text-slate-500">Info</div>
+      <div class="text-2xl font-bold text-slate-700 mt-0.5">{{ sev.get('Informational', 0) }}</div>
+      <div class="text-[10px] text-slate-400">Click to filter</div>
+    </button>
+    <button type="button" onclick="applyCrossFilter('confidence', 'Confirmed Vulnerability')"
+            class="fiq-card p-3.5 text-left hover:border-emerald-400 transition cursor-pointer">
+      <div class="text-[10px] font-bold uppercase text-emerald-700">Confirmed</div>
+      <div class="text-2xl font-bold text-slate-900 mt-0.5">{{ exec_a.confirmed_count }}</div>
+      <div class="text-[10px] text-slate-400">{{ exec_a.potential_count }} Potential</div>
+    </button>
+    <div class="fiq-card p-3.5 text-left">
+      <div class="text-[10px] font-bold uppercase text-slate-500">Open Ports</div>
+      <div class="text-2xl font-bold text-indigo-700 mt-0.5">{{ exec_a.open_ports_count }}</div>
+      <div class="text-[10px] text-slate-400">{{ exec_a.affected_target_count }} target(s)</div>
+    </div>
+    <div class="fiq-card p-3.5 text-left border-l-4 {% if risk_i.risk_score_available %}border-l-blue-600{% else %}border-l-amber-500{% endif %}">
+      <div class="text-[10px] font-bold uppercase text-slate-500">Risk Index</div>
+      {% if risk_i.risk_score_available and risk_i.exposure_score is not none %}
+      <div class="text-xl font-bold text-slate-900 mt-0.5">{{ risk_i.exposure_score }}<span class="text-xs font-normal text-slate-500">/100</span></div>
+      <div class="text-[10px] font-bold text-blue-700">{{ risk_i.exposure_level }}</div>
+      {% else %}
+      <div class="text-xs font-bold text-amber-700 mt-1">Risk score unavailable</div>
+      <div class="text-[10px] text-slate-400">Incomplete execution</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Active Chart Cross-Filter Pill Bar -->
+  <div id="activeFilterBar" class="hidden fiq-card px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs bg-blue-50 border-blue-200">
+    <div class="flex items-center gap-2">
+      <span class="font-bold text-blue-800">Active Cross-Filter:</span>
+      <span id="activeFilterSummary" class="mono font-semibold text-blue-900"></span>
+    </div>
+    <button type="button" onclick="clearAllAnalysisFilters()" class="px-2.5 py-1 rounded bg-white border border-blue-200 text-blue-700 font-semibold hover:bg-blue-100 transition">
+      Clear Filters
+    </button>
+  </div>
+
+  <!-- 3. Interactive Chart.js Analytics Visualizations -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900">Severity Distribution</h2>
+        <span class="text-[10px] text-slate-400">Click slice to filter</span>
+      </div>
+      <div class="h-56 relative"><canvas id="chartSeverityDonut"></canvas></div>
+    </div>
+
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900">Severity Counts Breakdown</h2>
+        <span class="text-[10px] text-slate-400">Deduplicated findings</span>
+      </div>
+      <div class="h-56 relative"><canvas id="chartSeverityBar"></canvas></div>
+    </div>
+
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900">Finding Classification</h2>
+        <span class="text-[10px] text-slate-400">Separate from severity</span>
+      </div>
+      <div class="h-56 relative"><canvas id="chartClassificationDonut"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div class="fiq-card p-5 space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900">Scanner Coverage &amp; Tool Contribution</h2>
+        <span class="text-[10px] text-slate-400">All 7 canonical FootprintIQ engines</span>
+      </div>
+      <div class="h-60 relative"><canvas id="chartScannerContrib"></canvas></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-2 border-t border-slate-100 text-[11px]">
+        {% for sc in vuln_a.scanner_contribution %}
+        <div class="flex items-center justify-between px-2 py-1 rounded bg-slate-50 border border-slate-200/70">
+          <span class="font-semibold text-slate-700 truncate">{{ sc.tool_label or sc.tool_name }}</span>
+          {% if sc.execution_state == 'executed_with_findings' %}
+          <span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold text-[10px]">{{ sc.unique_count if sc.unique_count is defined else (sc.unique_findings or 0) }} finding(s)</span>
+          {% elif sc.execution_state == 'partial' %}
+          <span class="px-1.5 py-0.5 rounded bg-orange-50 text-orange-800 font-bold text-[10px]">Partial ({{ sc.unique_count if sc.unique_count is defined else (sc.unique_findings or 0) }} hit(s))</span>
+          {% elif sc.execution_state == 'executed_zero_findings' %}
+          <span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-bold text-[10px]">Completed (0 hits)</span>
+          {% elif sc.execution_state in ('failed', 'failed_or_error') %}
+          <span class="px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 font-bold text-[10px]">Failed / Error</span>
+          {% elif sc.execution_state in ('skipped', 'skipped_or_unavailable') %}
+          <span class="px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 font-bold text-[10px]">Skipped / Unavail</span>
+          {% else %}
+          <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold text-[10px]">Not Selected</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="fiq-card p-5 space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900">Affected Hosts &amp; Vulnerability Categories</h2>
+        <span class="text-[10px] text-slate-400">Toggle view below</span>
+      </div>
+      <div class="grid grid-cols-1 gap-4">
+        <div class="h-36 relative"><canvas id="chartHostsBar"></canvas></div>
+        <div class="h-36 relative"><canvas id="chartCategoriesBar"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exposed Services & Multi-Run Risk Trend -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900">Exposed Network Services</h2>
+        <span class="text-[10px] text-slate-400">{{ exec_a.exposed_services_count or 0 }} distinct service/port signature(s)</span>
+      </div>
+      <div class="h-52 relative"><canvas id="chartServicesBar"></canvas></div>
+    </div>
+
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-bold text-slate-900">Historical Risk &amp; Findings Trend</h2>
+        <span class="text-[10px] text-slate-400">{{ (an.historical_trend or [])|length }} scan run(s) recorded</span>
+      </div>
+      {% set trend_completed = an.trend_completed_count if an.trend_completed_count is defined else ((an.historical_trend or [])|length) %}
+      <div id="trendChartContainer" class="h-52 relative {% if trend_completed < 2 %}hidden{% endif %}">
+        <canvas id="chartHistoricalTrend"></canvas>
+      </div>
+      <div id="trendEmptyNotice" class="h-52 flex flex-col items-center justify-center text-center p-4 rounded-lg bg-slate-50 border border-dashed border-slate-200 {% if trend_completed >= 2 %}hidden{% endif %}">
+        <svg class="w-8 h-8 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+        </svg>
+        <p class="text-xs font-semibold text-slate-700">Historical trend requires at least two completed scan runs.</p>
+        <p class="text-[11px] text-slate-400 mt-1">Execute additional scans under this investigation to plot multi-run remediation progress over time.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Interactive Scan-to-Scan Comparison Panel -->
+  <div class="fiq-card p-6 space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Scan-to-Scan Baseline Comparison</h2>
+        <p class="text-[11px] text-slate-500">
+          Compare two independent scan runs under {{ camp.name }}. Missing findings are marked Verified Resolved ONLY when the originating scanner executed cleanly in the newer run.
+        </p>
+      </div>
+      {% if analysis.available_runs and analysis.available_runs|length >= 2 %}
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <select id="compBaseRun" class="px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white">
+          {% for r in analysis.available_runs %}
+          <option value="{{ r.scan_id }}" {% if loop.first %}selected{% endif %}>
+            Base: {{ r.run_label or ('Run ' ~ r.run_number) }} ({{ r.status }})
+          </option>
+          {% endfor %}
+        </select>
+        <span class="text-slate-400">&rarr;</span>
+        <select id="compTargetRun" class="px-2.5 py-1.5 border border-slate-300 rounded-lg bg-white">
+          {% for r in analysis.available_runs %}
+          <option value="{{ r.scan_id }}" {% if loop.last %}selected{% endif %}>
+            Target: {{ r.run_label or ('Run ' ~ r.run_number) }} ({{ r.status }})
+          </option>
+          {% endfor %}
+        </select>
+        <button type="button" onclick="runScanComparison()"
+                class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition">
+          Compare Runs
+        </button>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if not analysis.available_runs or analysis.available_runs|length < 2 %}
+    <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+      <span>Only one scan run exists under this investigation so far.</span>
+      {% if not is_admin %}
+      <a href="/recon/{{ camp.investigation_id }}/workspace?run_new=1" class="text-blue-600 font-semibold hover:underline">
+        Launch Another Scan Run &rarr;
+      </a>
+      {% endif %}
+    </div>
+    {% else %}
+    <div id="comparisonResultContainer" class="space-y-3 text-xs text-slate-600">
+      <div class="text-slate-400">Click "Compare Runs" above to compute run-to-run security posture changes cleanly.</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- 5. Executive Overview, Risk Interpretation & Remediation -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div class="fiq-card p-6 space-y-3">
+      <h2 class="text-sm font-bold text-slate-900">Executive Security Posture &amp; Risk Drivers</h2>
+      <p class="text-xs text-slate-700 leading-relaxed">{{ exec_a.overall_posture }}</p>
+      <div class="space-y-1.5 pt-2">
+        <div class="text-[11px] font-bold uppercase text-slate-400">Key Evidence-Backed Drivers</div>
+        {% for d in risk_i.drivers %}
+        <div class="text-xs text-slate-700 flex items-start space-x-2">
+          <span class="text-blue-600 font-bold">&bull;</span>
+          <span>{{ d }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% if vuln_a.cve_inventory %}
+      <div class="pt-2 border-t border-slate-100">
+        <div class="text-[11px] font-bold uppercase text-slate-400 mb-1.5">Referenced CVE Identifiers ({{ vuln_a.cve_inventory|length }})</div>
+        <div class="flex flex-wrap gap-1.5">
+          {% for cve in vuln_a.cve_inventory[:24] %}
+          <span class="mono px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 text-[10px] font-bold">{{ cve }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="fiq-card p-6 space-y-3">
+      <h2 class="text-sm font-bold text-slate-900">Prioritized Remediation Roadmap</h2>
+      <ol class="list-decimal pl-5 space-y-1.5 text-xs text-slate-700">
+        {% for step in rem_a.roadmap %}
+        <li>{{ step }}</li>
+        {% endfor %}
+      </ol>
+      <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 text-[11px] text-slate-600 mt-3">
+        <strong>Verification Guidance:</strong> {{ rem_a.verification_guidance }}
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Complete Filterable, Sortable, Paginated Findings Table -->
+  <div class="fiq-card p-6 space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Detailed Findings Explorer</h2>
+        <p class="text-[11px] text-slate-500">Search, filter by severity/classification/scanner, sort columns, and open full evidence &amp; remediation detail.</p>
+      </div>
+      <div class="text-xs text-slate-500">
+        Showing <strong id="findingsShowingCount" class="text-slate-900">0</strong> matching finding(s)
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 text-xs">
+      <div class="lg:col-span-2">
+        <input id="fSearch" type="text" placeholder="Search title, CVE, host, service, scanner..."
+               oninput="resetPageAndRenderFindings()"
+               class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+      </div>
+      <div>
+        <select id="fSev" onchange="resetPageAndRenderFindings()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Severities</option>
+          <option value="Critical">Critical</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+          <option value="Informational">Informational</option>
+        </select>
+      </div>
+      <div>
+        <select id="fConf" onchange="resetPageAndRenderFindings()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Classifications</option>
+          <option value="Confirmed Vulnerability">Confirmed Vulnerability</option>
+          <option value="Observed Scanner Match">Observed Scanner Match</option>
+          <option value="Potential Vulnerability">Potential Vulnerability</option>
+          <option value="Informational Observation">Informational Observation</option>
+          <option value="Marked False Positive">Marked False Positive</option>
+        </select>
+      </div>
+      <div>
+        <select id="fScanner" onchange="resetPageAndRenderFindings()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="">All Scanners</option>
+        </select>
+      </div>
+      <div>
+        <select id="fPageSize" onchange="resetPageAndRenderFindings()" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white">
+          <option value="10" selected>10 per page</option>
+          <option value="25">25 per page</option>
+          <option value="50">50 per page</option>
+          <option value="100">100 per page</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="fiq-table">
+        <thead>
+          <tr>
+            <th class="cursor-pointer" onclick="toggleFindingsSort('severity')">Severity &udarr;</th>
+            <th class="cursor-pointer" onclick="toggleFindingsSort('title')">Title &amp; Category &udarr;</th>
+            <th class="cursor-pointer" onclick="toggleFindingsSort('host')">Host : Port / Service &udarr;</th>
+            <th>CVE / CVSS</th>
+            <th>Classification</th>
+            <th class="cursor-pointer" onclick="toggleFindingsSort('source')">Scanner &udarr;</th>
+            <th class="text-right">Details</th>
+          </tr>
+        </thead>
+        <tbody id="findingsTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="flex items-center justify-between pt-2 text-xs text-slate-600">
+      <div id="findingsPageLabel">Page 1 of 1</div>
+      <div class="flex items-center space-x-2">
+        <button type="button" onclick="prevFindingsPage()" class="px-3 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 font-semibold">Prev</button>
+        <button type="button" onclick="nextFindingsPage()" class="px-3 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 font-semibold">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Finding Detail Modal -->
+<div id="findingDetailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4">
+  <div class="fiq-card max-w-2xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-start justify-between gap-4 border-b border-slate-100 pb-3">
+      <div>
+        <div id="fdBadges" class="flex flex-wrap gap-1.5 mb-1"></div>
+        <h3 id="fdTitle" class="text-base font-bold text-slate-900">Finding Detail</h3>
+      </div>
+      <button type="button" onclick="closeFindingModal()" class="px-2.5 py-1 rounded border border-slate-200 text-xs font-semibold hover:bg-slate-100">Close</button>
+    </div>
+    <div id="fdBody" class="space-y-3 text-xs text-slate-700"></div>
+  </div>
+</div>
+
+<script>
+const ANALYSIS_DATA = {{ analysis|tojson }};
+const INVESTIGATION_ID = {{ (camp.investigation_id or '')|tojson }};
+const ALL_FINDINGS = (ANALYSIS_DATA.vulnerability_analysis && ANALYSIS_DATA.vulnerability_analysis.all_findings) || [];
+const ANALYTICS = ANALYSIS_DATA.analytics || {};
+
+let chartInstances = {};
+let findingsPage = 1;
+let findingsSortKey = 'severity';
+let findingsSortAsc = true;
+
+const SEV_WEIGHT = { 'Critical': 1, 'High': 2, 'Medium': 3, 'Low': 4, 'Informational': 5 };
+
+function getThemeColors() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    text: isDark ? '#cbd5e1' : '#334155',
+    grid: isDark ? 'rgba(51, 65, 85, 0.45)' : '#e2e8f0',
+    surfaceBorder: isDark ? '#111827' : '#ffffff',
+  };
+}
+
+function destroyCharts() {
+  Object.keys(chartInstances).forEach(function (k) {
+    try { chartInstances[k].destroy(); } catch (_) {}
+  });
+  chartInstances = {};
+}
+
+function renderAllCharts() {
+  if (typeof Chart === 'undefined') return;
+  destroyCharts();
+  const tc = getThemeColors();
+  const baseOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: tc.text, font: { size: 11 } } },
+    },
+  };
+
+  const sevMap = ANALYTICS.severity_distribution || {};
+  const sevLabels = ['Critical', 'High', 'Medium', 'Low', 'Informational'];
+  const sevVals = sevLabels.map((k) => Number(sevMap[k] || 0));
+  const sevColors = ['#dc2626', '#ea580c', '#d97706', '#2563eb', '#64748b'];
+
+  const ctxSevDonut = document.getElementById('chartSeverityDonut');
+  if (ctxSevDonut) {
+    chartInstances.sevDonut = new Chart(ctxSevDonut, {
+      type: 'doughnut',
+      data: {
+        labels: sevLabels,
+        datasets: [{ data: sevVals, backgroundColor: sevColors, borderColor: tc.surfaceBorder, borderWidth: 2 }],
+      },
+      options: {
+        ...baseOpts,
+        cutout: '58%',
+        onClick: function (_evt, els) {
+          if (els && els.length > 0) applyCrossFilter('severity', sevLabels[els[0].index]);
+        },
+        plugins: { legend: { position: 'right', labels: { color: tc.text, font: { size: 11 } } } },
+      },
+    });
+  }
+
+  const ctxSevBar = document.getElementById('chartSeverityBar');
+  if (ctxSevBar) {
+    chartInstances.sevBar = new Chart(ctxSevBar, {
+      type: 'bar',
+      data: {
+        labels: sevLabels,
+        datasets: [{ label: 'Findings', data: sevVals, backgroundColor: sevColors, borderRadius: 4 }],
+      },
+      options: {
+        ...baseOpts,
+        onClick: function (_evt, els) {
+          if (els && els.length > 0) applyCrossFilter('severity', sevLabels[els[0].index]);
+        },
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: tc.text, font: { size: 10 } }, grid: { display: false } },
+          y: { beginAtZero: true, ticks: { precision: 0, color: tc.text }, grid: { color: tc.grid } },
+        },
+      },
+    });
+  }
+
+  const clsMap = ANALYTICS.classification_breakdown || {};
+  const clsLabels = Object.keys(clsMap);
+  const clsVals = clsLabels.map((k) => Number(clsMap[k] || 0));
+  const ctxCls = document.getElementById('chartClassificationDonut');
+  if (ctxCls) {
+    chartInstances.clsDonut = new Chart(ctxCls, {
+      type: 'doughnut',
+      data: {
+        labels: clsLabels,
+        datasets: [{
+          data: clsVals,
+          backgroundColor: ['#dc2626', '#ea580c', '#d97706', '#2563eb', '#64748b', '#94a3b8', '#0d9488'],
+          borderColor: tc.surfaceBorder,
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        ...baseOpts,
+        cutout: '56%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: tc.text, font: { size: 9.5 }, boxWidth: 9, padding: 6 },
+          },
+        },
+      },
+    });
+  }
+
+  const contrib = ANALYTICS.scanner_contribution || [];
+  const ctxScan = document.getElementById('chartScannerContrib');
+  if (ctxScan) {
+    chartInstances.scanner = new Chart(ctxScan, {
+      type: 'bar',
+      data: {
+        labels: contrib.map((c) => c.tool_label || c.tool_name),
+        datasets: [
+          {
+            label: 'Unique Findings',
+            data: contrib.map((c) => Number(c.unique_count ?? c.unique_findings ?? 0)),
+            backgroundColor: '#0d9488',
+            borderRadius: 4,
+          },
+          {
+            label: 'Raw Findings',
+            data: contrib.map((c) => Number(c.raw_count ?? c.raw_findings ?? 0)),
+            backgroundColor: '#3b82f6',
+            borderRadius: 4,
+          },
+        ],
+      },
+      options: {
+        ...baseOpts,
+        indexAxis: 'y',
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0, color: tc.text }, grid: { color: tc.grid } },
+          y: { ticks: { color: tc.text, font: { size: 10 } }, grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  const hosts = (ANALYTICS.affected_hosts || []).slice(0, 8);
+  const ctxHosts = document.getElementById('chartHostsBar');
+  if (ctxHosts) {
+    chartInstances.hosts = new Chart(ctxHosts, {
+      type: 'bar',
+      data: {
+        labels: hosts.length ? hosts.map((h) => h.host) : ['No Affected Hosts'],
+        datasets: [{
+          label: 'Findings per Host',
+          data: hosts.length ? hosts.map((h) => Number(h.finding_count ?? h.findings_count ?? 0)) : [0],
+          backgroundColor: '#dc2626',
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        ...baseOpts,
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0, color: tc.text }, grid: { color: tc.grid } },
+          y: { ticks: { color: tc.text, font: { size: 10 } }, grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  const cats = ANALYTICS.vulnerability_categories || {};
+  const catLabels = Object.keys(cats);
+  const ctxCats = document.getElementById('chartCategoriesBar');
+  if (ctxCats) {
+    chartInstances.cats = new Chart(ctxCats, {
+      type: 'bar',
+      data: {
+        labels: catLabels.length ? catLabels : ['No Categories'],
+        datasets: [{
+          label: 'Findings',
+          data: catLabels.length ? catLabels.map((k) => Number(cats[k] || 0)) : [0],
+          backgroundColor: '#7c3aed',
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        ...baseOpts,
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0, color: tc.text }, grid: { color: tc.grid } },
+          y: { ticks: { color: tc.text, font: { size: 10 } }, grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  const svcs = (ANALYTICS.exposed_services || []);
+  const ctxSvcs = document.getElementById('chartServicesBar');
+  if (ctxSvcs) {
+    const counts = svcs.map((s) => Number(s.count ?? s.hosts_count ?? 1));
+    const maxCount = counts.length ? Math.max(...counts) : 0;
+    chartInstances.services = new Chart(ctxSvcs, {
+      type: 'bar',
+      data: {
+        labels: svcs.length ? svcs.map((s) => s.label) : ['No Open Ports Recorded'],
+        datasets: [{
+          label: 'Exposed Service Instances',
+          data: svcs.length ? counts : [0],
+          backgroundColor: '#2563eb',
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        ...baseOpts,
+        scales: {
+          x: {
+            ticks: { color: tc.text, font: { size: 10 } },
+            grid: { display: false },
+          },
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0, stepSize: 1, color: tc.text },
+            grid: { color: tc.grid },
+            suggestedMax: Math.max(maxCount, 1) + (maxCount <= 2 ? 1 : 0),
+          },
+        },
+      },
+    });
+  }
+
+  const allTrendRuns = ANALYTICS.historical_trend || [];
+  const completedTrend = allTrendRuns.filter((t) => t.is_completed !== false && t.status !== 'failed');
+  const trendContainer = document.getElementById('trendChartContainer');
+  const trendNotice = document.getElementById('trendEmptyNotice');
+  const ctxTrend = document.getElementById('chartHistoricalTrend');
+
+  if (completedTrend.length < 2) {
+    if (trendContainer) trendContainer.classList.add('hidden');
+    if (trendNotice) trendNotice.classList.remove('hidden');
+  } else {
+    if (trendContainer) trendContainer.classList.remove('hidden');
+    if (trendNotice) trendNotice.classList.add('hidden');
+    if (ctxTrend) {
+      chartInstances.trend = new Chart(ctxTrend, {
+        type: 'line',
+        data: {
+          labels: completedTrend.map((t) => t.run_label || t.scan_id),
+          datasets: [
+            {
+              label: 'Total Findings',
+              data: completedTrend.map((t) => (t.total_findings !== null && t.total_findings !== undefined) ? Number(t.total_findings) : null),
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.15)',
+              tension: 0.25,
+              fill: true,
+              yAxisID: 'y',
+              pointRadius: 4,
+              pointHoverRadius: 6,
+            },
+            {
+              label: 'Risk Score',
+              data: completedTrend.map((t) => (t.risk_score !== null && t.risk_score !== undefined) ? Number(t.risk_score) : null),
+              borderColor: '#dc2626',
+              backgroundColor: 'rgba(220, 38, 38, 0.1)',
+              tension: 0.25,
+              spanGaps: true,
+              yAxisID: 'y1',
+              pointRadius: 4,
+              pointHoverRadius: 6,
+            },
+          ],
+        },
+        options: {
+          ...baseOpts,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          scales: {
+            x: {
+              ticks: { color: tc.text, font: { size: 10 } },
+              grid: { display: false },
+            },
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              beginAtZero: true,
+              title: { display: true, text: 'Findings', color: tc.text, font: { size: 10 } },
+              ticks: { precision: 0, color: tc.text },
+              grid: { color: tc.grid },
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              beginAtZero: true,
+              min: 0,
+              max: 100,
+              title: { display: true, text: 'Risk Score', color: tc.text, font: { size: 10 } },
+              ticks: { precision: 0, color: tc.text },
+              grid: { display: false },
+            },
+          },
+        },
+      });
+    }
+  }
+}
+
+function applyCrossFilter(kind, value) {
+  if (kind === 'severity') {
+    const sel = document.getElementById('fSev');
+    sel.value = (sel.value === value) ? '' : value;
+  } else if (kind === 'confidence') {
+    const sel = document.getElementById('fConf');
+    sel.value = (sel.value === value) ? '' : value;
+  }
+  resetPageAndRenderFindings();
+  const tableEl = document.getElementById('findingsTableBody');
+  if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function clearAllAnalysisFilters() {
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fSev').value = '';
+  document.getElementById('fConf').value = '';
+  document.getElementById('fScanner').value = '';
+  resetPageAndRenderFindings();
+}
+
+function getFilteredSortedFindings() {
+  const q = (document.getElementById('fSearch').value || '').trim().toLowerCase();
+  const sev = document.getElementById('fSev').value;
+  const conf = document.getElementById('fConf').value;
+  const src = document.getElementById('fScanner').value;
+
+  const filterBar = document.getElementById('activeFilterBar');
+  const filterSum = document.getElementById('activeFilterSummary');
+  const activeParts = [];
+  if (sev) activeParts.push(`Severity=${sev}`);
+  if (conf) activeParts.push(`Classification=${conf}`);
+  if (src) activeParts.push(`Scanner=${src}`);
+  if (q) activeParts.push(`Query="${q}"`);
+  if (activeParts.length) {
+    filterBar.classList.remove('hidden');
+    filterSum.textContent = activeParts.join(' • ');
+  } else {
+    filterBar.classList.add('hidden');
+  }
+
+  let items = ALL_FINDINGS.filter(function (f) {
+    if (sev && (f.severity || 'Informational') !== sev) return false;
+    if (conf && (f.confidence_label || '') !== conf) return false;
+    if (src && (f.detection_source || '') !== src) return false;
+    if (q) {
+      const hay = `${f.title || ''} ${f.target_ip || ''} ${f.port || ''} ${f.service || ''} ${f.cve_identifiers || ''} ${f.detection_source || ''} ${f.category || ''}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  items.sort(function (a, b) {
+    let cmp = 0;
+    if (findingsSortKey === 'severity') {
+      cmp = (SEV_WEIGHT[a.severity] || 9) - (SEV_WEIGHT[b.severity] || 9);
+    } else if (findingsSortKey === 'title') {
+      cmp = String(a.title || '').localeCompare(String(b.title || ''));
+    } else if (findingsSortKey === 'host') {
+      cmp = String(a.target_ip || '').localeCompare(String(b.target_ip || ''));
+    } else if (findingsSortKey === 'source') {
+      cmp = String(a.detection_source || '').localeCompare(String(b.detection_source || ''));
+    }
+    return findingsSortAsc ? cmp : -cmp;
+  });
+  return items;
+}
+
+function renderFindingsTable() {
+  const tbody = document.getElementById('findingsTableBody');
+  const countEl = document.getElementById('findingsShowingCount');
+  const pageLbl = document.getElementById('findingsPageLabel');
+  const pageSize = Number(document.getElementById('fPageSize').value || 10);
+  if (!tbody) return;
+
+  const items = getFilteredSortedFindings();
+  countEl.textContent = String(items.length);
+
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  if (findingsPage > totalPages) findingsPage = totalPages;
+  const start = (findingsPage - 1) * pageSize;
+  const slice = items.slice(start, start + pageSize);
+  pageLbl.textContent = `Page ${findingsPage} of ${totalPages}`;
+
+  while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+  if (slice.length === 0) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 7;
+    td.className = 'py-8 text-center text-xs text-slate-400';
+    td.textContent = ALL_FINDINGS.length === 0 ? 'Zero vulnerability findings recorded in this report scope.' : 'No findings match the current filter criteria.';
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    return;
+  }
+
+  slice.forEach(function (f) {
+    const tr = document.createElement('tr');
+
+    const tdSev = document.createElement('td');
+    const sBadge = document.createElement('span');
+    const sv = f.severity || 'Informational';
+    sBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold uppercase ' + (
+      sv === 'Critical' ? 'bg-rose-100 text-rose-800' :
+      sv === 'High' ? 'bg-orange-100 text-orange-800' :
+      sv === 'Medium' ? 'bg-amber-100 text-amber-800' :
+      sv === 'Low' ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-700'
+    );
+    sBadge.textContent = sv;
+    tdSev.appendChild(sBadge);
+    tr.appendChild(tdSev);
+
+    const tdTitle = document.createElement('td');
+    const tDiv = document.createElement('div');
+    tDiv.className = 'font-bold text-xs text-slate-900';
+    tDiv.textContent = f.title || 'Untitled Finding';
+    const cDiv = document.createElement('div');
+    cDiv.className = 'text-[10px] text-slate-500 mt-0.5';
+    cDiv.textContent = f.category || 'Security Observation';
+    tdTitle.appendChild(tDiv);
+    tdTitle.appendChild(cDiv);
+    tr.appendChild(tdTitle);
+
+    const tdHost = document.createElement('td');
+    tdHost.className = 'mono text-xs text-slate-700';
+    tdHost.textContent = `${f.target_ip || 'N/A'}${f.port ? ':' + f.port : ''}${f.service ? ' (' + f.service + ')' : ''}`;
+    tr.appendChild(tdHost);
+
+    const tdCve = document.createElement('td');
+    tdCve.className = 'mono text-[11px] text-slate-700';
+    tdCve.textContent = `${f.cve_identifiers || '—'}${f.cvss_score ? ' (' + f.cvss_score + ')' : ''}`;
+    tr.appendChild(tdCve);
+
+    const tdConf = document.createElement('td');
+    tdConf.className = 'text-[11px] font-semibold text-slate-700';
+    tdConf.textContent = f.confidence_label || 'Informational';
+    tr.appendChild(tdConf);
+
+    const tdSrc = document.createElement('td');
+    tdSrc.className = 'text-[11px] font-semibold text-blue-700';
+    tdSrc.textContent = f.detection_source || 'scanner';
+    tr.appendChild(tdSrc);
+
+    const tdAct = document.createElement('td');
+    tdAct.className = 'text-right';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'px-2.5 py-1 rounded border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-semibold text-slate-700 transition';
+    btn.textContent = 'Inspect';
+    btn.onclick = function () { openFindingModal(f); };
+    tdAct.appendChild(btn);
+    tr.appendChild(tdAct);
+
+    tbody.appendChild(tr);
+  });
+}
+
+function resetPageAndRenderFindings() {
+  findingsPage = 1;
+  renderFindingsTable();
+}
+
+function toggleFindingsSort(key) {
+  if (findingsSortKey === key) findingsSortAsc = !findingsSortAsc;
+  else { findingsSortKey = key; findingsSortAsc = true; }
+  renderFindingsTable();
+}
+
+function prevFindingsPage() {
+  if (findingsPage > 1) { findingsPage -= 1; renderFindingsTable(); }
+}
+
+function nextFindingsPage() {
+  findingsPage += 1;
+  renderFindingsTable();
+}
+
+function openFindingModal(f) {
+  const modal = document.getElementById('findingDetailModal');
+  const titleEl = document.getElementById('fdTitle');
+  const badgesEl = document.getElementById('fdBadges');
+  const bodyEl = document.getElementById('fdBody');
+  if (!modal || !bodyEl) return;
+
+  titleEl.textContent = f.title || 'Finding Detail';
+  while (badgesEl.firstChild) badgesEl.removeChild(badgesEl.firstChild);
+  while (bodyEl.firstChild) bodyEl.removeChild(bodyEl.firstChild);
+
+  [f.severity || 'Informational', f.confidence_label || 'Unverified', f.detection_source || 'scanner'].forEach(function (txt) {
+    const sp = document.createElement('span');
+    sp.className = 'px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase text-slate-700';
+    sp.textContent = txt;
+    badgesEl.appendChild(sp);
+  });
+
+  const pl = f.plain_language || {};
+  const blocks = [
+    ['Host & Service', `${f.target_ip || 'N/A'}:${f.port || 'all'} (${f.service || 'unknown'})`],
+    ['CVE / CVSS', `${f.cve_identifiers || 'None'} ${f.cvss_score ? '• CVSS ' + f.cvss_score : ''}`],
+    ['Category', f.category || 'Security Finding'],
+    ['What Was Discovered', pl.what_discovered || f.description || '—'],
+    ['Why It Matters', pl.why_important || '—'],
+    ['Potential Impact', pl.potential_impact || '—'],
+    ['Recommended Action', pl.recommended_action || f.remediation || '—'],
+    ['Observed Evidence', f.evidence || 'Persisted in scan artifact'],
+  ];
+  blocks.forEach(function (pair) {
+    const row = document.createElement('div');
+    row.className = 'p-2.5 rounded-lg bg-slate-50 border border-slate-200/80';
+    const lbl = document.createElement('div');
+    lbl.className = 'text-[10px] font-bold uppercase text-slate-400 mb-0.5';
+    lbl.textContent = pair[0];
+    const val = document.createElement('div');
+    val.className = 'text-xs text-slate-800 whitespace-pre-wrap';
+    val.textContent = pair[1];
+    row.appendChild(lbl);
+    row.appendChild(val);
+    bodyEl.appendChild(row);
+  });
+
+  modal.classList.remove('hidden');
+}
+
+function closeFindingModal() {
+  const modal = document.getElementById('findingDetailModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function runScanComparison() {
+  const baseId = document.getElementById('compBaseRun')?.value;
+  const targetId = document.getElementById('compTargetRun')?.value;
+  const out = document.getElementById('comparisonResultContainer');
+  if (!baseId || !targetId || !out) return;
+
+  out.textContent = 'Comparing scan runs...';
+  try {
+    const res = await fetch(`/api/v1/reports/compare?investigation_id=${encodeURIComponent(INVESTIGATION_ID)}&base_scan_id=${encodeURIComponent(baseId)}&target_scan_id=${encodeURIComponent(targetId)}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Comparison failed');
+
+    while (out.firstChild) out.removeChild(out.firstChild);
+    const s = data.summary || {};
+
+    const kpiGrid = document.createElement('div');
+    kpiGrid.className = 'grid grid-cols-2 sm:grid-cols-5 gap-2.5';
+    [
+      ['New Findings', s.new_findings_count || 0, 'text-rose-700'],
+      ['Verified Resolved', s.resolved_findings_count || 0, 'text-emerald-700'],
+      ['Persistent', s.persistent_findings_count || 0, 'text-amber-700'],
+      ['Not Reassessed', s.not_reassessed_count || 0, 'text-slate-700'],
+      ['Risk Score Delta', `${s.risk_score_delta > 0 ? '+' : ''}${s.risk_score_delta || 0}`, 'text-blue-700'],
+    ].forEach(function (item) {
+      const box = document.createElement('div');
+      box.className = 'p-2.5 rounded-lg bg-slate-50 border border-slate-200';
+      const lbl = document.createElement('div');
+      lbl.className = 'text-[10px] font-bold uppercase text-slate-400';
+      lbl.textContent = item[0];
+      const val = document.createElement('div');
+      val.className = `text-lg font-bold ${item[2]}`;
+      val.textContent = String(item[1]);
+      box.appendChild(lbl);
+      box.appendChild(val);
+      kpiGrid.appendChild(box);
+    });
+    out.appendChild(kpiGrid);
+
+    (data.limitation_warnings || []).forEach(function (w) {
+      const warn = document.createElement('div');
+      warn.className = 'p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-medium';
+      warn.textContent = 'Honesty Notice: ' + w;
+      out.appendChild(warn);
+    });
+
+    if ((data.services_added || []).length || (data.services_removed || []).length) {
+      const svcNote = document.createElement('div');
+      svcNote.className = 'text-[11px] text-slate-600';
+      svcNote.textContent = `Services Added: ${(data.services_added || []).join(', ') || 'None'} • Services Absent: ${(data.services_removed || []).join(', ') || 'None'}`;
+      out.appendChild(svcNote);
+    }
+  } catch (err) {
+    out.textContent = 'Comparison error: ' + err.message;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const scannerSel = document.getElementById('fScanner');
+  if (scannerSel) {
+    const sources = Array.from(new Set(ALL_FINDINGS.map((f) => f.detection_source).filter(Boolean))).sort();
+    sources.forEach(function (s) {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      scannerSel.appendChild(opt);
+    });
+  }
+  renderAllCharts();
+  renderFindingsTable();
+  window.addEventListener('fiq:themechange', renderAllCharts);
+});
+</script>
+{% endblock %}

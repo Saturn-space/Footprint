@@ -1,0 +1,26 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Completed",
+  "findings_count": 1,
+  "exposure_score": 46.2,
+  "exposure_level": "Medium",
+  "elapsed_seconds": 30.05,
+  "scanners_executed": [
+    "nmap_nse"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.111",
+      "status": "COMPLETED",
+      "detail": "Findings: 1"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [],
+  "active_hosts": [],
+  "discovered_ports": []
+}

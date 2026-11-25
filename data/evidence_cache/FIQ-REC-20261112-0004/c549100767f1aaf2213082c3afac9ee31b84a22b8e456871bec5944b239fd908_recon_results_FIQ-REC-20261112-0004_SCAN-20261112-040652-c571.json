@@ -1,0 +1,62 @@
+{
+  "target": "scanme.nmap.org",
+  "targets": [
+    "scanme.nmap.org"
+  ],
+  "status": "Partially Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 39.34,
+  "scanners_executed": [
+    "nmap_services"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "scanme.nmap.org",
+      "status": "COMPLETED",
+      "detail": "Hosts UP: 1, Open ports: 2"
+    },
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "scanme.nmap.org",
+      "status": "FAILED",
+      "detail": "Target hostname 'scanme.nmap.org' resolves to or represents external infrastructure. Active reconnaissance is strictly confined to authorized local lab targets."
+    }
+  ],
+  "failed_stages": [
+    "Active Recon (scanme.nmap.org)"
+  ],
+  "partial_stages": [],
+  "passive_results": [],
+  "active_hosts": [
+    {
+      "ip": "45.33.32.156",
+      "hostname": null,
+      "status": "up",
+      "os_matches": [],
+      "open_ports_count": 2
+    }
+  ],
+  "discovered_ports": [
+    {
+      "target_ip": "45.33.32.156",
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "ssh",
+      "service_version": "OpenSSH 6.6.1p1 Ubuntu 2ubuntu2.13",
+      "extrainfo": "Ubuntu Linux; protocol 2.0"
+    },
+    {
+      "target_ip": "45.33.32.156",
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Apache httpd 2.4.7",
+      "extrainfo": "(Ubuntu)"
+    }
+  ]
+}

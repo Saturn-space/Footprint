@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Scanner Health — FootprintIQ Admin{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-6xl mx-auto">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-xl font-bold text-slate-900">Scanner Health &amp; Engine Readiness</h1>
+      <p class="text-xs text-slate-500 mt-0.5">Live operational status of active discovery engines, vulnerability scanners, and OSINT capabilities</p>
+    </div>
+    <button type="button" onclick="refreshReadiness()" id="btnRefreshScanners"
+            class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg transition">
+      Refresh Readiness Checks
+    </button>
+  </div>
+
+  <div id="scannerFeedback" class="hidden"></div>
+
+  {% set act_caps = catalog.get('active', {}).get('capabilities', {}) %}
+  {% set vuln = catalog.get('vulnerability', {}) %}
+  {% set nessus = vuln.get('nessus', {}) %}
+  {% set nuclei = vuln.get('nuclei', {}) %}
+  {% set combined = vuln.get('combined', {}) %}
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- Active Network Engine -->
+    {% set active_ready = act_caps.get('binary_found', false) %}
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-900">Active Port &amp; NSE Engine</span>
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if active_ready %}bg-emerald-100 text-emerald-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+          {% if active_ready %}Available{% else %}Unavailable{% endif %}
+        </span>
+      </div>
+      <p class="text-[11px] text-slate-500">
+        {% if act_caps.get('has_raw_socket') %}
+        Full privileged scanning supported (SYN, UDP, OS fingerprinting, TCP Connect).
+        {% elif active_ready %}
+        Standard unprivileged TCP Connect, Service Version, and Allowlisted NSE scripts operational. Raw-socket modes marked unavailable.
+        {% else %}
+        Active scanner binary is not available on this host.
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Tenable Nessus -->
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-900">Tenable Nessus</span>
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if nessus.get('available') %}bg-emerald-100 text-emerald-800{% elif nessus.get('connected') %}bg-amber-100 text-amber-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+          {% if nessus.get('available') %}Operational{% elif nessus.get('connected') %}Read-Only Connected{% else %}Unavailable{% endif %}
+        </span>
+      </div>
+      <p class="text-[11px] text-slate-500">
+        {% if nessus.get('available') %}
+        Connected and authenticated. {{ nessus.get('template_count', 0) }} runnable scan templates detected.
+        {% elif nessus.get('connected') %}
+        {{ nessus.get('nessus_type', 'Nessus') }} ({{ nessus.get('server_version', 'Unknown') }}) connected &amp; authenticated. Scan inspection, results retrieval &amp; import active; launch disabled by license.
+        {% else %}
+        {{ nessus.get('reason') or 'Scanner is offline or API credentials are not reachable.' }}
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- ProjectDiscovery Nuclei -->
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-900">ProjectDiscovery Nuclei</span>
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if nuclei.get('available') %}bg-emerald-100 text-emerald-800{% else %}bg-rose-100 text-rose-800{% endif %}">
+          {% if nuclei.get('available') %}Operational{% else %}Unavailable{% endif %}
+        </span>
+      </div>
+      <p class="text-[11px] text-slate-500">
+        {% if nuclei.get('available') %}
+        Nuclei {{ nuclei.get('version', '') }} operational with {{ nuclei.get('templates_count', 0) }} local templates and safe policy guardrails.
+        {% else %}
+        {{ nuclei.get('reason') or 'Nuclei binary or template repository is currently unavailable.' }}
+        {% endif %}
+      </p>
+    </div>
+
+    <!-- Combined Multi-Scanner -->
+    <div class="fiq-card p-5 space-y-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-900">Combined Assessment</span>
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold {% if combined.get('available') %}bg-emerald-100 text-emerald-800{% else %}bg-slate-100 text-slate-600{% endif %}">
+          {% if combined.get('available') %}Ready{% else %}Unavailable{% endif %}
+        </span>
+      </div>
+      <p class="text-[11px] text-slate-500">
+        {{ combined.get('reason') or 'Correlates allowlisted Nmap NSE and ProjectDiscovery Nuclei findings cleanly.' }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Passive Intelligence Collectors Readiness -->
+  <div class="fiq-card p-6">
+    <h2 class="text-sm font-bold text-slate-900 mb-3">Passive Intelligence Modules</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {% for cat_key, cat_data in catalog.get('passive', {}).get('groups', {}).items() %}
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+        <div class="text-xs font-bold text-slate-900">{{ cat_data.get('title', cat_key) }}</div>
+        <div class="space-y-1.5">
+          {% for opt in cat_data.get('options', []) %}
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="text-slate-700">{{ opt.get('label') }}</span>
+            {% if opt.get('available', true) %}
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">Ready</span>
+            {% else %}
+            <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800">Unconfigured</span>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+async function refreshReadiness() {
+  const btn = document.getElementById('btnRefreshScanners');
+  btn.disabled = true;
+  btn.textContent = 'Probing engines...';
+  try {
+    const res = await fetch('/api/v1/recon/options');
+    if (res.ok) {
+      window.location.reload();
+    } else {
+      FIQ_Alert('scannerFeedback', 'Unable to refresh scanner readiness.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Refresh Readiness Checks';
+    }
+  } catch (err) {
+    FIQ_Alert('scannerFeedback', 'Error: ' + err.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Refresh Readiness Checks';
+  }
+}
+</script>
+{% endblock %}

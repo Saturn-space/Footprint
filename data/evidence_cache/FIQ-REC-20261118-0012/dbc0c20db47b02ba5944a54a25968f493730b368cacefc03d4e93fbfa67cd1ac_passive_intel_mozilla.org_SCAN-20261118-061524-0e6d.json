@@ -1,0 +1,487 @@
+{
+  "target": "mozilla.org",
+  "target_kind": "domain",
+  "ip_scope": null,
+  "timestamp_utc": "2026-11-18T06:15:24.060196+00:00",
+  "checks_requested": [
+    "public_metadata",
+    "hosting_info",
+    "rdap_lookup",
+    "reverse_dns",
+    "dns_security_posture",
+    "dns_enumeration",
+    "crtsh_history",
+    "certificate_info",
+    "search_engine_intel",
+    "ip_intelligence",
+    "ip_geolocation",
+    "public_emails",
+    "whois_lookup",
+    "asn_ip_hosting",
+    "technology_intel",
+    "subdomains_ct",
+    "nameserver_analysis",
+    "dns_records",
+    "public_org_info"
+  ],
+  "checks_executed": [
+    {
+      "id": "whois_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "rdap_lookup",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "asn_ip_hosting",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "dns_records",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "dns_enumeration",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "nameserver_analysis",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "dns_security_posture",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "subdomains_ct",
+      "interaction_type": "Pure Passive",
+      "status": "UNAVAILABLE",
+      "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Read timed out. (read timeout=12)"
+    },
+    {
+      "id": "crtsh_history",
+      "interaction_type": "Pure Passive",
+      "status": "UNAVAILABLE",
+      "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Read timed out. (read timeout=12)"
+    },
+    {
+      "id": "certificate_info",
+      "interaction_type": "Pure Passive",
+      "status": "UNAVAILABLE",
+      "error": "Certificate Transparency lookup unavailable: HTTPSConnectionPool(host='crt.sh', port=443): Read timed out. (read timeout=12)"
+    },
+    {
+      "id": "search_engine_intel",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "public_emails",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "reverse_dns",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "ip_intelligence",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "hosting_info",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "ip_geolocation",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "public_org_info",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "public_metadata",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    },
+    {
+      "id": "technology_intel",
+      "interaction_type": "Pure Passive",
+      "status": "SUCCESS"
+    }
+  ],
+  "checks_skipped": [],
+  "unavailable_checks": [],
+  "domain_intel": {
+    "whois": {
+      "registrar": "MarkMonitor Inc.",
+      "organization": null,
+      "creation_date": "1998-01-24T05:00:00+00:00",
+      "expiration_date": "2027-01-23T05:00:00+00:00",
+      "name_servers": [
+        "ns1-240.akam.net",
+        "ns4-64.akam.net",
+        "ns5-65.akam.net",
+        "ns7-66.akam.net"
+      ],
+      "status": "SUCCESS"
+    },
+    "rdap": {
+      "status": "SUCCESS",
+      "query": "mozilla.org",
+      "handle": null,
+      "name": "",
+      "start_address": null,
+      "end_address": null,
+      "ip_version": null,
+      "country": null,
+      "entities": [
+        {
+          "handle": "292",
+          "roles": [
+            "registrar"
+          ]
+        }
+      ],
+      "status_list": [
+        "client delete prohibited",
+        "server delete prohibited",
+        "client transfer prohibited",
+        "server transfer prohibited",
+        "client update prohibited",
+        "server update prohibited"
+      ]
+    },
+    "dns_records": {
+      "A": [
+        "35.190.14.201"
+      ],
+      "AAAA": [
+        "2600:1901:0:c197::"
+      ],
+      "MX": [
+        "alt1.aspmx.l.google.com",
+        "aspmx3.googlemail.com",
+        "aspmx.l.google.com",
+        "alt2.aspmx.l.google.com"
+      ],
+      "NS": [
+        "ns4-64.akam.net",
+        "ns5-65.akam.net",
+        "ns1-240.akam.net",
+        "ns7-66.akam.net"
+      ],
+      "TXT": [
+        "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+        "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+        "anthropic-domain-verification-w5rph5=bZ2V4N0ps4oFSU6yrv4DfD6nA",
+        "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+        "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE",
+        "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all",
+        "MS=ms14343235",
+        "_zojr3c56nq36tokzhnj9crit28tiqly",
+        "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+        "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+        "rz8t7zvjv5frpfbjs3y5n6g5tkw7gt2q",
+        "yandex-verification",
+        "bzbkzkxj2ws8gvtw6hpssfy7lv9kym88",
+        "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+        "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+        "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+        "ZOOM_verify_lGxIzL49Id7PipUgDgTd9K"
+      ]
+    },
+    "dns_enumeration": {
+      "A": [
+        "35.190.14.201"
+      ],
+      "AAAA": [
+        "2600:1901:0:c197::"
+      ],
+      "MX": [
+        "1 aspmx.l.google.com.",
+        "5 alt1.aspmx.l.google.com.",
+        "10 aspmx3.googlemail.com.",
+        "5 alt2.aspmx.l.google.com."
+      ],
+      "NS": [
+        "ns5-65.akam.net.",
+        "ns1-240.akam.net.",
+        "ns4-64.akam.net.",
+        "ns7-66.akam.net."
+      ],
+      "TXT": [
+        "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+        "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+        "MS=ms14343235",
+        "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all",
+        "_zojr3c56nq36tokzhnj9crit28tiqly",
+        "bzbkzkxj2ws8gvtw6hpssfy7lv9kym88",
+        "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+        "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+        "rz8t7zvjv5frpfbjs3y5n6g5tkw7gt2q",
+        "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+        "ZOOM_verify_lGxIzL49Id7PipUgDgTd9K",
+        "anthropic-domain-verification-w5rph5=bZ2V4N0ps4oFSU6yrv4DfD6nA",
+        "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s",
+        "yandex-verification",
+        "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+        "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE",
+        "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e"
+      ],
+      "SOA": [
+        "ns5-65.akam.net. hostmaster.mozilla.com. 2024020848 180 180 1209600 60"
+      ],
+      "CAA": [
+        "0 issue \"pki.goog",
+        "0 iodef \"mailto:foxsec+caaiodef@mozilla.com",
+        "0 issue \"awstrust.com",
+        "0 issue \"certainly.com",
+        "0 issue \"comodoca.com",
+        "0 issue \"amazontrust.com",
+        "0 issue \"amazon.com",
+        "0 issue \"letsencrypt.org",
+        "0 issue \"digicert.com",
+        "0 issue \"amazonaws.com",
+        "0 issue \"sectigo.com"
+      ]
+    },
+    "nameserver_analysis": {
+      "count": 4,
+      "nameservers": [
+        {
+          "nameserver": "ns4-64.akam.net",
+          "ipv4": [
+            "84.53.139.64"
+          ]
+        },
+        {
+          "nameserver": "ns5-65.akam.net",
+          "ipv4": [
+            "184.85.248.65"
+          ]
+        },
+        {
+          "nameserver": "ns1-240.akam.net",
+          "ipv4": [
+            "193.108.91.240"
+          ]
+        },
+        {
+          "nameserver": "ns7-66.akam.net",
+          "ipv4": [
+            "96.7.49.66"
+          ]
+        }
+      ]
+    },
+    "subdomains": [
+      "blog.mozilla.org",
+      "firefoxlive.mozilla.org",
+      "foundation.mozilla.org",
+      "mozilla.org",
+      "note-blog.mozilla.org",
+      "ref-blog.mozilla.org",
+      "www-archive.mozilla.org"
+    ],
+    "dns_security": {
+      "spf_configured": true,
+      "spf_records": [
+        "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all"
+      ],
+      "dmarc_configured": true,
+      "dmarc_records": [
+        "v=DMARC1; p=reject; pct=100; adkim=r; aspf=r; rua=mailto:dmarc_agg@vali.email,mailto:dmarc@mozilla.com"
+      ],
+      "dnssec_configured": false,
+      "notes": [
+        "No DNSSEC DS/DNSKEY chain observed."
+      ]
+    }
+  },
+  "osint_intel": {
+    "emails": [
+      "abusecomplaints@markmonitor.com",
+      "cmartorella@edge-security.com"
+    ],
+    "crtsh_certificates": [],
+    "public_org_info": {
+      "organization": null,
+      "registrar": "MarkMonitor Inc.",
+      "country": null,
+      "verification_tokens": [
+        "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+        "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+        "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+        "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE",
+        "MS=ms14343235",
+        "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+        "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU",
+        "openai-domain-verification=dv-J6NgbJamHFrHSyNqlhElIX5K",
+        "google-site-verification=Brpe3hQpo9FlGIHMtK4ViKL60L0G8VM16nXopwVDoEU",
+        "google-site-verification=Lo_B34AJAe70BQVNF1Fo1zGGJudPmw9bLTnP2C8lV-s"
+      ]
+    },
+    "public_metadata": {
+      "txt_metadata_count": 17,
+      "txt_records_sample": [
+        "zoom-domain-verification=ZOOM_verify_671ea7b9c47d4b7b8cc9441f40817e3e",
+        "google-site-verification=Ep3NdzNxaf8Vl48dniNneaqm7JcWUiy3GjKS0wx5zQw",
+        "anthropic-domain-verification-w5rph5=bZ2V4N0ps4oFSU6yrv4DfD6nA",
+        "google-site-verification=S3M17z96OKfZJ2dq7mYqQDfRWsEVjy3hdxaSyB72YPc",
+        "google-site-verification=mU3ta-ZJga-aCNg7IlaRaGYK9sDOMagHRNGVW1FSJGE",
+        "v=spf1 include:%{i}._ip.%{h}._ehlo.%{d}._spf.vali.email include:_spf.mozilla.com include:_spf.google.com include:spf.fundraiseup.com ~all",
+        "MS=ms14343235",
+        "_zojr3c56nq36tokzhnj9crit28tiqly",
+        "google-site-verification=E1vBHtOW-D9IlAj-pbRM-8PrOSiPDT48lrwRlW82ysw",
+        "google-site-verification=z68pON7CWSaZu_sBqDQofmDL19OVp3krGEjaDl7cSaU"
+      ],
+      "certificate_issuers": []
+    },
+    "search_engine_intel": {
+      "hosts_found": [
+        "mozilla.org",
+        "blog.mozilla.org",
+        "firefoxlive.mozilla.org",
+        "foundation.mozilla.org",
+        "www-archive.mozilla.org",
+        "note-blog.mozilla.org",
+        "ref-blog.mozilla.org"
+      ],
+      "emails_found": [
+        "cmartorella@edge-security.com"
+      ],
+      "ips_found": [],
+      "status": "SUCCESS"
+    },
+    "technology_intel": [
+      {
+        "technology": "Google Workspace / DNS",
+        "category": "Mail / Cloud",
+        "evidence": "MX/NS references google.com"
+      },
+      {
+        "technology": "Google Workspace",
+        "category": "Email Hosting",
+        "evidence": "MX record matches aspmx.l.google.com"
+      },
+      {
+        "technology": "Google Search Console Verified",
+        "category": "Site Verification",
+        "evidence": "DNS TXT verification record"
+      },
+      {
+        "technology": "SPF Email Authentication",
+        "category": "Email Security",
+        "evidence": "DNS TXT v=spf1 policy"
+      }
+    ],
+    "external_apis": {}
+  },
+  "infrastructure_intel": {
+    "resolved_ips": [
+      "2600:1901:0:c197::",
+      "35.190.14.201"
+    ],
+    "ip_intelligence": {
+      "resolved_ips": [
+        "2600:1901:0:c197::",
+        "35.190.14.201"
+      ],
+      "reverse_dns": [
+        {
+          "status": "NO_PTR",
+          "ip": "2600:1901:0:c197::",
+          "ptr_records": [],
+          "note": "[Errno 1] Unknown host"
+        },
+        {
+          "status": "SUCCESS",
+          "ip": "35.190.14.201",
+          "ptr_records": [
+            "201.14.190.35.bc.googleusercontent.com"
+          ]
+        }
+      ],
+      "network_cidr": null,
+      "network_name": ""
+    },
+    "reverse_dns": [
+      {
+        "status": "NO_PTR",
+        "ip": "2600:1901:0:c197::",
+        "ptr_records": [],
+        "note": "[Errno 1] Unknown host"
+      },
+      {
+        "status": "SUCCESS",
+        "ip": "35.190.14.201",
+        "ptr_records": [
+          "201.14.190.35.bc.googleusercontent.com"
+        ]
+      }
+    ],
+    "asn_hosting": {
+      "handle": null,
+      "name": "",
+      "scope": null,
+      "ownership_status": null,
+      "start_address": null,
+      "end_address": null,
+      "country": null,
+      "cidr": null,
+      "org": null
+    },
+    "ip_geolocation": [
+      {
+        "ip": "2600:1901:0:c197::",
+        "status": "SUCCESS",
+        "country": "United States",
+        "region": "Missouri",
+        "city": "Kansas City",
+        "isp": "Google LLC",
+        "org": "Google Cloud",
+        "asn": "AS396982 Google LLC"
+      },
+      {
+        "ip": "35.190.14.201",
+        "status": "SUCCESS",
+        "country": "United States",
+        "region": "Missouri",
+        "city": "Kansas City",
+        "isp": "Google LLC",
+        "org": "Google Cloud",
+        "asn": "AS396982 Google LLC"
+      }
+    ],
+    "hosting_info": {
+      "organization": null,
+      "asn_handle": null,
+      "network_name": "",
+      "country": null,
+      "nameservers": [
+        "ns4-64.akam.net",
+        "ns5-65.akam.net",
+        "ns1-240.akam.net",
+        "ns7-66.akam.net"
+      ]
+    },
+    "tls_certificates": null,
+    "http_headers": []
+  },
+  "errors": []
+}

@@ -1,0 +1,2 @@
+section,id,entity_type,maltego_type,value,label,source_tool,risk_level,confidence,evidence_ref
+entity,EXT-1,domain,maltego.Domain,imported-check.example,imported-check.example,maltego_import,medium,0.9,maltego_csv

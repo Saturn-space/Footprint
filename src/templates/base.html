@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="fiq-csrf" content="{{ csrf_token or '' }}">
+  <meta name="fiq-theme-preference" content="{{ user_theme or 'light' }}">
+  <meta name="fiq-authenticated" content="{{ 'true' if current_user else 'false' }}">
+  <title>{% block title %}FootprintIQ — Enterprise Reconnaissance &amp; Vulnerability Assessment{% endblock %}</title>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- FootprintIQ Enterprise Stylesheet -->
+  <link rel="stylesheet" href="/static/css/app.css">
+  <link rel="stylesheet" href="/static/css/themes.css">
+  <script src="/static/js/vendor/chart.umd.min.js"></script>
+  <script>
+    (function(){
+      try {
+        var isAuth = (document.querySelector('meta[name="fiq-authenticated"]') || {}).content === 'true';
+        var metaPref = (document.querySelector('meta[name="fiq-theme-preference"]') || {}).content || 'light';
+        var stored = localStorage.getItem('fiq_theme');
+        var pref = isAuth ? (metaPref === 'dark' || metaPref === 'system' ? metaPref : 'light') : ((stored === 'dark' || stored === 'light') ? stored : 'light');
+        if (isAuth) {
+          localStorage.setItem('fiq_theme', pref);
+        }
+        var eff = (pref === 'dark') ? 'dark' : ((pref === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', eff);
+        document.documentElement.setAttribute('data-theme-pref', pref);
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body class="h-full flex overflow-hidden text-slate-800 antialiased bg-slate-50">
+
+  <!-- =========================================================================
+       SIDEBAR NAVIGATION (RBAC-SCOPED WITH COLLAPSE PERSISTENCE)
+       ========================================================================= -->
+  <aside id="fiqSidebar" class="sidebar-transition w-64 bg-white border-r border-slate-200 flex flex-col justify-between z-30 flex-shrink-0 select-none shadow-[1px_0_4px_rgba(0,0,0,0.02)]">
+    <div>
+      <!-- Brand Header -->
+      <div class="h-16 flex items-center justify-between px-4 border-b border-slate-200">
+        <a href="{{ '/' if current_user else '/login' }}" class="flex items-center space-x-3 overflow-hidden">
+          <div class="h-9 w-9 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-base shadow-sm flex-shrink-0">
+            F
+          </div>
+          <div class="sidebar-label whitespace-nowrap">
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-slate-900 text-sm tracking-tight">FootprintIQ</span>
+              <span class="px-1.5 py-0.2 text-[10px] font-semibold bg-blue-50 text-blue-700 rounded border border-blue-200">ENT</span>
+            </div>
+            <div class="text-[10px] text-slate-400 font-medium tracking-wide">RECON &amp; VULN AUDIT</div>
+          </div>
+        </a>
+        <button id="sidebarToggleBtn" title="Toggle Sidebar" class="p-1 rounded text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      {% if current_user %}
+      <!-- Role / Scope Status Pill -->
+      <div class="px-3 pt-4 pb-2">
+        <div class="px-3 py-2 rounded-lg {% if is_admin %}bg-indigo-50/80 border border-indigo-200/80{% else %}bg-emerald-50/80 border border-emerald-200/80{% endif %} flex items-center space-x-2.5">
+          <span class="relative flex h-2 w-2 flex-shrink-0">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full {% if is_admin %}bg-indigo-400{% else %}bg-emerald-400{% endif %} opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 {% if is_admin %}bg-indigo-500{% else %}bg-emerald-500{% endif %}"></span>
+          </span>
+          <div class="sidebar-label overflow-hidden">
+            <div class="text-[10px] font-bold {% if is_admin %}text-indigo-800{% else %}text-emerald-800{% endif %} tracking-wide uppercase">
+              {{ 'Admin Governance' if is_admin else 'Scope Policy Active' }}
+            </div>
+            <div class="text-[11px] {% if is_admin %}text-indigo-700{% else %}text-emerald-700{% endif %} font-medium truncate">
+              {{ 'Read-Only Oversight' if is_admin else 'Authorized Scope Enforced' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="px-3 py-3 space-y-1">
+        <a href="/" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page == 'dashboard' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">Dashboard</span>
+        </a>
+
+        {% if is_admin %}
+        <a href="/recon" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page in ['recon_list', 'recon', 'investigations'] %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="radar" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">All Investigations</span>
+        </a>
+        {% else %}
+        <a href="/recon/new" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page == 'recon_new' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="plus-circle" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">New Investigation</span>
+        </a>
+
+        <a href="/recon" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page in ['recon_list', 'recon', 'investigations'] %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="radar" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">My Investigations</span>
+        </a>
+        {% endif %}
+
+        <a href="/findings" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page == 'findings' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="shield-alert" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">Findings</span>
+        </a>
+
+        <a href="/reports" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page == 'reports' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="file-text" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">Reports</span>
+        </a>
+
+        <a href="/evidence" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page == 'evidence' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="folder-lock" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">Evidence</span>
+        </a>
+
+        {% if not is_admin %}
+        <a href="/settings" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page == 'settings' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="settings" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">Settings</span>
+        </a>
+        {% endif %}
+
+        {% if is_admin %}
+        <div class="pt-3 mt-3 border-t border-slate-200 space-y-1">
+          <div class="sidebar-label px-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Administration</div>
+          <a href="/admin/users" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-semibold transition {% if active_page == 'admin_users' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+            <i data-lucide="users" class="w-4 h-4 flex-shrink-0"></i>
+            <span class="sidebar-label">User Management</span>
+          </a>
+          <a href="/admin/scanners" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-semibold transition {% if active_page == 'admin_scanners' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+            <i data-lucide="activity" class="w-4 h-4 flex-shrink-0"></i>
+            <span class="sidebar-label">Scanner Health</span>
+          </a>
+          <a href="/admin/system" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-semibold transition {% if active_page == 'admin_system' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+            <i data-lucide="sliders" class="w-4 h-4 flex-shrink-0"></i>
+            <span class="sidebar-label">System Administration</span>
+          </a>
+          <a href="/admin/audit-logs" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-xs font-semibold transition {% if active_page == 'admin_audit_logs' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+            <i data-lucide="scroll-text" class="w-4 h-4 flex-shrink-0"></i>
+            <span class="sidebar-label">Audit Logs</span>
+          </a>
+        </div>
+        {% endif %}
+      </nav>
+      {% else %}
+      <nav class="px-3 py-4 space-y-1">
+        <a href="/login" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-semibold transition {% if active_page == 'login' %}bg-blue-50 text-blue-700 font-bold{% else %}text-slate-600 hover:text-slate-900 hover:bg-slate-100{% endif %}">
+          <i data-lucide="log-in" class="w-4 h-4 flex-shrink-0"></i>
+          <span class="sidebar-label">Operator Sign In</span>
+        </a>
+      </nav>
+      {% endif %}
+    </div>
+
+    <!-- User Profile Footer -->
+    <div class="p-3 border-t border-slate-200 space-y-2">
+      {% if current_user %}
+      <a href="/login" class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-100 transition">
+        <div class="flex items-center space-x-3 overflow-hidden">
+          <div class="h-8 w-8 rounded-full {% if is_admin %}bg-indigo-700{% else %}bg-slate-800{% endif %} text-white flex items-center justify-center font-bold text-xs flex-shrink-0 uppercase">
+            {{ current_user.username[:2] }}
+          </div>
+          <div class="sidebar-label overflow-hidden">
+            <div class="text-xs font-semibold text-slate-900 truncate">{{ current_user.username }}</div>
+            <div class="text-[10px] font-bold uppercase tracking-wide truncate {% if is_admin %}text-indigo-700{% else %}text-emerald-700{% endif %}">
+              {{ 'Administrator' if is_admin else 'Investigator' }}
+            </div>
+          </div>
+        </div>
+        <i data-lucide="user-check" class="w-3.5 h-3.5 text-slate-400 sidebar-label"></i>
+      </a>
+      <button type="button" onclick="FIQ_Logout()"
+              class="sidebar-label w-full px-3 py-1.5 rounded-lg border border-slate-200 hover:border-rose-200 hover:bg-rose-50 text-[11px] font-semibold text-slate-600 hover:text-rose-700 transition flex items-center justify-center space-x-1.5">
+        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+        <span>Sign Out</span>
+      </button>
+      {% else %}
+      <a href="/login" class="flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-slate-100 transition">
+        <div class="flex items-center space-x-3 overflow-hidden">
+          <div class="h-8 w-8 rounded-full bg-slate-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">FI</div>
+          <div class="sidebar-label overflow-hidden">
+            <div class="text-xs font-semibold text-slate-900">Guest Session</div>
+            <div class="text-[10px] text-slate-500">Sign in required</div>
+          </div>
+        </div>
+        <i data-lucide="log-in" class="w-3.5 h-3.5 text-slate-400 sidebar-label"></i>
+      </a>
+      {% endif %}
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       MAIN VIEWPORT CONTAINER
+       ========================================================================= -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-20 flex-shrink-0">
+      <div class="flex items-center space-x-3">
+        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">FootprintIQ</span>
+        <span class="text-slate-300">/</span>
+        <span class="text-xs font-bold text-slate-800 capitalize">{{ active_page|replace('_', ' ') }}</span>
+      </div>
+
+      {% if current_user %}
+      <div class="flex items-center space-x-2.5">
+        <span class="hidden md:inline-flex items-center px-2 py-1 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200" title="All timestamps rendered in Indian Standard Time (UTC+05:30)">
+          IST &bull; Asia/Kolkata
+        </span>
+        <button type="button" data-fiq-theme-toggle aria-pressed="false"
+                class="inline-flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition">
+          <i data-lucide="moon" class="w-3.5 h-3.5"></i>
+          <span data-fiq-theme-label>Light</span>
+        </button>
+        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide {% if is_admin %}bg-indigo-50 text-indigo-700 border border-indigo-200{% else %}bg-emerald-50 text-emerald-700 border border-emerald-200{% endif %}">
+          {{ 'Admin' if is_admin else 'Investigator' }}
+        </span>
+        {% if not is_admin %}
+        <a href="/recon/new" class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-medium shadow-sm transition">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+          <span>New Investigation</span>
+        </a>
+        {% else %}
+        <a href="/admin/audit-logs" class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-medium transition">
+          <i data-lucide="scroll-text" class="w-3.5 h-3.5"></i>
+          <span>Audit Logs</span>
+        </a>
+        {% endif %}
+        <a href="/reports" class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-medium transition">
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>Reports</span>
+        </a>
+      </div>
+      {% else %}
+      <div class="flex items-center space-x-2">
+        <button type="button" data-fiq-theme-toggle aria-pressed="false"
+                class="inline-flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition">
+          <i data-lucide="moon" class="w-3.5 h-3.5"></i>
+          <span data-fiq-theme-label>Light</span>
+        </button>
+      </div>
+      {% endif %}
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50/60">
+      {% block content %}{% endblock %}
+    </main>
+
+  </div>
+
+  {% if is_admin %}
+  <!-- =========================================================================
+       SYSTEM HEALTH DIAGNOSTICS MODAL (ADMINISTRATOR ONLY)
+       ========================================================================= -->
+  <div id="healthModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-xl w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+          <h3 class="text-sm font-bold text-slate-900">FootprintIQ System Diagnostics</h3>
+        </div>
+        <button onclick="closeHealthModal()" class="text-slate-400 hover:text-slate-700 text-sm p-1 rounded-lg hover:bg-slate-100">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div id="healthModalContent" class="py-2 text-xs text-slate-600">
+        Querying system diagnostics...
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex justify-end">
+        <button onclick="closeHealthModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Enterprise Application Script -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+  "target": "testphp.vulnweb.com",
+  "targets": [
+    "testphp.vulnweb.com"
+  ],
+  "status": "Partially Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 28.99,
+  "scanners_executed": [
+    "nuclei"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "testphp.vulnweb.com",
+      "status": "FAILED",
+      "detail": "Target hostname 'testphp.vulnweb.com' resolves to or represents external infrastructure. Active reconnaissance is strictly confined to authorized local lab targets."
+    },
+    {
+      "scanner": "ProjectDiscovery Nuclei",
+      "target": "testphp.vulnweb.com",
+      "status": "COMPLETED",
+      "detail": "Profile: safe-all | Findings: 0 | 28.58s/180s",
+      "execution_meta": {
+        "scanner": "nuclei",
+        "profile": "safe-all",
+        "template_subdirs": [],
+        "severities": [
+          "critical",
+          "high",
+          "medium",
+          "low",
+          "info"
+        ],
+        "duration_seconds": 28.58,
+        "timeout_seconds": 180,
+        "timed_out": false,
+        "returncode": 0,
+        "command_summary": "nuclei -profile safe-all -rl 30 -c 10 (targets=2, timeout=180s)",
+        "targets_scanned_count": 2,
+        "targets_scanned": [
+          "https://testphp.vulnweb.com",
+          "http://testphp.vulnweb.com"
+        ],
+        "stderr_excerpt": null,
+        "raw_records_count": 0,
+        "parsed_findings_count": 0,
+        "parse_errors_count": 0,
+        "incomplete_reason": null,
+        "skipped_checks": []
+      }
+    }
+  ],
+  "failed_stages": [
+    "NSE Check (testphp.vulnweb.com)"
+  ],
+  "partial_stages": [],
+  "passive_results": [],
+  "active_hosts": [],
+  "discovered_ports": []
+}

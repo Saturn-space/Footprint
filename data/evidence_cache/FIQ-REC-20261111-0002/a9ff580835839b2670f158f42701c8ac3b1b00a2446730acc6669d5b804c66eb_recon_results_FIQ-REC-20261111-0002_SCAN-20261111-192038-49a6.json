@@ -1,0 +1,44 @@
+{
+  "target": "127.0.0.1",
+  "targets": [
+    "127.0.0.1"
+  ],
+  "status": "Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 6.62,
+  "scanners_executed": [
+    "nmap_services"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "127.0.0.1",
+      "status": "COMPLETED",
+      "detail": "Hosts UP: 1, Open ports: 1"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [],
+  "active_hosts": [
+    {
+      "ip": "127.0.0.1",
+      "hostname": null,
+      "status": "up",
+      "os_matches": [],
+      "open_ports_count": 1
+    }
+  ],
+  "discovered_ports": [
+    {
+      "target_ip": "127.0.0.1",
+      "port": 8000,
+      "protocol": "tcp",
+      "state": "open",
+      "service": "http",
+      "service_version": "Uvicorn",
+      "extrainfo": null
+    }
+  ]
+}

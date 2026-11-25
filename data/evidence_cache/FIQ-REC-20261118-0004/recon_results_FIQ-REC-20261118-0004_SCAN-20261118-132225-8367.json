@@ -1,0 +1,149 @@
+{
+  "recon_id": "FIQ-REC-20261118-0004",
+  "target": "192.168.56.114",
+  "hostname": "vpn-gateway.enterprise.dmz",
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.114",
+      "port": 22,
+      "protocol": "tcp",
+      "service": "ssh",
+      "product": "OpenSSH",
+      "version": "8.2p1",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.114",
+      "port": 88,
+      "protocol": "tcp",
+      "service": "kerberos",
+      "product": "MIT Kerberos",
+      "version": "5",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.114",
+      "port": 389,
+      "protocol": "tcp",
+      "service": "ldap",
+      "product": "OpenLDAP",
+      "version": "2.4.49",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.114",
+      "port": 443,
+      "protocol": "tcp",
+      "service": "https",
+      "product": "Pulse Connect SSL-VPN",
+      "version": "9.0R3",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.114",
+      "port": 445,
+      "protocol": "tcp",
+      "service": "microsoft-ds",
+      "product": "Windows Server SMB",
+      "version": "2016",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.114",
+      "port": 3389,
+      "protocol": "tcp",
+      "service": "ms-wbt-server",
+      "product": "Microsoft Remote Desktop",
+      "version": "10.0",
+      "state": "open"
+    }
+  ],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.114",
+      "hostname": "vpn-gateway.enterprise.dmz",
+      "status": "up",
+      "latency_ms": 1.25,
+      "os_match": "Linux 2.6.x - 5.x",
+      "open_ports_count": 6
+    }
+  ],
+  "passive_results": [
+    {
+      "source": "WHOIS / RDAP",
+      "domain": "vpn-gateway.enterprise.dmz",
+      "registrar": "FootprintIQ Internal Assessment Registry",
+      "created_date": "2024-01-15T00:00:00Z",
+      "org": "FootprintIQ Security Operations Lab",
+      "nameservers": [
+        "ns1.local",
+        "ns2.local"
+      ]
+    },
+    {
+      "source": "theHarvester",
+      "query": "vpn-gateway.enterprise.dmz",
+      "emails_discovered": [
+        "admin@demo.internal",
+        "security@demo.internal",
+        "ops@demo.internal"
+      ],
+      "subdomains_discovered": [
+        "mail.vpn-gateway.enterprise.dmz",
+        "api.vpn-gateway.enterprise.dmz",
+        "vpn.vpn-gateway.enterprise.dmz"
+      ]
+    },
+    {
+      "source": "DNS OSINT",
+      "target": "192.168.56.114",
+      "records": [
+        {
+          "type": "A",
+          "name": "vpn-gateway.enterprise.dmz",
+          "value": "192.168.56.114",
+          "ttl": 3600
+        },
+        {
+          "type": "PTR",
+          "name": "192.168.56.114.in-addr.arpa",
+          "value": "vpn-gateway.enterprise.dmz",
+          "ttl": 3600
+        }
+      ]
+    }
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "theharvester",
+      "status": "COMPLETED",
+      "detail": "Verified external records unchanged",
+      "duration_seconds": 18.0
+    },
+    {
+      "scanner": "whois_rdap_dns",
+      "status": "COMPLETED",
+      "detail": "Re-verified DNS nameserver configuration",
+      "duration_seconds": 12.0
+    },
+    {
+      "scanner": "nmap",
+      "status": "COMPLETED",
+      "detail": "Discovered 6 open TCP services across target",
+      "duration_seconds": 62.0
+    },
+    {
+      "scanner": "nmap_nse",
+      "status": "COMPLETED",
+      "detail": "Rechecked remediation status of previous vulnerability findings",
+      "duration_seconds": 68.0
+    },
+    {
+      "scanner": "nuclei",
+      "status": "COMPLETED",
+      "detail": "Confirmed patched CVEs and endpoints",
+      "duration_seconds": 35.0
+    }
+  ],
+  "generated_at": "2026-11-17T13:25:39.763341+00:00"
+}

@@ -1,0 +1,212 @@
+{
+  "target": "example.com",
+  "targets": [
+    "example.com"
+  ],
+  "status": "Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 23.32,
+  "scanners_executed": [
+    "passive_recon"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Passive Intelligence",
+      "target": "example.com",
+      "status": "COMPLETED",
+      "detail": "DNS records: 7, Subdomains: 0, Emails: 0"
+    }
+  ],
+  "failed_stages": [],
+  "passive_results": [
+    {
+      "target": "example.com",
+      "target_kind": "domain",
+      "timestamp_utc": "2026-11-11T12:28:37.980046+00:00",
+      "checks_requested": [
+        "technology_intel",
+        "dns_records",
+        "rdap_lookup",
+        "nameserver_analysis",
+        "dns_enumeration",
+        "whois_lookup"
+      ],
+      "checks_executed": [
+        {
+          "id": "whois_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "rdap_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "dns_records",
+          "interaction_type": "Pure Passive",
+          "status": "PARTIAL"
+        },
+        {
+          "id": "dns_enumeration",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "nameserver_analysis",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "technology_intel",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        }
+      ],
+      "unavailable_checks": [],
+      "domain_intel": {
+        "whois": {
+          "registrar": "RESERVED-Internet Assigned Numbers Authority",
+          "organization": null,
+          "creation_date": "1995-08-14T04:00:00+00:00",
+          "expiration_date": "2027-08-13T04:00:00+00:00",
+          "name_servers": [
+            "elliott.ns.cloudflare.com",
+            "hera.ns.cloudflare.com"
+          ],
+          "status": "SUCCESS"
+        },
+        "rdap": {
+          "status": "SUCCESS",
+          "query": "example.com",
+          "handle": "2336799_DOMAIN_COM-VRSN",
+          "name": "2336799_DOMAIN_COM-VRSN",
+          "start_address": null,
+          "end_address": null,
+          "ip_version": null,
+          "country": null,
+          "entities": [
+            {
+              "handle": "376",
+              "roles": [
+                "registrar"
+              ]
+            }
+          ],
+          "status_list": [
+            "client delete prohibited",
+            "client transfer prohibited",
+            "client update prohibited"
+          ]
+        },
+        "dns_records": {
+          "A": [
+            "172.66.147.243",
+            "104.20.23.154"
+          ],
+          "AAAA": [
+            "2606:4700:10::6814:179a",
+            "2606:4700:10::ac42:93f3"
+          ],
+          "MX": [
+            "."
+          ],
+          "NS": [
+            "elliott.ns.cloudflare.com",
+            "hera.ns.cloudflare.com"
+          ]
+        },
+        "dns_enumeration": {
+          "A": [
+            "172.66.147.243",
+            "104.20.23.154"
+          ],
+          "AAAA": [
+            "2606:4700:10::ac42:93f3",
+            "2606:4700:10::6814:179a"
+          ],
+          "MX": [
+            "0 ."
+          ],
+          "NS": [
+            "elliott.ns.cloudflare.com.",
+            "hera.ns.cloudflare.com."
+          ],
+          "TXT": [
+            "v=spf1 -all",
+            "_k2n1y4vw3qtb4skdx9e7dxt97qrmmq9"
+          ],
+          "SOA": [
+            "elliott.ns.cloudflare.com. dns.cloudflare.com. 2418004112 10000 2400 604800 1800"
+          ]
+        },
+        "nameserver_analysis": {
+          "count": 2,
+          "nameservers": [
+            {
+              "nameserver": "elliott.ns.cloudflare.com",
+              "ipv4": [
+                "172.64.35.228",
+                "162.159.44.228",
+                "108.162.195.228"
+              ]
+            },
+            {
+              "nameserver": "hera.ns.cloudflare.com",
+              "ipv4": [
+                "172.64.32.162",
+                "108.162.192.162",
+                "173.245.58.162"
+              ]
+            }
+          ]
+        },
+        "subdomains": [],
+        "dns_security": null
+      },
+      "osint_intel": {
+        "emails": [],
+        "crtsh_certificates": [],
+        "public_org_info": null,
+        "public_metadata": null,
+        "search_engine_intel": null,
+        "technology_intel": [
+          {
+            "technology": "Cloudflare",
+            "category": "CDN / DNS",
+            "evidence": "NS/CNAME match: elliott.ns.cloudflare.com hera.ns.cloudflare.com"
+          }
+        ],
+        "external_apis": {}
+      },
+      "infrastructure_intel": {
+        "resolved_ips": [
+          "104.20.23.154",
+          "172.66.147.243",
+          "2606:4700:10::6814:179a",
+          "2606:4700:10::ac42:93f3"
+        ],
+        "ip_intelligence": null,
+        "reverse_dns": [],
+        "asn_hosting": {
+          "handle": "2336799_DOMAIN_COM-VRSN",
+          "name": "2336799_DOMAIN_COM-VRSN",
+          "start_address": null,
+          "end_address": null,
+          "country": null,
+          "cidr": null,
+          "org": null
+        },
+        "ip_geolocation": null,
+        "hosting_info": null,
+        "tls_certificates": null,
+        "http_headers": []
+      },
+      "errors": []
+    }
+  ],
+  "active_hosts": [],
+  "discovered_ports": []
+}

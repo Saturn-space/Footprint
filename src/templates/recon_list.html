@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% block title %}Reconnaissance Campaigns — FootprintIQ Enterprise{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-7xl mx-auto">
+
+  <!-- Header Banner -->
+  <div class="fiq-card p-6 border-l-4 border-l-blue-600 bg-white reveal-on-scroll">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded bg-blue-100 text-blue-800">
+            Reconnaissance Lifecycle
+          </span>
+          <span class="text-xs text-slate-400">&bull; Mission-Centric Execution</span>
+        </div>
+        <h1 class="text-xl font-bold text-slate-900 mt-1">Reconnaissance Campaigns</h1>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Orchestrate multi-stage OSINT, active port mapping, NSE vulnerability checks, and automated risk reporting.
+        </p>
+      </div>
+
+      {% if not is_admin %}
+      <div class="flex items-center space-x-3">
+        <a href="/recon/new" class="inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>Create New Recon</span>
+        </a>
+      </div>
+      {% else %}
+      <span class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold">Read-Only All-Campaign Oversight</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- KPI Metrics Strip -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+    <!-- Total Campaigns -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-1">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Campaigns</span>
+        <span class="p-1.5 rounded-lg bg-blue-50 text-blue-600"><i data-lucide="folder" class="w-4 h-4"></i></span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold text-slate-900">{{ total_campaigns }}</span>
+        <span class="text-xs font-medium text-slate-400">Registered</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        {{ total_targets }} authorized lab targets tracked
+      </div>
+    </div>
+
+    <!-- Active Scans Running -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Pipeline</span>
+        <span class="p-1.5 rounded-lg bg-emerald-50 text-emerald-600"><i data-lucide="activity" class="w-4 h-4"></i></span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold {% if running_count > 0 %}text-emerald-600{% else %}text-slate-900{% endif %}">{{ running_count }}</span>
+        <span class="text-xs font-semibold {% if running_count > 0 %}text-emerald-600{% else %}text-slate-400{% endif %}">Running Now</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        Real-time campaign tracking active
+      </div>
+    </div>
+
+    <!-- Completed Campaigns -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Completed</span>
+        <span class="p-1.5 rounded-lg bg-blue-50 text-blue-600"><i data-lucide="check-circle-2" class="w-4 h-4"></i></span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold text-slate-900">{{ completed_count }}</span>
+        <span class="text-xs font-medium text-slate-400">Finished</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        Integrity-verified assessment deliverables
+      </div>
+    </div>
+
+    <!-- Correlated Findings -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Findings</span>
+        <span class="p-1.5 rounded-lg bg-amber-50 text-amber-600"><i data-lucide="shield-alert" class="w-4 h-4"></i></span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold text-slate-900">{{ total_findings }}</span>
+        <span class="text-xs font-bold text-amber-600">Correlated</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        Multi-engine deduplicated vulns
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaign Table Section -->
+  <div class="fiq-card p-6 reveal-on-scroll">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Campaign Directory</h2>
+        <p class="text-xs text-slate-500">Review status, monitor live execution, and inspect technical assessment findings</p>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <div class="relative">
+          <input type="text" id="campaignSearchInput" placeholder="Filter campaigns..." onkeyup="filterCampaigns()" class="w-56 px-3 py-1.5 pl-8 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500">
+          <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="fiq-table w-full" id="campaignsTable">
+        <thead>
+          <tr>
+            <th>Recon ID</th>
+            <th>Campaign Name &amp; Purpose</th>
+            <th>Target Asset</th>
+            <th>Scan Type</th>
+            <th>Stage / Progress</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in campaigns %}
+          <tr class="campaign-row hover:bg-slate-50/80 transition">
+            <td>
+              <a href="/recon/{{ c.recon_id }}/results" class="mono text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center space-x-1">
+                <span>{{ c.recon_id }}</span>
+                <i data-lucide="arrow-up-right" class="w-3 h-3 text-slate-400"></i>
+              </a>
+            </td>
+            <td>
+              <div class="font-bold text-slate-900 text-xs">{{ c.name }}</div>
+              <div class="text-[11px] text-slate-400 truncate max-w-xs">{{ c.purpose or 'General Security Audit' }}</div>
+            </td>
+            <td>
+              <div class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded bg-slate-100 text-slate-800 mono text-xs font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span>{{ c.target_value }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 capitalize">
+                {{ c.selected_scan_types or 'combined' }}
+              </span>
+            </td>
+            <td>
+              <div class="w-32">
+                <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                  <span class="font-medium truncate">{{ c.current_stage or 'Ready' }}</span>
+                  <span class="font-bold">{{ c.progress or 0 }}%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                  <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-500" data-progress-width="{{ c.progress or 0 }}"></div>
+                </div>
+              </div>
+            </td>
+            <td>
+              {% if c.status in ['Running', 'in_progress'] %}
+              <span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                </span>
+                <span>Running</span>
+              </span>
+              {% elif c.status in ['Completed', 'completed'] %}
+              <span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <i data-lucide="check" class="w-3 h-3"></i>
+                <span>Completed</span>
+              </span>
+              {% elif c.status in ['Failed', 'failed'] %}
+              <span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                <i data-lucide="x-circle" class="w-3 h-3"></i>
+                <span>Failed</span>
+              </span>
+              {% else %}
+              <span class="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600">
+                <span>{{ c.status or 'Pending' }}</span>
+              </span>
+              {% endif %}
+            </td>
+            <td class="text-xs text-slate-500 whitespace-nowrap">
+              {{ c.created_at|ist_short if c.created_at else '—' }}
+            </td>
+            <td class="text-right">
+              <div class="inline-flex items-center space-x-1.5">
+                {% if not is_admin and c.status in ['Draft', 'Authorized', 'Pending'] %}
+                <a href="/recon/{{ c.recon_id }}/workspace" class="px-2 py-1 text-[11px] font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-md transition" title="Configure Scans">
+                  Configure
+                </a>
+                {% endif %}
+                <a href="/recon/{{ c.recon_id }}/live" class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:text-blue-700 bg-slate-100 hover:bg-blue-50 rounded-md transition" title="Live Monitor">
+                  Live
+                </a>
+                <a href="/recon/{{ c.recon_id }}/results" class="px-2 py-1 text-[11px] font-semibold text-blue-700 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-md transition" title="Results Dashboard">
+                  Results
+                </a>
+                {% set existing_rep = reports_by_recon.get(c.recon_id) %}
+                {% if existing_rep %}
+                <a href="{{ existing_rep.analysis_url }}" class="px-2 py-1 text-[11px] font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition" title="Analyse Report">
+                  Analyse
+                </a>
+                <a href="{{ existing_rep.download_url }}" class="px-2 py-1 text-[11px] font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-md transition" title="Download Report">
+                  PDF &darr;
+                </a>
+                {% elif not is_admin %}
+                <a href="/recon/{{ c.recon_id }}/pdf?format=executive" class="px-2 py-1 text-[11px] font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-md transition" title="Generate Executive PDF">
+                  Exec PDF
+                </a>
+                <a href="/recon/{{ c.recon_id }}/pdf?format=technical" class="px-2 py-1 text-[11px] font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 rounded-md transition" title="Generate Technical PDF">
+                  Tech PDF
+                </a>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="8" class="py-12 text-center">
+              <div class="max-w-sm mx-auto text-center space-y-3">
+                <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+                  <i data-lucide="radar" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-sm font-bold text-slate-800">No Recon campaigns yet. Create your first Recon to begin.</h3>
+                <p class="text-xs text-slate-500">
+                  Start by creating a campaign with your target domain, IP address, or authorized scope, then manually choose the assessments to execute.
+                </p>
+                {% if not is_admin %}
+                <div class="pt-2">
+                  <a href="/recon/new" class="inline-flex items-center space-x-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Create Recon</span>
+                  </a>
+                </div>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function filterCampaigns() {
+  const query = document.getElementById('campaignSearchInput').value.toLowerCase();
+  const rows = document.querySelectorAll('.campaign-row');
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(query) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}
+

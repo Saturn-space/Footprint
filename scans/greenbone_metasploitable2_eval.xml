@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report id="d198f12a-3c77-4402-9f12-001122334455" format_id="d5da9f67-e111-11e0-80fb-406186ea4fc5">
+  <task id="a298f12a-3c77-4402-9f12-001122334466">
+    <name>Metasploitable2 Baseline Vulnerability Assessment</name>
+  </task>
+  <scan_start>2026-11-09T14:00:00Z</scan_start>
+  <scan_end>2026-11-09T14:18:22Z</scan_end>
+  <config id="daba56c8-73ec-11df-a475-002264764cea">
+    <name>Full and fast</name>
+  </config>
+  <results>
+    <result id="res-ms2-001">
+      <name>vsftpd 2.3.4 Smile Face Backdoor Execution</name>
+      <host>192.168.56.111</host>
+      <port>21/tcp</port>
+      <threat>Critical</threat>
+      <severity>10.0</severity>
+      <nvt oid="1.3.6.1.4.1.25623.1.0.103185">
+        <name>vsftpd 2.3.4 Compromise</name>
+        <cve>CVE-2011-2523</cve>
+        <cvss_base>10.0</cvss_base>
+        <cvss_version>2.0</cvss_version>
+        <tags>summary=The remote vsftpd FTP server contains a backdoor allowing unauthorized remote command execution.|insight=A smiley face :) sent in the username field opens a backdoor listener on TCP port 6200.|solution=Upgrade to vsftpd 2.3.5 or later.|solution_type=VendorFix</tags>
+        <solution>Upgrade vsftpd to version 2.3.5 or higher immediately.</solution>
+        <xref>
+          <type>URL</type>
+          <value>https://nvd.nist.gov/vuln/detail/CVE-2011-2523</value>
+        </xref>
+      </nvt>
+      <description>The remote vsftpd FTP service is vulnerable to arbitrary remote root execution.</description>
+      <qod><value>98</value><type>remote_vul</type></qod>
+      <creation_time>2026-11-09T14:05:00Z</creation_time>
+    </result>
+    <result id="res-ms2-002">
+      <name>UnrealIRCd Backdoor Execution (DEBUG Command)</name>
+      <host>192.168.56.111</host>
+      <port>6667/tcp</port>
+      <threat>Critical</threat>
+      <severity>10.0</severity>
+      <nvt oid="1.3.6.1.4.1.25623.1.0.100685">
+        <name>UnrealIRCd 3.2.8.1 Backdoor</name>
+        <cve>CVE-2010-2075</cve>
+        <cvss_base>10.0</cvss_base>
+        <cvss_version>2.0</cvss_version>
+        <tags>summary=UnrealIRCd contains a backdoor that allows arbitrary command execution.|solution=Upgrade UnrealIRCd to 3.2.8.2 or re-download verified sources.|solution_type=VendorFix</tags>
+      </nvt>
+      <description>Remote command execution confirmed via backdoor sequence on port 6667.</description>
+      <qod><value>95</value><type>remote_vul</type></qod>
+      <creation_time>2026-11-09T14:07:30Z</creation_time>
+    </result>
+    <result id="res-ms2-003">
+      <name>Cleartext Telnet Service Detected</name>
+      <host>192.168.56.111</host>
+      <port>23/tcp</port>
+      <threat>High</threat>
+      <severity>7.5</severity>
+      <nvt oid="1.3.6.1.4.1.25623.1.0.90012">
+        <name>Insecure Cleartext Protocol (Telnet)</name>
+        <cve>NOCVE</cve>
+        <cvss_base>7.5</cvss_base>
+        <cvss_version>2.0</cvss_version>
+        <tags>summary=Telnet transmits credentials and session data in cleartext.|solution=Disable the telnet daemon and utilize OpenSSH.|solution_type=Mitigation</tags>
+        <solution>Decommission telnet and enforce SSH with public key authentication.</solution>
+      </nvt>
+      <description>The Telnet daemon accepts unencrypted connections vulnerable to eavesdropping.</description>
+      <qod><value>90</value><type>remote_banner</type></qod>
+      <creation_time>2026-11-09T14:09:15Z</creation_time>
+    </result>
+    <result id="res-ms2-004">
+      <name>MySQL Empty Root Password</name>
+      <host>192.168.56.111</host>
+      <port>3306/tcp</port>
+      <threat>High</threat>
+      <severity>8.5</severity>
+      <nvt oid="1.3.6.1.4.1.25623.1.0.103234">
+        <name>MySQL Weak / Empty Credentials</name>
+        <cve>CVE-2004-1234</cve>
+        <cvss_base>8.5</cvss_base>
+        <cvss_version>2.0</cvss_version>
+        <tags>summary=MySQL service allows connection without a root password.|solution=Set a strong password for MySQL root user.|solution_type=Configuration</tags>
+        <solution>Run mysql_secure_installation and enforce strong passwords.</solution>
+      </nvt>
+      <description>Direct database administrative login permitted without password authentication.</description>
+      <qod><value>99</value><type>remote_active</type></qod>
+      <creation_time>2026-11-09T14:11:00Z</creation_time>
+    </result>
+    <result id="res-ms2-005">
+      <name>Apache HTTP Server ETag Inode Leakage</name>
+      <host>192.168.56.111</host>
+      <port>80/tcp</port>
+      <threat>Low</threat>
+      <severity>2.6</severity>
+      <nvt oid="1.3.6.1.4.1.25623.1.0.103440">
+        <name>Apache HTTP Server ETag Leak</name>
+        <cve>CVE-2003-1418</cve>
+        <cvss_base>2.6</cvss_base>
+        <cvss_version>2.0</cvss_version>
+        <tags>summary=Apache HTTP Server reveals filesystem inode numbers via HTTP ETag headers.|solution=Configure FileETag None in apache2.conf.|solution_type=Configuration</tags>
+      </nvt>
+      <description>ETag header reveals inode number of static files.</description>
+      <qod><value>80</value><type>remote_banner</type></qod>
+      <creation_time>2026-11-09T14:13:00Z</creation_time>
+    </result>
+  </results>
+</report>
+

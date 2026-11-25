@@ -1,0 +1,512 @@
+{
+  "investigation_id": "FIQ-REC-20261118-0006",
+  "campaign_name": "Test 1",
+  "target": "mozilla.org",
+  "generated_at": "2026-11-18T04:44:57.802297+00:00",
+  "metrics": {
+    "node_count": 11,
+    "edge_count": 10,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.0909,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "domain": 1,
+    "ip": 1,
+    "ipv6": 1,
+    "mx": 4,
+    "nameserver": 4
+  },
+  "source_breakdown": {
+    "passive_recon": 1,
+    "dns_osint": 10
+  },
+  "nodes": [
+    {
+      "id": "ENT:DOMAIN:087ffdf131a7",
+      "type": "domain",
+      "label": "mozilla.org",
+      "canonical_value": "mozilla.org",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "passive_recon"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "Test 1",
+        "value": "mozilla.org",
+        "source_tool": "passive_recon",
+        "evidence_ref": "7,0372fb351b34",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Domain"
+      },
+      "first_seen": "2026-11-18T04:44:57.801903+00:00",
+      "last_seen": "2026-11-18T04:44:57.801937+00:00",
+      "entity_type": "domain",
+      "maltego_type": "maltego.Domain",
+      "source_tool": "passive_recon",
+      "evidence_ref": "7,0372fb351b34",
+      "value": "mozilla.org"
+    },
+    {
+      "id": "ENT:IP:7949ec685392",
+      "type": "ip",
+      "label": "35.190.14.201",
+      "canonical_value": "35.190.14.201",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "35.190.14.201",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv4Address"
+      },
+      "first_seen": "2026-11-18T04:44:57.802096+00:00",
+      "last_seen": "2026-11-18T04:44:57.802143+00:00",
+      "entity_type": "ip",
+      "maltego_type": "maltego.IPv4Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:mozilla.org",
+      "value": "35.190.14.201"
+    },
+    {
+      "id": "ENT:IPV6:000234adb2ba",
+      "type": "ipv6",
+      "label": "2600:1901:0:c197::",
+      "canonical_value": "2600:1901:0:c197::",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.92,
+      "attributes": {
+        "value": "2600:1901:0:c197::",
+        "source_tool": "dns_osint",
+        "evidence_ref": "infra:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.92,
+        "maltego_type": "maltego.IPv6Address"
+      },
+      "first_seen": "2026-11-18T04:44:57.802111+00:00",
+      "last_seen": "2026-11-18T04:44:57.802126+00:00",
+      "entity_type": "ipv6",
+      "maltego_type": "maltego.IPv6Address",
+      "source_tool": "dns_osint",
+      "evidence_ref": "infra:mozilla.org",
+      "value": "2600:1901:0:c197::"
+    },
+    {
+      "id": "ENT:MX:0b8258f36da4",
+      "type": "mx",
+      "label": "alt1.aspmx.l.google.com",
+      "canonical_value": "alt1.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt1.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.802040+00:00",
+      "last_seen": "2026-11-18T04:44:57.802040+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "alt1.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:0d6be481d647",
+      "type": "mx",
+      "label": "alt2.aspmx.l.google.com",
+      "canonical_value": "alt2.aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "alt2.aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.802081+00:00",
+      "last_seen": "2026-11-18T04:44:57.802081+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "alt2.aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:5baaa2ffae62",
+      "type": "mx",
+      "label": "aspmx.l.google.com",
+      "canonical_value": "aspmx.l.google.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "aspmx.l.google.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.802069+00:00",
+      "last_seen": "2026-11-18T04:44:57.802069+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "aspmx.l.google.com"
+    },
+    {
+      "id": "ENT:MX:98620f2d9f9a",
+      "type": "mx",
+      "label": "aspmx3.googlemail.com",
+      "canonical_value": "aspmx3.googlemail.com",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "aspmx3.googlemail.com",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_mx:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.MXRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.802056+00:00",
+      "last_seen": "2026-11-18T04:44:57.802056+00:00",
+      "entity_type": "mx",
+      "maltego_type": "maltego.MXRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_mx:mozilla.org",
+      "value": "aspmx3.googlemail.com"
+    },
+    {
+      "id": "ENT:NAMESERVER:054094ff1105",
+      "type": "nameserver",
+      "label": "ns4-64.akam.net",
+      "canonical_value": "ns4-64.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns4-64.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.802025+00:00",
+      "last_seen": "2026-11-18T04:44:57.802025+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns4-64.akam.net"
+    },
+    {
+      "id": "ENT:NAMESERVER:1b8af4e99834",
+      "type": "nameserver",
+      "label": "ns1-240.akam.net",
+      "canonical_value": "ns1-240.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns1-240.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.802011+00:00",
+      "last_seen": "2026-11-18T04:44:57.802011+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns1-240.akam.net"
+    },
+    {
+      "id": "ENT:NAMESERVER:2c9820591d80",
+      "type": "nameserver",
+      "label": "ns7-66.akam.net",
+      "canonical_value": "ns7-66.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns7-66.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.801993+00:00",
+      "last_seen": "2026-11-18T04:44:57.801993+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns7-66.akam.net"
+    },
+    {
+      "id": "ENT:NAMESERVER:600786b4052c",
+      "type": "nameserver",
+      "label": "ns5-65.akam.net",
+      "canonical_value": "ns5-65.akam.net",
+      "tags": [],
+      "sources": [
+        "dns_osint"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "value": "ns5-65.akam.net",
+        "source_tool": "dns_osint",
+        "evidence_ref": "dns_ns:mozilla.org",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.NSRecord"
+      },
+      "first_seen": "2026-11-18T04:44:57.801968+00:00",
+      "last_seen": "2026-11-18T04:44:57.801968+00:00",
+      "entity_type": "nameserver",
+      "maltego_type": "maltego.NSRecord",
+      "source_tool": "dns_osint",
+      "evidence_ref": "dns_ns:mozilla.org",
+      "value": "ns5-65.akam.net"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:8f935db8b6c3",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:IP:7949ec685392",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802149+00:00",
+      "last_observed": "2026-11-18T04:44:57.802149+00:00"
+    },
+    {
+      "id": "REL:390b7f73301c",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:IPV6:000234adb2ba",
+      "relationship_type": "RESOLVES_TO",
+      "relationship": "RESOLVES_TO",
+      "weight": 0.9,
+      "confidence": 0.92,
+      "confidence_score": 0.92,
+      "evidence_ids": [
+        "infra:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802133+00:00",
+      "last_observed": "2026-11-18T04:44:57.802133+00:00"
+    },
+    {
+      "id": "REL:018032b45411",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:0b8258f36da4",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802044+00:00",
+      "last_observed": "2026-11-18T04:44:57.802044+00:00"
+    },
+    {
+      "id": "REL:10001db09ad4",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:0d6be481d647",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802084+00:00",
+      "last_observed": "2026-11-18T04:44:57.802084+00:00"
+    },
+    {
+      "id": "REL:1a57fbdf8b59",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:5baaa2ffae62",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802073+00:00",
+      "last_observed": "2026-11-18T04:44:57.802073+00:00"
+    },
+    {
+      "id": "REL:388ae348df17",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:MX:98620f2d9f9a",
+      "relationship_type": "ROUTES_MAIL_TO",
+      "relationship": "ROUTES_MAIL_TO",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_mx:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802060+00:00",
+      "last_observed": "2026-11-18T04:44:57.802060+00:00"
+    },
+    {
+      "id": "REL:2ea3c5e920b0",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:054094ff1105",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802028+00:00",
+      "last_observed": "2026-11-18T04:44:57.802028+00:00"
+    },
+    {
+      "id": "REL:33e5ae49a380",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:1b8af4e99834",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.802016+00:00",
+      "last_observed": "2026-11-18T04:44:57.802016+00:00"
+    },
+    {
+      "id": "REL:390b46fdd6bf",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:2c9820591d80",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.801999+00:00",
+      "last_observed": "2026-11-18T04:44:57.801999+00:00"
+    },
+    {
+      "id": "REL:2f7ed53fe3de",
+      "source": "ENT:DOMAIN:087ffdf131a7",
+      "target": "ENT:NAMESERVER:600786b4052c",
+      "relationship_type": "USES_NAMESERVER",
+      "relationship": "USES_NAMESERVER",
+      "weight": 0.9,
+      "confidence": 0.95,
+      "confidence_score": 0.95,
+      "evidence_ids": [
+        "dns_ns:mozilla.org"
+      ],
+      "first_observed": "2026-11-18T04:44:57.801977+00:00",
+      "last_observed": "2026-11-18T04:44:57.801977+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:DOMAIN:087ffdf131a7",
+      "ENT:IP:7949ec685392",
+      "ENT:IPV6:000234adb2ba",
+      "ENT:MX:0b8258f36da4",
+      "ENT:MX:0d6be481d647",
+      "ENT:MX:5baaa2ffae62",
+      "ENT:MX:98620f2d9f9a",
+      "ENT:NAMESERVER:054094ff1105",
+      "ENT:NAMESERVER:1b8af4e99834",
+      "ENT:NAMESERVER:2c9820591d80",
+      "ENT:NAMESERVER:600786b4052c"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}

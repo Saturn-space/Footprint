@@ -1,0 +1,21 @@
+{
+  "entities": [
+    {
+      "node_id": "ENT:PERSON:b64a37c70f0a",
+      "entity_type": "person",
+      "maltego_type": "maltego.Person",
+      "value": "Jane Doe (CISO)",
+      "label": "Jane Doe (CISO)",
+      "source_tool": "analyst_manual",
+      "evidence_ref": "LinkedIn OSINT note #14",
+      "risk_level": "info",
+      "confidence": 0.9,
+      "attributes": {
+        "added_by": "graph_inv_a"
+      }
+    }
+  ],
+  "relationships": [],
+  "revision_ns": 1794428682969271695,
+  "updated_at": "2026-11-11T20:24:42.969275+00:00"
+}

@@ -1,0 +1,158 @@
+{
+  "recon_id": "FIQ-REC-20261118-0005",
+  "target": "192.168.56.115",
+  "hostname": "scada-historian.ot.internal",
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.115",
+      "port": 22,
+      "protocol": "tcp",
+      "service": "ssh",
+      "product": "OpenSSH",
+      "version": "7.6p1",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.115",
+      "port": 502,
+      "protocol": "tcp",
+      "service": "modbus",
+      "product": "Schneider Modbus/TCP Gateway",
+      "version": "1.0",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.115",
+      "port": 1433,
+      "protocol": "tcp",
+      "service": "ms-sql-s",
+      "product": "Microsoft SQL Server",
+      "version": "2019 RTM",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.115",
+      "port": 1521,
+      "protocol": "tcp",
+      "service": "oracle",
+      "product": "Oracle Database TNS Listener",
+      "version": "19c",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.115",
+      "port": 3306,
+      "protocol": "tcp",
+      "service": "mysql",
+      "product": "MariaDB",
+      "version": "10.3.27",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.115",
+      "port": 5432,
+      "protocol": "tcp",
+      "service": "postgresql",
+      "product": "PostgreSQL Database",
+      "version": "12.4",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.115",
+      "port": 8080,
+      "protocol": "tcp",
+      "service": "http",
+      "product": "SCADA Web Supervision Console",
+      "version": "3.2",
+      "state": "open"
+    }
+  ],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.115",
+      "hostname": "scada-historian.ot.internal",
+      "status": "up",
+      "latency_ms": 1.25,
+      "os_match": "Linux 2.6.x - 5.x",
+      "open_ports_count": 7
+    }
+  ],
+  "passive_results": [
+    {
+      "source": "WHOIS / RDAP",
+      "domain": "scada-historian.ot.internal",
+      "registrar": "FootprintIQ Internal Assessment Registry",
+      "created_date": "2024-01-15T00:00:00Z",
+      "org": "FootprintIQ Security Operations Lab",
+      "nameservers": [
+        "ns1.local",
+        "ns2.local"
+      ]
+    },
+    {
+      "source": "theHarvester",
+      "query": "scada-historian.ot.internal",
+      "emails_discovered": [
+        "admin@demo.internal",
+        "security@demo.internal",
+        "ops@demo.internal"
+      ],
+      "subdomains_discovered": [
+        "mail.scada-historian.ot.internal",
+        "api.scada-historian.ot.internal",
+        "vpn.scada-historian.ot.internal"
+      ]
+    },
+    {
+      "source": "DNS OSINT",
+      "target": "192.168.56.115",
+      "records": [
+        {
+          "type": "A",
+          "name": "scada-historian.ot.internal",
+          "value": "192.168.56.115",
+          "ttl": 3600
+        },
+        {
+          "type": "PTR",
+          "name": "192.168.56.115.in-addr.arpa",
+          "value": "scada-historian.ot.internal",
+          "ttl": 3600
+        }
+      ]
+    }
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "theharvester",
+      "status": "COMPLETED",
+      "detail": "Verified external records unchanged",
+      "duration_seconds": 18.0
+    },
+    {
+      "scanner": "whois_rdap_dns",
+      "status": "COMPLETED",
+      "detail": "Re-verified DNS nameserver configuration",
+      "duration_seconds": 12.0
+    },
+    {
+      "scanner": "nmap",
+      "status": "COMPLETED",
+      "detail": "Discovered 7 open TCP services across target",
+      "duration_seconds": 62.0
+    },
+    {
+      "scanner": "nmap_nse",
+      "status": "COMPLETED",
+      "detail": "Rechecked remediation status of previous vulnerability findings",
+      "duration_seconds": 68.0
+    },
+    {
+      "scanner": "nuclei",
+      "status": "COMPLETED",
+      "detail": "Confirmed patched CVEs and endpoints",
+      "duration_seconds": 35.0
+    }
+  ],
+  "generated_at": "2026-11-17T13:25:56.019397+00:00"
+}

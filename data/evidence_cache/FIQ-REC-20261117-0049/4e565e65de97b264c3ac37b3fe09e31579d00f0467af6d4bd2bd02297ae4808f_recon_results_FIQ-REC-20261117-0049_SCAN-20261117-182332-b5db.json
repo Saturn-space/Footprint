@@ -1,0 +1,27 @@
+{
+  "target": "192.168.56.111",
+  "targets": [
+    "192.168.56.111"
+  ],
+  "status": "Failed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 6.31,
+  "scanners_executed": [],
+  "scanner_statuses": [
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "192.168.56.111",
+      "status": "BLOCKED",
+      "detail": "Target '192.168.56.111' is UNREACHABLE or OFFLINE. Active reconnaissance halted before scanning to prevent inaccurate or stalled results.\nAction Required: Please verify that the target host is online and reachable."
+    }
+  ],
+  "failed_stages": [
+    "Active Recon (192.168.56.111)"
+  ],
+  "partial_stages": [],
+  "passive_results": [],
+  "active_hosts": [],
+  "discovered_ports": []
+}

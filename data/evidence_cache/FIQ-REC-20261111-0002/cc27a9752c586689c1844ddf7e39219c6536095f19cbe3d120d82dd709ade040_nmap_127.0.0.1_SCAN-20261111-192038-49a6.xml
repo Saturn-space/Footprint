@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.99 scan initiated Thu Nov 12 00:50:38 2026 as: /usr/lib/nmap/nmap -&#45;privileged -Pn -sT -p 8000 -sV -T4 -oX /home/asip_ali/Desktop/Projects/OSINT-RECON/data/raw_outputs/SCAN-20261111-192038-49a6/nmap/nmap_scan.xml 127.0.0.1 -->
+<nmaprun scanner="nmap" args="/usr/lib/nmap/nmap -&#45;privileged -Pn -sT -p 8000 -sV -T4 -oX /home/asip_ali/Desktop/Projects/OSINT-RECON/data/raw_outputs/SCAN-20261111-192038-49a6/nmap/nmap_scan.xml 127.0.0.1" start="1794424838" startstr="Thu Nov 12 00:50:38 2026" version="7.99" xmloutputversion="1.05">
+<scaninfo type="connect" protocol="tcp" numservices="1" services="8000"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<host starttime="1794424838" endtime="1794424844"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="127.0.0.1" addrtype="ipv4"/>
+<hostnames>
+<hostname name="localhost" type="PTR"/>
+</hostnames>
+<ports><port protocol="tcp" portid="8000"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="Uvicorn" method="probed" conf="10"><cpe>cpe:/a:encode:uvicorn</cpe></service></port>
+</ports>
+<times srtt="24" rttvar="5000" to="100000"/>
+</host>
+<runstats><finished time="1794424844" timestr="Thu Nov 12 00:50:44 2026" summary="Nmap done at Thu Nov 12 00:50:44 2026; 1 IP address (1 host up) scanned in 6.42 seconds" elapsed="6.42" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>

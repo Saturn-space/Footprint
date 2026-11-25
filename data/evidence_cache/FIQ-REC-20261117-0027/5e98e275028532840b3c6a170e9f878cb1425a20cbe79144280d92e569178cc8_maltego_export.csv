@@ -1,0 +1,4 @@
+section,id,entity_type,maltego_type,value,label,source_tool,confidence,evidence_ref
+entity,EXT1,domain,maltego.Domain,partner.footprintiq.local,partner.footprintiq.local,maltego_desktop,0.9,maltego_transform_1
+entity,EXT2,ip,maltego.IPv4Address,192.168.56.200,192.168.56.200,maltego_desktop,0.9,maltego_transform_1
+edge,EXT1,RESOLVES_TO,EXT2,maltego_transform,0.9,partner_dns

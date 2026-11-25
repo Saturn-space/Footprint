@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Account Access — FootprintIQ{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto py-8 space-y-6">
+  <div class="fiq-card p-6 md:p-8">
+    <div class="mb-6">
+      <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+        Operator Authentication
+      </span>
+      <h1 class="text-xl font-bold text-slate-900 mt-3">Sign in to FootprintIQ</h1>
+      <p class="text-xs text-slate-500 mt-1">
+        Authenticate to manage reconnaissance campaigns, approve scope targets, or access administrative controls.
+      </p>
+    </div>
+
+    {% if current_user %}
+    <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
+      <div>
+        <div class="text-xs font-bold text-emerald-900">Currently signed in as {{ current_user.username }}</div>
+        <div class="text-[11px] text-emerald-700 mt-0.5">Assigned role: {{ current_user.role|title }}</div>
+      </div>
+      <button type="button" onclick="performLogout()"
+              class="px-3 py-1.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-200 rounded-lg text-xs font-semibold transition">
+        Sign Out
+      </button>
+    </div>
+    {% endif %}
+
+    <form id="loginForm" onsubmit="performLogin(event)" class="space-y-4">
+      <div>
+        <label for="loginUsername" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Username</label>
+        <input id="loginUsername" name="username" type="text" required autocomplete="username"
+               placeholder="Enter username"
+               class="w-full text-sm px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+      </div>
+
+      <div>
+        <label for="loginPassword" class="block text-xs font-semibold text-slate-700 uppercase mb-1">Password</label>
+        <input id="loginPassword" name="password" type="password" required autocomplete="current-password"
+               placeholder="Enter password"
+               class="w-full text-sm px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+      </div>
+
+      <div id="loginFeedback" class="hidden"></div>
+
+      <button type="submit" id="btnSignIn"
+              class="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg shadow-sm transition">
+        Sign In
+      </button>
+    </form>
+
+    <div class="mt-6 pt-5 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+      <div class="font-semibold text-slate-700">Role Permissions</div>
+      <p><strong>Investigators</strong> can configure, execute, monitor, and export reports for authorized campaigns.</p>
+      <p><strong>Administrators</strong> can approve investigator accounts, configure lab network ranges, and verify scanner integrations.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+async function performLogin(event) {
+  event.preventDefault();
+  const btn = document.getElementById('btnSignIn');
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  if (!username || !password) {
+    FIQ_Alert('loginFeedback', 'Please provide both username and password.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+  FIQ_Alert('loginFeedback', 'Verifying credentials...', 'loading');
+
+  try {
+    const res = await fetch('/api/v1/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      FIQ_Alert('loginFeedback', 'Signed in successfully as ' + (data.username || username) + '. Redirecting...', 'success');
+      setTimeout(() => { window.location.href = '/'; }, 700);
+    } else {
+      FIQ_Alert('loginFeedback', data.detail || 'Authentication failed.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  } catch (err) {
+    FIQ_Alert('loginFeedback', 'Unable to complete sign-in: ' + err.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+  }
+}
+
+async function performLogout() {
+  try {
+    await fetch('/api/v1/auth/logout', { method: 'POST' });
+    window.location.href = '/login';
+  } catch (err) {
+    FIQ_Alert('loginFeedback', 'Sign-out failed: ' + err.message, 'error');
+  }
+}
+</script>
+{% endblock %}
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.99 scan initiated Wed Nov 11 23:42:24 2026 as: /usr/lib/nmap/nmap -&#45;privileged -Pn -sT -p 21,22,80 -sV -T4 -oX /home/asip_ali/Desktop/Projects/OSINT-RECON/data/raw_outputs/SCAN-20261111-181224-6f34/nmap/nmap_scan.xml 192.168.56.111 -->
+<nmaprun scanner="nmap" args="/usr/lib/nmap/nmap -&#45;privileged -Pn -sT -p 21,22,80 -sV -T4 -oX /home/asip_ali/Desktop/Projects/OSINT-RECON/data/raw_outputs/SCAN-20261111-181224-6f34/nmap/nmap_scan.xml 192.168.56.111" start="1794420744" startstr="Wed Nov 11 23:42:24 2026" version="7.99" xmloutputversion="1.05">
+<scaninfo type="connect" protocol="tcp" numservices="3" services="21-22,80"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<host starttime="1794420748" endtime="1794420755"><status state="up" reason="user-set" reason_ttl="0"/>
+<address addr="192.168.56.111" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<ports><port protocol="tcp" portid="21"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ftp" product="vsftpd" version="2.3.4" ostype="Unix" method="probed" conf="10"><cpe>cpe:/a:vsftpd:vsftpd:2.3.4</cpe></service></port>
+<port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="ssh" product="OpenSSH" version="4.7p1 Debian 8ubuntu1" extrainfo="protocol 2.0" ostype="Linux" method="probed" conf="10"><cpe>cpe:/a:openbsd:openssh:4.7p1</cpe><cpe>cpe:/o:linux:linux_kernel</cpe></service></port>
+<port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="0"/><service name="http" product="Apache httpd" version="2.2.8" extrainfo="(Ubuntu) DAV/2" method="probed" conf="10"><cpe>cpe:/a:apache:http_server:2.2.8</cpe></service></port>
+</ports>
+<times srtt="11810" rttvar="6688" to="100000"/>
+</host>
+<runstats><finished time="1794420755" timestr="Wed Nov 11 23:42:35 2026" summary="Nmap done at Wed Nov 11 23:42:35 2026; 1 IP address (1 host up) scanned in 10.89 seconds" elapsed="10.89" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>

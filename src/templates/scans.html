@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block title %}Scans &amp; Reconnaissance — FootprintIQ Enterprise{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-7xl mx-auto">
+
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-bold text-slate-900">Reconnaissance &amp; Vulnerability Scans</h1>
+      <p class="text-xs text-slate-500 mt-0.5">Multi-engine scanner orchestration with strict target authorization enforcement</p>
+    </div>
+  </div>
+
+  {% if not is_admin %}
+  <!-- Launch Scan Card -->
+  <div class="fiq-card p-6 reveal-on-scroll">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Launch Authorized Scan Execution</h2>
+        <p class="text-xs text-slate-500">Select an active investigation and its authorized assets to trigger automated scanning.</p>
+      </div>
+    </div>
+
+    <form id="scanForm" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+        <!-- Investigation Selection -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Active Investigation</label>
+          <select id="scanInvestigationSelect" name="investigation_id" required
+                  class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+            {% for inv in investigations %}
+            <option value="{{ inv.investigation_id }}">{{ inv.title }} ({{ inv.investigation_id }})</option>
+            {% else %}
+            <option value="">No investigations available</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Target Selection (Dynamic) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Target Asset</label>
+          <select id="scanTargetSelect" name="target" required
+                  class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white mono">
+            {% for t in targets %}
+            <option value="{{ t.target }}" data-investigation="{{ t.investigation_id or 'ALL' }}">
+              {{ t.target }} — {{ t.name }}
+            </option>
+            {% else %}
+            <option value="" disabled selected>No authorized targets registered yet</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Scanner Mode -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Scanner Engine / Mode</label>
+          <select id="scanTypeSelect" name="scan_type" required
+                  class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+            <option value="combined" selected>Combined Multi-Engine Assessment</option>
+            <option value="nmap_nse">Nmap NSE (Vulnerability Scripts)</option>
+            <option value="nuclei">ProjectDiscovery Nuclei (Web, SSL &amp; CVEs)</option>
+            <option value="nmap_services">Nmap Service &amp; OS Discovery</option>
+            <option value="nessus">Tenable Nessus Scanner (When Scan API Enabled)</option>
+            <option value="passive">Passive OSINT (WHOIS, DNS, Harvester, RDAP)</option>
+            <option value="network_discovery">Network Ping Discovery</option>
+          </select>
+        </div>
+
+        <!-- Scan Profile -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Scan Profile</label>
+          <select id="scanProfileSelect" name="profile"
+                  class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+            <option value="lab-basic" selected>lab-basic (Full Port Lab Scan)</option>
+            <option value="lab-safe-minimal">lab-safe-minimal (Safe Checks)</option>
+            <option value="default">default (Standard Scan Profile)</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <div id="scanFeedback" class="hidden"></div>
+        <button type="button" id="btnSubmitScan" onclick="executeScan()"
+                class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg shadow-sm transition">
+          Launch Scan Execution
+        </button>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+
+  <!-- Scan Execution History Table -->
+  <div class="fiq-card p-6 reveal-on-scroll">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Execution History &amp; Pipeline Status</h2>
+        <p class="text-xs text-slate-500">Real-time record of multi-scanner jobs executed on the host</p>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="fiq-table">
+        <thead>
+          <tr>
+            <th>Scan ID</th>
+            <th>Target</th>
+            <th>Scan Type</th>
+            <th>Status</th>
+            <th>Started</th>
+            <th>Results &amp; Summary</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in scans %}
+          <tr>
+            <td class="mono font-bold text-slate-900">{{ s.scan_id }}</td>
+            <td class="mono text-slate-700">{{ s.target }}</td>
+            <td class="font-semibold text-slate-800 capitalize">{{ s.scan_type|replace('_', ' ') }}</td>
+            <td>
+              <span class="px-2 py-0.5 rounded font-bold text-[10px] uppercase {% if s.status == 'completed' %}badge-low{% elif s.status == 'failed' %}badge-critical{% else %}badge-info{% endif %}">
+                {{ s.status }}
+              </span>
+            </td>
+            <td class="text-slate-500 text-xs">{{ s.started_at_ist or (s.started_at|ist) }}</td>
+            <td class="text-slate-600 text-xs">
+              {% if s.error_message %}
+              <span class="text-rose-600 font-medium truncate block max-w-xs" title="{{ s.error_message }}">{{ s.error_message }}</span>
+              {% else %}
+              <span class="text-emerald-700 font-medium">Completed successfully</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-400">
+              No scans executed yet.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.initDynamicScanTargets) {
+    window.initDynamicScanTargets();
+  }
+});
+
+async function executeScan() {
+  const btn = document.getElementById('btnSubmitScan');
+  const invId = document.getElementById('scanInvestigationSelect').value;
+  const target = document.getElementById('scanTargetSelect').value;
+  const scanType = document.getElementById('scanTypeSelect').value;
+  const profile = document.getElementById('scanProfileSelect').value;
+
+  if (!invId || !target) {
+    FIQ_Alert('scanFeedback', 'Investigation and Target selection are required.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerText = 'Executing scan pipeline...';
+  FIQ_Alert('scanFeedback', 'Multi-scanner execution in progress on target ' + target + '... Please wait.', 'loading');
+
+  try {
+    const res = await fetch('/api/v1/scans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        investigation_id: invId,
+        target: target,
+        scan_type: scanType,
+        profile: profile
+      })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      const findingsCount = data.vulnerabilities_found || (data.findings ? data.findings.length : 0);
+      FIQ_Alert('scanFeedback', 'Scan ' + (data.scan_id || '') + ' completed! Detected ' + findingsCount + ' findings. Reloading...', 'success');
+      setTimeout(() => window.location.reload(), 1500);
+    } else {
+      FIQ_Alert('scanFeedback', 'Scan rejected: ' + (data.detail || JSON.stringify(data)), 'error');
+      btn.disabled = false;
+      btn.innerText = 'Launch Scan Execution';
+    }
+  } catch (err) {
+    FIQ_Alert('scanFeedback', 'Execution error: ' + err.message, 'error');
+    btn.disabled = false;
+    btn.innerText = 'Launch Scan Execution';
+  }
+}
+</script>
+{% endblock %}

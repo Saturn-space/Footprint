@@ -1,0 +1,302 @@
+{
+  "recon_id": "FIQ-REC-20261118-0001",
+  "target": "192.168.56.111",
+  "hostname": "metasploitable2.local",
+  "discovered_ports": [
+    {
+      "target_ip": "192.168.56.111",
+      "port": 21,
+      "protocol": "tcp",
+      "service": "ftp",
+      "product": "vsftpd",
+      "version": "2.3.4",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 22,
+      "protocol": "tcp",
+      "service": "ssh",
+      "product": "OpenSSH",
+      "version": "4.7p1 Debian 8ubuntu1",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 23,
+      "protocol": "tcp",
+      "service": "telnet",
+      "product": "Linux telnetd",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 25,
+      "protocol": "tcp",
+      "service": "smtp",
+      "product": "Postfix smtpd",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 53,
+      "protocol": "tcp",
+      "service": "domain",
+      "product": "ISC BIND",
+      "version": "9.4.2",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 80,
+      "protocol": "tcp",
+      "service": "http",
+      "product": "Apache httpd",
+      "version": "2.2.8",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 111,
+      "protocol": "tcp",
+      "service": "rpcbind",
+      "product": "2 (rpcbind)",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 139,
+      "protocol": "tcp",
+      "service": "netbios-ssn",
+      "product": "Samba smbd",
+      "version": "3.X - 4.X",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 445,
+      "protocol": "tcp",
+      "service": "microsoft-ds",
+      "product": "Samba smbd",
+      "version": "3.0.20-Debian",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 512,
+      "protocol": "tcp",
+      "service": "exec",
+      "product": "netkit-rsh rexecd",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 513,
+      "protocol": "tcp",
+      "service": "login",
+      "product": "OpenBSD rlogind",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 514,
+      "protocol": "tcp",
+      "service": "shell",
+      "product": "Netkit rshd",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 1099,
+      "protocol": "tcp",
+      "service": "rmiregistry",
+      "product": "GNU Classpath grmiregistry",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 1524,
+      "protocol": "tcp",
+      "service": "bindshell",
+      "product": "Metasploitable root shell",
+      "version": "",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 2049,
+      "protocol": "tcp",
+      "service": "nfs",
+      "product": "NFS",
+      "version": "2-4 (RPC #100003)",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 2121,
+      "protocol": "tcp",
+      "service": "ftp",
+      "product": "ProFTPD",
+      "version": "1.3.1",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 3306,
+      "protocol": "tcp",
+      "service": "mysql",
+      "product": "MySQL",
+      "version": "5.0.51a-3ubuntu5",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 5432,
+      "protocol": "tcp",
+      "service": "postgresql",
+      "product": "PostgreSQL DB",
+      "version": "8.3.0 - 8.3.7",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 5900,
+      "protocol": "tcp",
+      "service": "vnc",
+      "product": "VNC",
+      "version": "protocol 3.3",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 6000,
+      "protocol": "tcp",
+      "service": "x11",
+      "product": "X11",
+      "version": "access granted",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 6667,
+      "protocol": "tcp",
+      "service": "irc",
+      "product": "UnrealIRCd",
+      "version": "3.2.8.1",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 8009,
+      "protocol": "tcp",
+      "service": "ajp13",
+      "product": "Apache Jserv",
+      "version": "Protocol v1.3",
+      "state": "open"
+    },
+    {
+      "target_ip": "192.168.56.111",
+      "port": 8180,
+      "protocol": "tcp",
+      "service": "http",
+      "product": "Apache Tomcat/Coyote",
+      "version": "1.1",
+      "state": "open"
+    }
+  ],
+  "active_hosts": [
+    {
+      "ip": "192.168.56.111",
+      "hostname": "metasploitable2.local",
+      "status": "up",
+      "latency_ms": 1.25,
+      "os_match": "Linux 2.6.x - 5.x",
+      "open_ports_count": 23
+    }
+  ],
+  "passive_results": [
+    {
+      "source": "WHOIS / RDAP",
+      "domain": "metasploitable2.local",
+      "registrar": "FootprintIQ Internal Assessment Registry",
+      "created_date": "2024-01-15T00:00:00Z",
+      "org": "FootprintIQ Security Operations Lab",
+      "nameservers": [
+        "ns1.local",
+        "ns2.local"
+      ]
+    },
+    {
+      "source": "theHarvester",
+      "query": "metasploitable2.local",
+      "emails_discovered": [
+        "admin@demo.internal",
+        "security@demo.internal",
+        "ops@demo.internal"
+      ],
+      "subdomains_discovered": [
+        "mail.metasploitable2.local",
+        "api.metasploitable2.local",
+        "vpn.metasploitable2.local"
+      ]
+    },
+    {
+      "source": "DNS OSINT",
+      "target": "192.168.56.111",
+      "records": [
+        {
+          "type": "A",
+          "name": "metasploitable2.local",
+          "value": "192.168.56.111",
+          "ttl": 3600
+        },
+        {
+          "type": "PTR",
+          "name": "192.168.56.111.in-addr.arpa",
+          "value": "metasploitable2.local",
+          "ttl": 3600
+        }
+      ]
+    }
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "theharvester",
+      "status": "COMPLETED",
+      "detail": "Verified external records unchanged",
+      "duration_seconds": 18.0
+    },
+    {
+      "scanner": "whois_rdap_dns",
+      "status": "COMPLETED",
+      "detail": "Re-verified DNS nameserver configuration",
+      "duration_seconds": 12.0
+    },
+    {
+      "scanner": "nmap",
+      "status": "COMPLETED",
+      "detail": "Discovered 23 open TCP services across target",
+      "duration_seconds": 62.0
+    },
+    {
+      "scanner": "nmap_nse",
+      "status": "COMPLETED",
+      "detail": "Rechecked remediation status of previous vulnerability findings",
+      "duration_seconds": 68.0
+    },
+    {
+      "scanner": "nuclei",
+      "status": "COMPLETED",
+      "detail": "Confirmed patched CVEs and endpoints",
+      "duration_seconds": 35.0
+    }
+  ],
+  "generated_at": "2026-11-17T13:23:05.439557+00:00"
+}

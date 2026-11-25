@@ -1,0 +1,132 @@
+{
+  "target": "192.168.56.112",
+  "targets": [
+    "192.168.56.112"
+  ],
+  "status": "Partially Completed",
+  "findings_count": 0,
+  "exposure_score": 0.0,
+  "exposure_level": "Minimal",
+  "elapsed_seconds": 9.78,
+  "scanners_executed": [
+    "passive_recon"
+  ],
+  "scanner_statuses": [
+    {
+      "scanner": "Passive Intelligence",
+      "target": "192.168.56.112",
+      "status": "COMPLETED",
+      "detail": "DNS records: 0, Subdomains: 0, Emails: 1"
+    },
+    {
+      "scanner": "Active Port & Service Scan",
+      "target": "192.168.56.112",
+      "status": "BLOCKED",
+      "detail": "Target '192.168.56.112' is UNREACHABLE or OFFLINE. Active reconnaissance halted before scanning to prevent inaccurate or stalled results.\nAction Required: Please verify that the target host is online and reachable."
+    },
+    {
+      "scanner": "Nmap NSE Assessment",
+      "target": "192.168.56.112",
+      "status": "FAILED",
+      "detail": "Target '192.168.56.112' is NOT in the authorized active reconnaissance allowlist.\nAuthorized lab targets: ['192.168.56.111', '127.0.0.1'].\nTo scan a target, it must be explicitly configured in config/target_authorization.json."
+    }
+  ],
+  "failed_stages": [
+    "Active Recon (192.168.56.112)",
+    "NSE Check (192.168.56.112)"
+  ],
+  "passive_results": [
+    {
+      "target": "192.168.56.112",
+      "target_kind": "ip",
+      "timestamp_utc": "2026-11-11T13:56:29.733098+00:00",
+      "checks_requested": [
+        "dns_records",
+        "rdap_lookup",
+        "whois_lookup",
+        "asn_ip_hosting"
+      ],
+      "checks_executed": [
+        {
+          "id": "whois_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "rdap_lookup",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        },
+        {
+          "id": "asn_ip_hosting",
+          "interaction_type": "Pure Passive",
+          "status": "SUCCESS"
+        }
+      ],
+      "unavailable_checks": [
+        {
+          "id": "dns_records",
+          "reason": "Forward domain DNS checks apply to domain/hostname targets, not bare IP addresses."
+        }
+      ],
+      "domain_intel": {
+        "whois": {
+          "registrar": "Regional Internet Registry",
+          "organization": "Internet Assigned Numbers Authority",
+          "country": "US",
+          "status": "SUCCESS"
+        },
+        "rdap": {
+          "status": "LOCAL_PRIVATE_IP",
+          "ip": "192.168.56.112",
+          "name": "Private/Local Address Space (RFC 1918)",
+          "cidr": "192.168.56.112/24",
+          "country": "LOCAL_LAB",
+          "org": "Internal Lab Environment",
+          "remarks": [
+            "Private address range, RDAP queries are not sent to public RIRs."
+          ]
+        },
+        "dns_records": {},
+        "dns_enumeration": {},
+        "nameserver_analysis": null,
+        "subdomains": [],
+        "dns_security": null
+      },
+      "osint_intel": {
+        "emails": [
+          "abuse@iana.org"
+        ],
+        "crtsh_certificates": [],
+        "public_org_info": null,
+        "public_metadata": null,
+        "search_engine_intel": null,
+        "technology_intel": [],
+        "external_apis": {}
+      },
+      "infrastructure_intel": {
+        "resolved_ips": [
+          "192.168.56.112"
+        ],
+        "ip_intelligence": null,
+        "reverse_dns": [],
+        "asn_hosting": {
+          "handle": null,
+          "name": "Private/Local Address Space (RFC 1918)",
+          "start_address": null,
+          "end_address": null,
+          "country": "LOCAL_LAB",
+          "cidr": "192.168.56.112/24",
+          "org": "Internal Lab Environment"
+        },
+        "ip_geolocation": null,
+        "hosting_info": null,
+        "tls_certificates": null,
+        "http_headers": []
+      },
+      "errors": []
+    }
+  ],
+  "active_hosts": [],
+  "discovered_ports": []
+}

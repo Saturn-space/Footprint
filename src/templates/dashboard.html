@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — FootprintIQ Enterprise{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-7xl mx-auto">
+
+  <!-- Scope Banner -->
+  <div class="fiq-card p-6 border-l-4 border-l-blue-600 bg-white reveal-on-scroll">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded bg-blue-100 text-blue-800">
+            Scope Authorized
+          </span>
+          <span class="text-xs text-slate-400">&bull; Security Assessment Platform</span>
+        </div>
+        <h1 class="text-xl font-bold text-slate-900 mt-1">Investigation Intelligence Dashboard</h1>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Manual Reconnaissance, Service Discovery &amp; Multi-Engine Vulnerability Assessment &bull; Fail-Closed Scope
+          Policy
+        </p>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        {% if not is_admin %}
+        <a href="/recon/new"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition inline-flex items-center space-x-1.5">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+          <span>New Recon Campaign</span>
+        </a>
+        {% endif %}
+        <a href="/recon"
+          class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg transition inline-flex items-center space-x-1.5">
+          <i data-lucide="radar" class="w-3.5 h-3.5"></i>
+          <span>{{ 'All Investigations' if is_admin else 'Campaigns' }} ({{ total_campaigns or 0 }})</span>
+        </a>
+        <a href="/reports"
+          class="px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-lg transition hidden md:inline-flex items-center space-x-1.5">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i>
+          <span>Reports</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Metrics Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+    <!-- Exposure Score -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-1">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Exposure Score</span>
+        <span
+          class="px-2 py-0.5 text-[11px] font-bold rounded {% if exposure.exposure_score >= 80 %}badge-critical{% elif exposure.exposure_score >= 50 %}badge-high{% elif exposure.exposure_score >= 25 %}badge-medium{% else %}badge-low{% endif %}">
+          {{ exposure.exposure_level }}
+        </span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold text-slate-900">{{ exposure.exposure_score }}</span>
+        <span class="text-xs font-medium text-slate-400">/ 100</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        Aggregate multi-scanner risk index
+      </div>
+    </div>
+
+    <!-- Total Correlated Findings -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-2">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Vulnerabilities</span>
+        <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-blue-50 text-blue-700 border border-blue-200">
+          Correlated
+        </span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold text-slate-900">{{ total_findings }}</span>
+        <span class="text-xs font-bold text-rose-600">{{ exposure.severity_counts.Critical }} Critical</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        {{ exposure.severity_counts.High }} High &bull; {{ exposure.severity_counts.Medium }} Medium &bull; {{
+        exposure.severity_counts.Low }} Low
+      </div>
+    </div>
+
+    <!-- Active Investigations -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-3">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Investigations</span>
+        <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-slate-100 text-slate-700">
+          Managed
+        </span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold text-slate-900">{{ total_investigations }}</span>
+        <span class="text-xs font-medium text-slate-500">Campaigns</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        {{ total_targets }} Authorized Assets Registered
+      </div>
+    </div>
+
+    <!-- Executed Scans & Evidence -->
+    <div class="fiq-card fiq-card-interactive p-5 reveal-on-scroll stagger-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Scans Executed</span>
+        <span
+          class="px-2 py-0.5 text-[11px] font-bold rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+          Multi-Engine
+        </span>
+      </div>
+      <div class="mt-3 flex items-baseline space-x-2">
+        <span class="text-3xl font-extrabold text-slate-900">{{ total_scans }}</span>
+        <span class="text-xs font-bold text-emerald-600">Active Pipeline</span>
+      </div>
+      <div class="mt-2 text-[11px] text-slate-500">
+        {{ total_evidence }} Archived Evidence Artifacts
+      </div>
+    </div>
+  </div>
+
+  {% if is_admin %}
+  <div class="fiq-card p-6 border-l-4 border-l-indigo-600 bg-white reveal-on-scroll">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Administrator Oversight &amp; Governance</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Full platform visibility across investigations, findings, reports,
+          scanner integrations, and security audit trails.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a href="/admin/users"
+          class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold">Manage
+          Users</a>
+        <a href="/admin/scanners"
+          class="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold">Scanner Health</a>
+        <a href="/admin/audit-logs" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-semibold">View
+          Audit Logs</a>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <!-- Assessment Workflows Quick Launch -->
+  <div class="fiq-card p-6 reveal-on-scroll">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Start a Security Assessment</h2>
+        <p class="text-xs text-slate-500">Select the reconnaissance or vulnerability assessment stage you need</p>
+      </div>
+      <a href="/recon/new" class="text-xs text-blue-600 hover:text-blue-800 font-semibold">
+        Configure Assessment &rarr;
+      </a>
+    </div>
+
+    {% set p_cnt = (options_catalog.passive.groups.domain_intelligence.options|length +
+    options_catalog.passive.groups.osint_intelligence.options|length +
+    options_catalog.passive.groups.infrastructure_intelligence.options|length) if options_catalog else 17 %}
+    {% set a_cnt = (options_catalog.active.groups.host_discovery.options|length +
+    options_catalog.active.groups.service_enumeration.options|length) if options_catalog else 14 %}
+    {% set v_cnt = (options_catalog.vulnerability.nse.discovery_scripts|length +
+    options_catalog.vulnerability.nse.vulnerability_scripts|length) if options_catalog else 12 %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 fiq-3d-perspective">
+      <a href="/recon/new" class="fiq-3d-card p-5 block">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-900 uppercase tracking-wide">Passive Reconnaissance</span>
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-blue-100 text-blue-700">{{ p_cnt }} Checks</span>
+        </div>
+        <p class="text-xs text-slate-600 mt-2">WHOIS, RDAP, DNS records, Certificate Transparency, ASN, and public OSINT
+          intelligence.</p>
+      </a>
+
+      <a href="/recon/new" class="fiq-3d-card p-5 block">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-900 uppercase tracking-wide">Active Reconnaissance</span>
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-indigo-100 text-indigo-700">{{ a_cnt }}
+            Options</span>
+        </div>
+        <p class="text-xs text-slate-600 mt-2">Host liveness verification, custom or standard TCP/UDP port sweeps,
+          version detection, and service checks.</p>
+      </a>
+
+      <a href="/recon/new" class="fiq-3d-card p-5 block">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-900 uppercase tracking-wide">Vulnerability Assessment</span>
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded bg-rose-100 text-rose-700">{{ v_cnt }}+ NSE +
+            Engines</span>
+        </div>
+        <p class="text-xs text-slate-600 mt-2">Policy-controlled Nmap NSE security audits, ProjectDiscovery Nuclei
+          templates, Tenable Nessus read-only inspection, and combined multi-engine runs.</p>
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Recent Reconnaissance Campaigns -->
+  <div class="fiq-card p-6 reveal-on-scroll">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-sm font-bold text-slate-900">Active &amp; Recent Reconnaissance Campaigns</h2>
+        <p class="text-xs text-slate-500">Live execution pipelines, target authorizations, and progress</p>
+      </div>
+      <a href="/recon" class="text-xs font-semibold text-blue-600 hover:text-blue-800">
+        All Campaigns ({{ total_campaigns or 0 }}) &rarr;
+      </a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="fiq-table">
+        <thead>
+          <tr>
+            <th>Recon ID</th>
+            <th>Name</th>
+            <th>Target</th>
+            <th>Stage / Progress</th>
+            <th>Status</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in (recon_campaigns or [])[:5] %}
+          <tr>
+            <td>
+              <a href="/recon/{{ c.recon_id }}/results"
+                class="mono text-xs font-bold text-blue-600 hover:text-blue-800">{{ c.recon_id }}</a>
+            </td>
+            <td class="font-medium text-slate-900 text-xs">{{ c.name }}</td>
+            <td class="mono text-xs font-semibold text-slate-700">{{ c.target_value }}</td>
+            <td>
+              <div class="flex items-center space-x-2 text-[10px]">
+                <span class="text-slate-500 font-medium">{{ c.current_stage or 'Ready' }}</span>
+                <span class="mono font-bold text-blue-600">{{ c.progress or 0 }}%</span>
+              </div>
+            </td>
+            <td>
+              <span
+                class="px-2 py-0.5 rounded text-[10px] font-bold capitalize {% if c.status in ['Running', 'in_progress'] %}badge-medium{% elif c.status in ['Completed', 'completed'] %}badge-low{% elif c.status in ['Failed', 'failed'] %}badge-critical{% else %}badge-info{% endif %}">
+                {{ c.status }}
+              </span>
+            </td>
+            <td class="text-right space-x-1">
+              {% if c.status in ['Draft', 'Authorized', 'Pending'] %}
+              <a href="/recon/{{ c.recon_id }}/workspace"
+                class="p-1 text-slate-500 hover:text-blue-600 rounded inline-block" title="Configure Workspace">
+                <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+              </a>
+              {% endif %}
+              <a href="/recon/{{ c.recon_id }}/live" class="p-1 text-slate-500 hover:text-blue-600 rounded inline-block"
+                title="Live Monitor">
+                <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+              </a>
+              <a href="/recon/{{ c.recon_id }}/results"
+                class="p-1 text-slate-500 hover:text-indigo-600 rounded inline-block" title="Results">
+                <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i>
+              </a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="py-6 text-center text-xs text-slate-500">
+              No Recon campaigns yet. {% if not is_admin %}Create your first Recon to begin.
+              <a href="/recon/new" class="ml-1 text-blue-600 font-semibold hover:underline">New Recon &rarr;</a>{% endif
+              %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Two-Column Section: Top Prioritized Findings & Recent Scans -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Top Prioritized Vulnerabilities -->
+    <div class="lg:col-span-2 fiq-card p-6 reveal-on-scroll">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-sm font-bold text-slate-900">Top Prioritized Vulnerability Findings</h2>
+          <p class="text-xs text-slate-500">Cross-engine findings correlated by confidence and severity</p>
+        </div>
+        <a href="/findings" class="text-xs font-semibold text-blue-600 hover:text-blue-800">
+          View All Findings &rarr;
+        </a>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="fiq-table">
+          <thead>
+            <tr>
+              <th>Target / Port</th>
+              <th>Severity</th>
+              <th>CVE</th>
+              <th>Vulnerability Title</th>
+              <th>Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for f in findings[:6] %}
+            <tr>
+              <td class="mono font-semibold text-slate-800">{{ f.target_ip }}:{{ f.port or 'all' }}</td>
+              <td>
+                <span
+                  class="px-2 py-0.5 rounded font-bold text-[11px] {% if f.severity == 'Critical' %}badge-critical{% elif f.severity == 'High' %}badge-high{% elif f.severity == 'Medium' %}badge-medium{% else %}badge-info{% endif %}">
+                  {{ f.severity }}
+                </span>
+              </td>
+              <td class="mono text-xs font-semibold text-blue-700">{{ f.cve_identifiers or '—' }}</td>
+              <td class="font-medium text-slate-900 max-w-xs truncate" title="{{ f.title }}">{{ f.title }}</td>
+              <td class="capitalize text-slate-500 font-medium">{{ f.detection_source }}</td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5" class="py-8 text-center text-slate-400">
+                No vulnerability findings recorded yet. Launch a scan to populate.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Recent Scans Sidebar -->
+    <div class="fiq-card p-6 reveal-on-scroll">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-sm font-bold text-slate-900">Recent Scans</h2>
+          <p class="text-xs text-slate-500">Multi-engine executions</p>
+        </div>
+        <a href="/scans" class="text-xs font-semibold text-blue-600 hover:text-blue-800">
+          History &rarr;
+        </a>
+      </div>
+
+      <div class="space-y-3">
+        {% for s in scans[:5] %}
+        <div class="p-3 rounded-lg border border-slate-200 bg-slate-50/50 hover:border-slate-300 transition">
+          <div class="flex items-center justify-between">
+            <span class="mono text-xs font-bold text-slate-800 truncate max-w-[130px]" title="{{ s.scan_id }}">{{
+              s.scan_id }}</span>
+            <span
+              class="px-2 py-0.5 text-[10px] font-bold rounded {% if s.status == 'completed' %}badge-low{% elif s.status == 'failed' %}badge-critical{% else %}badge-info{% endif %} capitalize">
+              {{ s.status }}
+            </span>
+          </div>
+          <div class="mt-2 flex items-center justify-between text-[11px] text-slate-500">
+            <span class="mono">{{ s.target }}</span>
+            <span class="capitalize font-semibold text-slate-700">{{ s.scan_type|replace('_', ' ') }}</span>
+          </div>
+        </div>
+        {% else %}
+        <div class="py-8 text-center text-slate-400 text-xs">
+          No scan records found.
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

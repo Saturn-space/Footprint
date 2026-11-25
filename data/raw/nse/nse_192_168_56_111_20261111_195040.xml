@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.99 scan initiated Thu Nov 12 01:20:40 2026 as: /usr/lib/nmap/nmap -&#45;privileged -sT -sV -Pn -&#45;script ssh2-enum-algos,http-title,http-headers,http-methods,http-security-headers,smb-os-discovery,smb-security-mode,ftp-anon,mysql-info,postgresql-info,dns-nsid,dns-recursion,ssl-cert,ssl-enum-ciphers -oX /home/asip_ali/Desktop/Projects/OSINT-RECON/data/raw/nse/nse_192_168_56_111_20261111_195040.xml -T4 -F 192.168.56.111 -->
+<nmaprun scanner="nmap" args="/usr/lib/nmap/nmap -&#45;privileged -sT -sV -Pn -&#45;script ssh2-enum-algos,http-title,http-headers,http-methods,http-security-headers,smb-os-discovery,smb-security-mode,ftp-anon,mysql-info,postgresql-info,dns-nsid,dns-recursion,ssl-cert,ssl-enum-ciphers -oX /home/asip_ali/Desktop/Projects/OSINT-RECON/data/raw/nse/nse_192_168_56_111_20261111_195040.xml -T4 -F 192.168.56.111" start="1794426640" startstr="Thu Nov 12 01:20:40 2026" version="7.99" xmloutputversion="1.05">
+<scaninfo type="connect" protocol="tcp" numservices="100" services="7,9,13,21-23,25-26,37,53,79-81,88,106,110-111,113,119,135,139,143-144,179,199,389,427,443-445,465,513-515,543-544,548,554,587,631,646,873,990,993,995,1025-1029,1110,1433,1720,1723,1755,1900,2000-2001,2049,2121,2717,3000,3128,3306,3389,3986,4899,5000,5009,5051,5060,5101,5190,5357,5432,5631,5666,5800,5900,6000-6001,6646,7070,8000,8008-8009,8080-8081,8443,8888,9100,9999-10000,32768,49152-49157"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<runstats><finished time="1794426641" timestr="Thu Nov 12 01:20:41 2026" summary="Nmap done at Thu Nov 12 01:20:41 2026; 0 IP addresses (0 hosts up) scanned in 0.26 seconds" elapsed="0.26" exit="error" errormsg="NSE: failed to initialize the script engine:&#xa;/usr/share/nmap/nse_main.lua:829: &apos;postgresql-info&apos; did not match a category, filename, or directory&#xa;stack traceback:&#xa;&#x9;[C]: in function &apos;error&apos;&#xa;&#x9;/usr/share/nmap/nse_main.lua:829: in local &apos;get_chosen_scripts&apos;&#xa;&#x9;/usr/share/nmap/nse_main.lua:1364: in main chunk&#xa;&#x9;[C]: in ?&#xa;"/><hosts up="0" down="0" total="0"/>
+</runstats>
+</nmaprun>

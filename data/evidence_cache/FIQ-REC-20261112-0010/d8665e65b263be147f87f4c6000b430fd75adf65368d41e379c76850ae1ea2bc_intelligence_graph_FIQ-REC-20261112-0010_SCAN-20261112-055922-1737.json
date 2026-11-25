@@ -1,0 +1,167 @@
+{
+  "investigation_id": "FIQ-REC-20261112-0010",
+  "campaign_name": "test 5",
+  "target": "mozilla.or",
+  "generated_at": "2026-11-12T06:00:26.625854+00:00",
+  "metrics": {
+    "node_count": 3,
+    "edge_count": 2,
+    "isolated_node_count": 0,
+    "connected_component_count": 1,
+    "graph_density": 0.3333,
+    "component_count": 1
+  },
+  "entity_type_counts": {
+    "domain": 1,
+    "email": 1,
+    "subdomain": 1
+  },
+  "source_breakdown": {
+    "passive_recon": 1,
+    "theharvester": 1,
+    "theharvester_dns": 1
+  },
+  "nodes": [
+    {
+      "id": "ENT:DOMAIN:7d047f321301",
+      "type": "domain",
+      "label": "mozilla.or",
+      "canonical_value": "mozilla.or",
+      "tags": [],
+      "sources": [
+        "campaign_scope",
+        "passive_recon"
+      ],
+      "risk_level": "info",
+      "confidence": 0.95,
+      "attributes": {
+        "scope_role": "primary_target",
+        "campaign_name": "test 5",
+        "value": "mozilla.or",
+        "source_tool": "passive_recon",
+        "evidence_ref": "7,02e6858cea40",
+        "risk_level": "info",
+        "confidence": 0.95,
+        "maltego_type": "maltego.Domain"
+      },
+      "first_seen": "2026-11-12T06:00:26.625737+00:00",
+      "last_seen": "2026-11-12T06:00:26.625757+00:00",
+      "entity_type": "domain",
+      "maltego_type": "maltego.Domain",
+      "source_tool": "passive_recon",
+      "evidence_ref": "7,02e6858cea40",
+      "value": "mozilla.or"
+    },
+    {
+      "id": "ENT:EMAIL:51df8e2aede6",
+      "type": "email",
+      "label": "cmartorella@edge-security.com",
+      "canonical_value": "cmartorella@edge-security.com",
+      "tags": [],
+      "sources": [
+        "theharvester"
+      ],
+      "risk_level": "info",
+      "confidence": 0.8,
+      "attributes": {
+        "value": "cmartorella@edge-security.com",
+        "source_tool": "theharvester",
+        "evidence_ref": "theharvester:mozilla.or",
+        "risk_level": "info",
+        "confidence": 0.8,
+        "maltego_type": "maltego.EmailAddress"
+      },
+      "first_seen": "2026-11-12T06:00:26.625803+00:00",
+      "last_seen": "2026-11-12T06:00:26.625803+00:00",
+      "entity_type": "email",
+      "maltego_type": "maltego.EmailAddress",
+      "source_tool": "theharvester",
+      "evidence_ref": "theharvester:mozilla.or",
+      "value": "cmartorella@edge-security.com"
+    },
+    {
+      "id": "ENT:SUBDOMAIN:c5b1b1a7b0c3",
+      "type": "subdomain",
+      "label": "mozilla.or",
+      "canonical_value": "mozilla.or",
+      "tags": [],
+      "sources": [
+        "theharvester_dns"
+      ],
+      "risk_level": "info",
+      "confidence": 0.82,
+      "attributes": {
+        "value": "mozilla.or",
+        "source_tool": "theharvester_dns",
+        "evidence_ref": "passive_subdomains:mozilla.or",
+        "risk_level": "info",
+        "confidence": 0.82,
+        "maltego_type": "maltego.DNSName"
+      },
+      "first_seen": "2026-11-12T06:00:26.625777+00:00",
+      "last_seen": "2026-11-12T06:00:26.625777+00:00",
+      "entity_type": "subdomain",
+      "maltego_type": "maltego.DNSName",
+      "source_tool": "theharvester_dns",
+      "evidence_ref": "passive_subdomains:mozilla.or",
+      "value": "mozilla.or"
+    }
+  ],
+  "edges": [
+    {
+      "id": "REL:e576f7802c1a",
+      "source": "ENT:DOMAIN:7d047f321301",
+      "target": "ENT:EMAIL:51df8e2aede6",
+      "relationship_type": "ASSOCIATED_EMAIL",
+      "relationship": "ASSOCIATED_EMAIL",
+      "weight": 0.8,
+      "confidence": 0.8,
+      "confidence_score": 0.8,
+      "evidence_ids": [
+        "theharvester:mozilla.or"
+      ],
+      "first_observed": "2026-11-12T06:00:26.625807+00:00",
+      "last_observed": "2026-11-12T06:00:26.625807+00:00"
+    },
+    {
+      "id": "REL:8a32b996ad1f",
+      "source": "ENT:DOMAIN:7d047f321301",
+      "target": "ENT:SUBDOMAIN:c5b1b1a7b0c3",
+      "relationship_type": "HAS_SUBDOMAIN",
+      "relationship": "HAS_SUBDOMAIN",
+      "weight": 0.8,
+      "confidence": 0.82,
+      "confidence_score": 0.82,
+      "evidence_ids": [
+        "passive:mozilla.or"
+      ],
+      "first_observed": "2026-11-12T06:00:26.625783+00:00",
+      "last_observed": "2026-11-12T06:00:26.625783+00:00"
+    }
+  ],
+  "components": [
+    [
+      "ENT:DOMAIN:7d047f321301",
+      "ENT:EMAIL:51df8e2aede6",
+      "ENT:SUBDOMAIN:c5b1b1a7b0c3"
+    ]
+  ],
+  "isolated_nodes": [],
+  "maltego_integration": {
+    "available": true,
+    "maltego_desktop_installed": false,
+    "maltego_binary_path": null,
+    "mode": "Native Correlation Graph + Maltego GraphML / CSV Interchange",
+    "supported_exports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "supported_imports": [
+      "graphml",
+      "csv",
+      "json"
+    ],
+    "honesty_note": "Native FootprintIQ Entity Graph & Correlation engine active. Maltego CE desktop binary is not installed on host; live GUI transform automation is unavailable, while Maltego GraphML/CSV import and export work natively."
+  }
+}
